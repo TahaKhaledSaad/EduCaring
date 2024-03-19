@@ -1,0 +1,190 @@
+.container {
+  margin: 30px 50px;
+}
+.container .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container h5 {
+  margin: 20px 10px;
+  color: #33312c;
+}
+.container .icon {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #dcdcdc;
+  position: relative;
+}
+
+.container .icon i {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 80px;
+  font-weight: 800;
+  z-index: 0;
+}
+
+.header img {
+  width: 300px;
+}
+
+@media (max-width: 767px) {
+  .header img {
+    width: 200px;
+  }
+  .container .icon {
+    width: 70px;
+    height: 70px;
+  }
+  .container .icon i {
+    font-size: 30px;
+  }
+  .icon-label {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.form .input {
+  height: 60px;
+  border: 2px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 18px;
+  position: relative;
+  padding: 7.5px;
+}
+
+.form .input:focus-within {
+  border: 2px solid #3296d4;
+}
+
+.form .input input {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: none;
+  padding-left: 30px;
+}
+.form .input input::placeholder {
+  color: #dcdcdc;
+}
+.form .input i:first-child {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #dcdcdc;
+}
+
+.form .tele input {
+  width: 70%;
+  height: 100%;
+  outline: none;
+  border: none;
+}
+
+textarea {
+  height: 150px;
+}
+
+.form .date .input:first-child {
+  min-width: 60%;
+}
+.form .date .input:last-child {
+  min-width: 35%;
+  text-align: center;
+}
+
+.form .date {
+  display: flex;
+  gap: 20px;
+}
+
+.form select {
+  border: none;
+  outline: none;
+  color: #dcdcdc;
+  width: 95%;
+  padding-left: 30px;
+}
+
+.form select option {
+  color: #000;
+}
+
+.form i:last-child {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #dcdcdc;
+  cursor: pointer;
+}
+button[type="submit"] {
+  width: 320px;
+  border: none;
+  padding: 10px 5px;
+  border-radius: 10px;
+  background-color: #3296d4;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+}
+
+textarea {
+  width: 100%;
+  border: 2px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+  resize: none;
+}
+
+textarea::placeholder {
+  color: #dcdcdc;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #3296d4;
+}
+
+@media (max-width: 767px) {
+  .input {
+    width: 100%;
+  }
+}
+.container span {
+  display: block;
+  margin: 20px 10px;
+  font-size: 15px;
+}
+.container span a {
+  color: #3296d4;
+}
+
+label {
+  border-color: #dcdcdc;
+}
+
+label:hover,
+label:focus {
+  border-color: #3296d4;
+  cursor: pointer;
+}
+
+

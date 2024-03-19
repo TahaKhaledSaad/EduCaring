@@ -1,0 +1,130 @@
+.myevents .header {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+  }
+  @media (max-width: 767px) {
+    .myevents .header {
+      flex-direction: column;
+    }
+  }
+  .myevents .header select {
+    width: 140px;
+    height: 44px;
+    border: 1px solid #bdbdbd;
+    border-radius: 10px;
+    color: #bdbdbd;
+    padding: 0 10px;
+    outline: none;
+  }
+  @media (max-width: 767px) {
+    .myevents .header select {
+      width: 90%;
+      margin: 10px auto;
+    }
+  }
+  .myevents .header .search {
+    flex: 1;
+    background-color: #f5f7fb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+  @media (max-width: 767px) {
+    .myevents .header .search {
+      width: 90%;
+      margin: 10px auto;
+      padding: 10px;
+    }
+  }
+  .myevents .header .search i {
+    color: #a5a5a5;
+    width: 18px;
+    height: 18px;
+  }
+  .myevents .header .search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: none;
+  }
+  .myevents .header .search input::placeholder {
+    color: #a5a5a5;
+  }
+  @media (max-width: 992px) {
+    .myevents .body {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  .myevents .event {
+    display: block;
+    width: 200px;
+    height: 230px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 5px;
+    position: relative;
+  }
+  .myevents .body {
+    display: flex;
+  }
+  .myevents .event img {
+    width: 180px;
+    height: 120px;
+    border-radius: 10px;
+    display: block;
+    margin: 5px auto;
+  }
+  .myevents .event .info h6 {
+    color: #000;
+    font-size: 14px;
+  }
+  .myevents .event .info p {
+    color: #565656;
+    font-size: 12px;
+    margin: 0;
+  }
+  .myevents .event .info p i {
+    padding: 5px;
+  }
+  .myevents .event .info .rate {
+    display: flex;
+    justify-content: space-between;
+  }
+  .myevents .event .info .rate span {
+    color: #6b0ab9;
+    font-size: 14px;
+    text-decoration: underline;
+  }
+  .myevents .event .info .rate span:last-child {
+    font-size: 16px;
+    color: #000;
+    text-decoration: none;
+  }
+  .myevents .event .info .rate span:last-child i {
+    color: #f7cb15;
+    margin-right: 3px;
+  }
+  .myevents .event .price {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #ffffff;
+    background-color: rgba(154, 153, 153, 0.6);
+    backdrop-filter: blur(10px);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px;
+    border-radius: 8px;
+  }
+  .myevents .event .price h6 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .myevents .event .price span {
+    font-size: 12px;
+  }

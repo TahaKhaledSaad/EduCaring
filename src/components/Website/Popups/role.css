@@ -1,0 +1,79 @@
+/************** Start PopUps **************/
+
+/* Start Role */
+
+.role {
+  width: 350px;
+  height: 320px;
+  background-color: #fffcfc;
+  box-shadow: 0 0 200px 200px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 10px 0;
+  margin: 50px auto;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  transition: 0.3;
+  padding: 10px;
+}
+
+.role .head {
+  text-align: center;
+  position: relative;
+}
+.role .head h4 {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Cairo", sans-serif;
+}
+
+.role .roles {
+  display: flex;
+  width: 90%;
+  margin: 30px auto 20px;
+  text-align: center;
+  justify-content: center;
+  gap: 30px;
+  color: #a5a5a5;
+}
+
+.role .role-item {
+  cursor: pointer;
+}
+.role .role-item h5 {
+  font-weight: 900;
+}
+
+.role .role-item img {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+.role .btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.role .btns button, .role .btns a{
+  width: 45%;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background-color: #f3f5f5;
+  font-size: 16px;
+}
+
+.role .btns a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background-color: #3296d4;
+  color: #fff;
+}
+/* End Role */
+
+/*********** End PopUps ****************/
