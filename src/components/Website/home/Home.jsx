@@ -40,6 +40,7 @@ export default function Home() {
       })
       .then((data) => {
         setEvents(data.data.responseObject?.events);
+        console.log(data.data);
       })
       .catch((err) => console.log(err));
   }, [i18n.language, decodedToken.uid]);
@@ -109,8 +110,9 @@ export default function Home() {
                 </h3>
                 <div className="content">
                   <div className="nums">
-                    <h4>{daysDifference}</h4>:<h4>{hoursDifference}</h4>:
-                    <h4>{minutesDifference}</h4>
+                    <h4>{String(daysDifference ? daysDifference : "")}</h4>:
+                    <h4>{String(hoursDifference ? hoursDifference : "")}</h4>:
+                    <h4>{String(minutesDifference ? minutesDifference : "")}</h4>
                   </div>
 
                   <div className="text">

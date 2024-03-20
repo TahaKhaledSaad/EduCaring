@@ -119,7 +119,7 @@ export default function SpeakerReg() {
           cookies.set("edu-caring", res.data.responseObject.token);
 
           if (res.data.isSuccess) {
-            nav("/verfication");
+            nav("/login");
           } else {
             if (res.data.message) {
               setErrorMessage(res.data.message);

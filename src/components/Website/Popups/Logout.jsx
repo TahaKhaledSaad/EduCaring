@@ -33,6 +33,7 @@ export default function Logout() {
             transform: popupVisible ? "translate(-50%, -50%)" : "translate(200%, -50%)",
             transition: "0.5s",
             left: "50%",
+            zIndex: "1000",
           }}
         >
           <i

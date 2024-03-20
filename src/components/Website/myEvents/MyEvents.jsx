@@ -33,6 +33,7 @@ export default function MyEvents() {
         })
         .then((data) => {
           setUserEvents(data.data.responseObject);
+          console.log(data.data);
         })
         .catch((err) => console.log(err));
     }
@@ -41,7 +42,6 @@ export default function MyEvents() {
   // Filtered events based on dropdown selection and search term
   const filteredEvents = (userEvents && userEvents[(selectedType || "All").toLowerCase()]) || [];
 
-  console.log(filteredEvents);
 
   const searchedEvents = filteredEvents.filter((event) =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,7 +70,6 @@ export default function MyEvents() {
     return `${day < 10 ? "0" + day : day} ${month}, ${year}`;
   };
 
-  // console.log(userEvents);
   return (
     <>
       <div className="myevents">

@@ -16,11 +16,10 @@ export default function Profile() {
   const [showSuccessPopup, setSuccesshowPopup] = useState(false);
   const [showErrorPopup, setErrorhowPopup] = useState(false);
 
-  
   // Handle Cookies
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
-  
+
   const decodedToken = jwtDecode(token);
 
   // [2] Handle Date Change
@@ -70,7 +69,10 @@ export default function Profile() {
     formData.append("Specialization", user.specialization);
     formData.append("SpecializationCategoryId", user.specializationCategoryId);
     formData.append("PassportNumber", user.passportNumber);
-    formData.append("HealthAuthorityNumber", user.healthAuthorityNumber || 'No Health Authority Number');
+    formData.append(
+      "HealthAuthorityNumber",
+      user.healthAuthorityNumber || "No Health Authority Number"
+    );
     formData.append("PassportImageFile", user.displayPassportImageURL);
     formData.append("CvFile", user.cvURL);
     formData.append("WalaaCarFile", user.walaaCardURL);
@@ -107,6 +109,29 @@ export default function Profile() {
       setProfileFile(file);
     }
   };
+
+  // [10] Get All Specialization Categories
+  const [specializationCategories, setSpecializationCategories] = useState([]);
+  console.log(specializationCategories)
+  useEffect(() => {
+    axios
+      .get(`${BASE}/MainData/GetAllSpecialization`)
+      .then((res) => {
+        setSpecializationCategories(res.data.responseObject);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // [11] Get All Gender
+  const [genders, setGenders] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BASE}/MainData/GetAllGender`)
+      .then((res) => {
+        setGenders(res.data.responseObject);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -296,6 +321,7 @@ export default function Profile() {
                     style={{ outline: "0" }}
                     value={dateOfBirth}
                     onChange={(e) => handleDateChange(e)}
+                    placeholder={formattedDateOfBirth}
                   />
                 ) : (
                   <span className="fs-5">{formattedDateOfBirth}</span>
@@ -315,23 +341,45 @@ export default function Profile() {
                 }`}
               >
                 {isEditMode ? (
-                  <input
-                    type="text"
-                    className="border-0 mb-1"
-                    style={{ outline: "0" }}
-                    value={user.gender?.name}
-                    onChange={(e) =>
-                      setUser({
-                        ...user,
-                        gender: {
-                          ...user.gender,
-                          name: e.target.value,
-                        },
-                      })
-                    }
-                  />
+                  <>
+                    <select
+                      name="GenderId"
+                      className="p-0 px-2 text-muted"
+                      style={{
+                        outline: "0",
+                        border: "0",
+                        width: "100%",
+                        height: "100%",
+                        color: "#000",
+                      }}
+                      onChange={(e) =>
+                        setUser({
+                          ...user,
+                          gender: {
+                            ...user.gender,
+                            name: e.target.value,
+                          },
+                        })
+                      }
+                    >
+                      {genders.map((gender, index) => (
+                        <option
+                          key={index}
+                          value={gender.name === "Male" ? 1 : gender.name === "Female" ? 2 : 3}
+                        >
+                          {gender.name}
+                        </option>
+                      ))}
+                    </select>
+                  </>
                 ) : (
-                  <span className="fs-5">{user.gender?.name}</span>
+                  <span className="fs-5">
+                    {user.gender?.name == "1"
+                      ? "Male"
+                      : user.gender?.name == "2"
+                      ? "Female"
+                      : "string"}
+                  </span>
                 )}
                 <span
                   style={{

@@ -105,7 +105,7 @@ export default function AttendanceReg() {
           cookies.set("edu-caring", res.data.responseObject.token);
 
           // Set Navigation
-          nav("/verification");
+          nav("/login");
         });
       console.log(result);
     } catch (error) {

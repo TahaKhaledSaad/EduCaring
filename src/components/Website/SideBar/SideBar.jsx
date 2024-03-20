@@ -16,7 +16,6 @@ function SideBar() {
   useEffect(() => {
     // Get the path from the location object
     const path = location.pathname.split("/")[2] || "home"; // Get the first part of the pathname
-    console.log(path);
     setActiveLink(path);
   }, [location]);
 
@@ -35,7 +34,7 @@ function SideBar() {
     <>
       <div className="d-flex flex-column justify-content-between p-2 sideBar shadow-sm">
         <Link
-          to="home"
+          to="/home"
           className=""
           onClick={() => handleSetActiveLink("home")}
         >

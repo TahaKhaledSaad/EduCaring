@@ -8,7 +8,6 @@ export default function RequireAuth() {
   const token = cookies.get("edu-caring");
 
   const decodedToken = token ? jwtDecode(token) : {};
-  console.log(decodedToken);
 
   // Edditting in the token prevent it
   return token && decodedToken.uid ? <Outlet /> : <Navigate to="/login" replace={true} />;

@@ -33,8 +33,17 @@ import s3 from "../../../assets/speaker3.png";
 import s4 from "../../../assets/speaker4.png";
 import Role from "../Popups/Role";
 import { useState } from "react";
+import Cookie from "cookie-universal";
+import { jwtDecode } from "jwt-decode";
+import Logout from "../Popups/Logout";
 
 export default function LandingPage() {
+  const cookie = new Cookie();
+  const token = cookie.get("edu-caring");
+
+  const decodedToken = token ? jwtDecode(token) : {};
+  console.log(decodedToken);
+
   let [role, setRole] = useState(false);
 
   function handleRoleFromChild(role) {
@@ -127,22 +136,26 @@ export default function LandingPage() {
                 </li>
               </ul>
 
-              <ul className="navbar-nav m-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link
-                    className="btn btn-info text-white m-2 order-lg-last order-first"
-                    to="/login"
-                  >
-                    Login
-                  </Link>
-                </li>
+              {!decodedToken.uid && (
+                <ul className="navbar-nav m-2 mb-lg-0">
+                  <li className="nav-item">
+                    <Link
+                      className="btn btn-info text-white m-2 order-lg-last order-first"
+                      to="/login"
+                    >
+                      Login
+                    </Link>
+                  </li>
 
-                <li className="nav-item">
-                  <button className="btn btn-info text-white m-2" onClick={() => setRole(!role)}>
-                    Register
-                  </button>
-                </li>
-              </ul>
+                  <li className="nav-item">
+                    <button className="btn btn-info text-white m-2" onClick={() => setRole(!role)}>
+                      Register
+                    </button>
+                  </li>
+                </ul>
+              )}
+
+              {decodedToken.uid && <Logout />}
             </div>
           </div>
         </nav>
