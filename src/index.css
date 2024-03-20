@@ -133,7 +133,8 @@ i {
 }
 .choice {
   display: flex;
-  gap: 30px;
+  gap: 20px;
+  justify-content: center;
 }
 .choice img,
 .chosen img {

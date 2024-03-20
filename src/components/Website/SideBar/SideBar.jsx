@@ -1,14 +1,24 @@
 import logo from "../../../assets/logo-removebg-preview.png";
 import { Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import Logout from "../Popups/Logout";
 
+import { useLocation } from "react-router-dom";
+
 function SideBar() {
   // State to track the active link
   const [activeLink, setActiveLink] = useState("home");
+  const location = useLocation();
+
+  useEffect(() => {
+    // Get the path from the location object
+    const path = location.pathname.split("/")[2] || "home"; // Get the first part of the pathname
+    console.log(path);
+    setActiveLink(path);
+  }, [location]);
 
   // Handle Cookies
   const cookies = Cookie();
@@ -24,7 +34,11 @@ function SideBar() {
   return (
     <>
       <div className="d-flex flex-column justify-content-between p-2 sideBar shadow-sm">
-        <Link to="home" className="" onClick={() => handleSetActiveLink("home")}>
+        <Link
+          to="home"
+          className=""
+          onClick={() => handleSetActiveLink("home")}
+        >
           <img src={logo} alt="logo" className="mw-100 h-auto" />
         </Link>
         <hr className="opacity-0" />
@@ -43,7 +57,9 @@ function SideBar() {
               <span className="fs-6 ">Home</span>
             </Link>
           </li>
-          <li className={`nav-item my-2 ${activeLink === "myevents" && "active"}`}>
+          <li
+            className={`nav-item my-2 ${activeLink === "myevents" && "active"}`}
+          >
             <Link
               to="/home/myevents"
               className="nav-link px-2"
@@ -57,7 +73,11 @@ function SideBar() {
               <span className="fs-6 ">My Events</span>
             </Link>
           </li>
-          <li className={`nav-item my-2 ${activeLink === "community" && "active"}`}>
+          <li
+            className={`nav-item my-2 ${
+              activeLink === "community" && "active"
+            }`}
+          >
             <Link
               to="community"
               className="nav-link px-2"
@@ -71,13 +91,23 @@ function SideBar() {
               <span className="fs-6 ">Community</span>
             </Link>
           </li>
-          <li className={`nav-item my-2 ${activeLink === "profile" && "active"}`}>
+          <li
+            className={`nav-item my-2 ${activeLink === "profile" && "active"}`}
+          >
             <Link
               to={`${
-                decodedToken.roles.includes("User") ? "update-user-profile" : "update-speaker-profile"
+                decodedToken.roles.includes("User")
+                  ? "update-user-profile"
+                  : "update-speaker-profile"
               }`}
               className="nav-link px-2"
-              onClick={() => handleSetActiveLink("profile")}
+              onClick={() =>
+                handleSetActiveLink(
+                  decodedToken.roles.includes("User")
+                    ? "update-user-profile"
+                    : "update-speaker-profile"
+                )
+              }
               style={{
                 background: activeLink === "profile" && "#3296D4",
                 color: activeLink === "profile" && "#fff",
