@@ -24,6 +24,7 @@ import Payment from "./components/Website/payment/Payment.jsx";
 import Test from "./components/Test.jsx";
 import RequireBack from "./components/Website/Auth/RequireBack.jsx";
 import Session from "./components/Website/session/Session.jsx";
+import Recommendations from "./components/Website/recommendations/Recommendations.jsx";
 //
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
               element={<SpeakerProfile />}
             />
             <Route path="myevents" element={<MyEvents />} />
+            <Route path="recommendations" element={<Recommendations />} />
             <Route path="community" element={<Community />} />
             <Route path="payment/:eventId" element={<Payment />} />
             <Route path="session/:eventId/:eventDayId" element={<Session />} />

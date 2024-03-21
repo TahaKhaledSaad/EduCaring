@@ -40,7 +40,7 @@ export default function Home() {
       })
       .then((data) => {
         setEvents(data.data.responseObject?.events);
-        console.log(data.data);
+        // console.log(data.data);
       })
       .catch((err) => console.log(err));
   }, [i18n.language, decodedToken.uid]);
@@ -90,8 +90,12 @@ export default function Home() {
 
   // Calculate the difference in days, hours, and minutes
   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  const hoursDifference = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutesDifference = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  const hoursDifference = Math.floor(
+    (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutesDifference = Math.floor(
+    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+  );
 
   return (
     <div>
@@ -112,7 +116,9 @@ export default function Home() {
                   <div className="nums">
                     <h4>{String(daysDifference ? daysDifference : "")}</h4>:
                     <h4>{String(hoursDifference ? hoursDifference : "")}</h4>:
-                    <h4>{String(minutesDifference ? minutesDifference : "")}</h4>
+                    <h4>
+                      {String(minutesDifference ? minutesDifference : "")}
+                    </h4>
                   </div>
 
                   <div className="text">
@@ -128,7 +134,11 @@ export default function Home() {
               <h3 className="fw-bold mb-4">Upcoming Events</h3>
               <div className="events">
                 {events?.map((event) => (
-                  <Link key={event.id} className="event" to={`event/${event.id}`}>
+                  <Link
+                    key={event.id}
+                    className="event"
+                    to={`event/${event.id}`}
+                  >
                     <img src={event.displayPrimeImageURL} alt="event-Img" />
 
                     <div className="content">
@@ -148,14 +158,20 @@ export default function Home() {
 
                       <div className="date">
                         <p className="day m-0">
-                          {new Date(event.startDay).toLocaleDateString("en-US", {
-                            day: "numeric",
-                          })}
+                          {new Date(event.startDay).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                            }
+                          )}
                         </p>
                         <p className="month">
-                          {new Date(event.startDay).toLocaleDateString("en-US", {
-                            month: "short",
-                          })}
+                          {new Date(event.startDay).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                            }
+                          )}
                         </p>
                       </div>
                     </div>
@@ -165,14 +181,28 @@ export default function Home() {
             </div>
 
             <div className="recommend mb-3">
-              <h4 className="fw-bold mb-4">Recommendations for you</h4>
-              <div className="events d-flex gap-4 flex-wrap justify-content-center align-items-center">
-                {recommendEvents.map((event) => (
-                  <Link key={event.id} className="event" to={`event/${event.id}`}>
+              <div className="d-flex justify-content-between align-items-center px-3">
+                <h4 className="fw-bold mb-4">Recommendations for you</h4>
+                <Link
+                  to="recommendations"
+                  style={{ fontSize: "14px", color: "#3296D4" }}
+                >
+                  See All
+                </Link>
+              </div>
+              <div className="events d-flex gap-4 px-3 flex-wrap justify-content-start align-items-center">
+                {recommendEvents.slice(0, 3).map((event) => (
+                  <Link
+                    key={event.id}
+                    className="event"
+                    to={`event/${event.id}`}
+                  >
                     <img src={event.displayPrimeImageURL} alt="event-Img" />
 
                     <div className="info">
-                      <h6>{i18n.language === "en" ? event.nameEn : event.nameAr}</h6>
+                      <h6>
+                        {i18n.language === "en" ? event.nameEn : event.nameAr}
+                      </h6>
                       <p>
                         <i className="fa-solid fa-calendar-days"></i>
                         05 Mars, 2023

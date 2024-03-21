@@ -57,7 +57,7 @@
   row-gap: 20px;
   column-gap: 10px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 @media (max-width: 992px) {

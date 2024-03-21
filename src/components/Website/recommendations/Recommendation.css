@@ -1,0 +1,15 @@
+.event .info .btns{
+    padding: 10px 0;
+}
+.event .info .btns span {
+  background-color: #27ae60;
+  color: #fff;
+  margin: 0 5px;
+  width: fit-content;
+  padding: 0 3px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+ .event .info .btns .offline {
+  background-color: #747688;
+}

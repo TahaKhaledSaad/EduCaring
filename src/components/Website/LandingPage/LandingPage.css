@@ -55,7 +55,7 @@
 }
 @media (max-width: 1100px) {
   .home {
-    height: 190vh
+    height: 190vh;
   }
 }
 @media (max-width: 920px) {
@@ -177,12 +177,12 @@
   margin: 5px 0;
 }
 .button {
-  padding: 10px;
+  padding: 12px 30px;
   border: 0;
   outline: 0;
   background-color: #3296d4;
   color: #fff;
-  font-size: 18px;
+  font-size: 20px;
   border-radius: 5px;
   position: absolute;
   bottom: 150px;
@@ -233,67 +233,6 @@
     margin: 10px 15px;
   }
 }
-
-/* ///////////////////////////////////////////////////// */
-
-.landing-page .period {
-  background: rgba(50, 150, 212, 0.1);
-  padding: 30px;
-  position: relative;
-}
-.landing-page .period .shape {
-  position: absolute;
-  top: 50px;
-  right: 120px;
-}
-.landing-page .period h2 {
-  color: #565656;
-  text-align: center;
-  font-size: 45px;
-  font-weight: 600;
-  margin-bottom: 30px;
-}
-.landing-page .period .content .nums,
-.landing-page .period .content .text {
-  display: flex;
-  justify-content: space-between;
-  text-align: right;
-  align-items: center;
-  width: 70%;
-  margin: 0 auto;
-  font-size: 45px;
-  color: #3296d4;
-}
-@media (max-width: 767px) {
-  .landing-page .period .content .nums,
-  .landing-page .period .content .text {
-    width: 100%;
-  }
-}
-.landing-page .period .content .text {
-  width: 71%;
-}
-.landing-page .period .content h4 {
-  background-color: #fff;
-  padding: 15px;
-  border-radius: 5px;
-  font-size: 45px;
-  margin: 0;
-}
-@media (max-width: 767px) {
-  .landing-page .period .content h4 {
-    margin: 0 10px;
-  }
-}
-.landing-page .period .content p {
-  margin-top: 5px;
-  margin-left: 15px;
-  color: #565656;
-  font-size: 25px;
-}
-
-/* //////////////////////////////////////////// */
-
 .about {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -393,8 +332,8 @@
   display: flex;
   align-items: center;
 }
-@media (max-width:1024px) {
-  .photos .more{
+@media (max-width: 1024px) {
+  .photos .more {
     justify-content: center;
   }
 }
@@ -595,7 +534,7 @@
   }
 }
 .register .person {
-  height: 200px;
+  height: 250px;
   width: 50%;
   padding: 60px 50px 60px 50px;
   background-image: url(../../../assets/re-attendance.jpg);
@@ -644,7 +583,8 @@
   border-radius: 30px;
   border: 2px solid #fff;
   background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.07), 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.07),
+    0px 25px 50px -12px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   font-family: Roboto;
   font-size: 24px;
@@ -739,7 +679,7 @@
   background: none;
   border: none;
   outline: none;
-  color: rgba(255, 255, 255, 0.5);;
+  color: rgba(255, 255, 255, 0.5);
 }
 .footer .links .subscribe input:placeholder {
   background: rgba(255, 255, 255, 0.5);
@@ -778,4 +718,8 @@
   100% {
     transform: translateY(0);
   }
+}
+.navbar-collapse .logout{
+text-align: center;
+padding: 10px 0;
 }

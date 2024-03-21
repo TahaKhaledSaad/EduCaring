@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import map from "../../../assets/map.jpeg";
+import ExMark from "../../../assets/Exclamation_mark.png";
 import Carousel from "react-bootstrap/Carousel";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
@@ -60,12 +61,22 @@ export default function EventDetails() {
     return { formattedDate, formattedTime };
   };
   const { startDay, endDay } = eventDetails;
-  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(startDay);
-  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(endDay);
+  const { formattedDate: startDate, formattedTime: startTime } =
+    formatDateTime(startDay);
+  const { formattedDate: endDate, formattedTime: endTime } =
+    formatDateTime(endDay);
 
   // console.log(eventDetails);
 
   const uniqueSpeakers = {};
+
+  const isValidImageUrl = (url) => {
+    return (
+      url &&
+      !url.toLowerCase().endsWith("/null") &&
+      url.toLowerCase().startsWith("http" || "https")
+    );
+  };
 
   return (
     <>
@@ -92,7 +103,8 @@ export default function EventDetails() {
               }`}
               style={{
                 fontSize: "20px",
-                backgroundColor: selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
+                backgroundColor:
+                  selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
                 color: selectedDayIndex === index ? "white" : "black",
                 cursor: "pointer",
               }}
@@ -171,7 +183,9 @@ export default function EventDetails() {
                         color: "#6B0AB9",
                       }}
                     >
-                      ({eventDetails.eventDays[selectedDayIndex].numberOfReviews} reviews)
+                      (
+                      {eventDetails.eventDays[selectedDayIndex].numberOfReviews}{" "}
+                      reviews)
                     </p>
                     <p className="m-0 fw-bold d-flex align-items-center gap-1">
                       <svg
@@ -211,7 +225,8 @@ export default function EventDetails() {
                       }}
                     >
                       <span className="mx-1">
-                        Buy ticket {eventDetails.eventDays[selectedDayIndex].price} SAR
+                        Buy ticket{" "}
+                        {eventDetails.eventDays[selectedDayIndex].price} SAR
                       </span>
                       <svg
                         width="18"
@@ -248,7 +263,10 @@ export default function EventDetails() {
                   )}
                 </div>
 
-                <div className="general my-3" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="general my-3"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h2>{eventDetails.eventDays[selectedDayIndex].name}</h2>
                   <div className="date my-3 d-flex gap-2 align-items-center">
                     <svg
@@ -258,7 +276,13 @@ export default function EventDetails() {
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <rect width="48" height="48" rx="8" fill="#3296D4" fillOpacity="0.1" />
+                      <rect
+                        width="48"
+                        height="48"
+                        rx="8"
+                        fill="#3296D4"
+                        fillOpacity="0.1"
+                      />
                       <path
                         d="M28.75 15.56V14C28.75 13.59 28.41 13.25 28 13.25C27.59 13.25 27.25 13.59 27.25 14V15.5H20.75V14C20.75 13.59 20.41 13.25 20 13.25C19.59 13.25 19.25 13.59 19.25 14V15.56C16.55 15.81 15.24 17.42 15.04 19.81C15.02 20.1 15.26 20.34 15.54 20.34H32.46C32.75 20.34 32.99 20.09 32.96 19.81C32.76 17.42 31.45 15.81 28.75 15.56Z"
                         fill="#3296D4"
@@ -285,7 +309,10 @@ export default function EventDetails() {
                   </div>
                 </div>
 
-                <div className="desc py-2" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="desc py-2"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h3>{i18n.language === "en" ? "Description" : "الوصف"} </h3>
                   <span
                     style={{
@@ -304,9 +331,20 @@ export default function EventDetails() {
                     {eventDetails.eventDays[selectedDayIndex].address}
                   </p>
 
-                  <a href={eventDetails.eventDays[selectedDayIndex].addressGPSLink} target="blank">
+                  <a
+                    href={
+                      eventDetails.eventDays[selectedDayIndex].addressGPSLink
+                    }
+                    target="blank"
+                  >
                     {" "}
-                    <img src={map} alt="map" height={"220px"} width={"100%"} className="rounded" />
+                    <img
+                      src={map}
+                      alt="map"
+                      height={"220px"}
+                      width={"100%"}
+                      className="rounded"
+                    />
                   </a>
                 </div>
               </div>
@@ -316,10 +354,13 @@ export default function EventDetails() {
                 style={{ backgroundColor: "#F5F7FB", height: "50%" }}
               >
                 <div>
-                  <h5 className="text-left">{i18n.language === "en" ? "Speakers" : "المتحدثين"}</h5>
+                  <h5 className="text-left">
+                    {i18n.language === "en" ? "Speakers" : "المتحدثين"}
+                  </h5>
                   <div className="d-flex flex-wrap gap-3 justify-content-center">
                     {eventDetails.eventDays.map((d) =>
                       d.eventDaySpeakers.map((s) => {
+                        console.log(s.speaker.displayProfileImage);
                         const speakerKey = `${s.speaker.id}`;
                         if (!uniqueSpeakers[speakerKey]) {
                           uniqueSpeakers[speakerKey] = true; // Mark the speaker as encountered
@@ -330,7 +371,13 @@ export default function EventDetails() {
                             >
                               {s.speaker.displayProfileImage ? (
                                 <img
-                                  src={s.speaker.displayProfileImage}
+                                  src={
+                                    isValidImageUrl(
+                                      s.speaker.displayProfileImage
+                                    )
+                                      ? s.speaker.displayProfileImage
+                                      : ExMark
+                                  }
                                   alt="speakerImg"
                                   className="rounded-circle mb-2"
                                   width={"65px"}
@@ -353,7 +400,9 @@ export default function EventDetails() {
                                   </span>
                                 </div>
                               )}
-                              <p className="text-dark text-center">{s.speaker.name}</p>
+                              <p className="text-dark text-center">
+                                {s.speaker.name}
+                              </p>
                             </Link>
                           );
                         }
@@ -371,7 +420,9 @@ export default function EventDetails() {
                       paddingTop: "10px",
                     }}
                   >
-                    <h5 className="text-left">{i18n.language === "en" ? "Sessions" : "الجلسات"}</h5>
+                    <h5 className="text-left">
+                      {i18n.language === "en" ? "Sessions" : "الجلسات"}
+                    </h5>
                     <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
                       <Link
                         className="w-100 text-dark"

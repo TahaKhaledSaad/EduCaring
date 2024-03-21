@@ -16,7 +16,7 @@ export default function Logout() {
   return (
     <>
       <div
-        className="text-danger px-2 fw-bold"
+        className="text-danger px-2 fw-bold logout"
         style={{ cursor: "pointer" }}
         onClick={handleTogglePopup}
       >

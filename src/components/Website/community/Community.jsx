@@ -138,6 +138,11 @@ export default function Community() {
                     item.messages[item.messages.length - 1]?.timestamp
                   )}
                 </span>
+                {item?.eventData.isFinished && (
+                  <span className="text-danger event-finished">
+                    event finished
+                  </span>
+                )}
               </div>
             ))}
         </div>
@@ -166,7 +171,15 @@ export default function Community() {
                 </div>
                 <div className="msg-text rounded p-2 m-2">
                   <p>{msg.message}</p>
-                  {/* <span className="view">view</span> */}
+                  <span
+                    className="view"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(msg.imageUrl, "_blank");
+                    }}
+                  >
+                    view Resource
+                  </span>
                 </div>
               </div>
             ))}
