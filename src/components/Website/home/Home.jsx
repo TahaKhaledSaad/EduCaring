@@ -40,7 +40,6 @@ export default function Home() {
       })
       .then((data) => {
         setEvents(data.data.responseObject?.events);
-        console.log(data.data);
       })
       .catch((err) => console.log(err));
   }, [i18n.language, decodedToken.uid]);
@@ -60,7 +59,6 @@ export default function Home() {
       })
       .catch((err) => console.log(err));
   }, []);
-  // console.log(recommendEvents);
 
   const [reminder, setReminder] = useState([]);
   useEffect(() => {

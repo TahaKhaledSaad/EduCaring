@@ -37,14 +37,13 @@ function App() {
           <Route path="login" element={<Login />}></Route>
           <Route path="register-attendance" element={<AttendanceReg />}></Route>
           <Route path="register-speaker" element={<SpeakerReg />}></Route>
+          <Route path="verification" element={<Verfication />} />
         </Route>
 
         {/* Testing */}
         <Route path="test" element={<Test />} />
 
         <Route element={<RequireAuth />}>
-          <Route path="verification" element={<Verfication />} />
-
           <Route path="/home" element={<Home />}>
             <Route path="event/:eventId" element={<Event />} />
             <Route

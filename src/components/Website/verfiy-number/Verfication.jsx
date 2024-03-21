@@ -16,7 +16,7 @@ export default function Verfication() {
   const nav = useNavigate();
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
-  const decoded = jwtDecode(token);
+  const decoded = token ? jwtDecode(token) : {};
 
   // Countdown timer
   useEffect(() => {

@@ -99,13 +99,12 @@ export default function AttendanceReg() {
         .then((res) => {
           console.log(res.data);
 
-          res.data.isSuccess ? setErrorMessage("") : setErrorMessage(res.data.responseText);
-
-          // Set Token && Roles && UserId
           cookies.set("edu-caring", res.data.responseObject.token);
 
+          res.data.isSuccess ? setErrorMessage("") : setErrorMessage(res.data.responseText);
+
           // Set Navigation
-          nav("/login");
+          res.data.isSuccess && nav("/login");
         });
       console.log(result);
     } catch (error) {

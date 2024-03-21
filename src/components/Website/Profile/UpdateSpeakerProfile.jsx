@@ -546,7 +546,7 @@ export default function Profile() {
                   upload Wlaa Card <div className="text-danger d-inline">(not required)</div>
                 </div>
                 {/* Upload Label */}
-                {!showCommingWalaaFile && (
+                {!user.displayWalaaCardURL && (
                   <div className="input-group" style={{ display: walaaFile ? "none" : "block" }}>
                     <input
                       type="file"
@@ -649,7 +649,7 @@ export default function Profile() {
                   upload passport photo
                 </div>
                 {/* Upload Label */}
-                {!showCommingPassportFile && (
+                {!user.displayPassportImageURL && (
                   <div
                     className="input-group"
                     style={{
@@ -741,7 +741,7 @@ export default function Profile() {
                   upload cv
                 </div>
                 {/* Upload Label */}
-                {!showCommingCvFile && (
+                {!user.displayCvURL && (
                   <div className="input-group" style={{ display: cvFile ? "none" : "block" }}>
                     <input
                       type="file"

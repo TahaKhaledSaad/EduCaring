@@ -28,16 +28,17 @@ export default function Login() {
         password: password,
       });
 
-      console.log(res.data)
-
       res.data.isSuccess ? setErrorMessage("") : setErrorMessage(res.data.responseText);
       console.log(errorMessage);
 
       // Set Token
-      cookies.set("edu-caring", res.data.responseObject.token);
+      res.data.responseObject.isVerified &&
+        cookies.set("edu-caring", res.data.responseObject.token);
 
       // Set Navigation
-      res.data.responseObject.isVerified ? nav("/home") : nav("/verification");
+      cookies.get("edu-caring") !== "" && res.data.responseObject.isVerified
+        ? nav("/home")
+        : nav("/verification");
     } catch (error) {
       console.log(error);
     }
