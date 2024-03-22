@@ -96,7 +96,6 @@ export default function SpeakerReg() {
     }
   };
 
-  // [7] Handle Submit
   async function handleSubmit(e) {
     e.preventDefault();
     console.log(userData);
@@ -118,14 +117,13 @@ export default function SpeakerReg() {
         .then((res) => {
           console.log(res.data);
 
-          // Set Token && Roles && UserId
           cookies.set("edu-caring", res.data.responseObject.token);
 
           if (res.data.isSuccess) {
             nav("/login");
           } else {
-            if (res.data.message) {
-              setErrorMessage(res.data.message);
+            if (res.data.responseText == "Email is already registered!") {
+              setErrorMessage("Email is already registered!");
             } else {
               setErrorMessage("Something went wrong...");
             }

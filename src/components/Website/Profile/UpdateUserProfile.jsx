@@ -48,7 +48,11 @@ export default function Profile() {
       .catch((err) => console.log(err));
   }, [decodedToken.uid]);
 
-  const handleEditClick = () => setIsEditMode(true);
+  // console.log(user);
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+  };
 
   // [4] Handle Save Click
   const handleSaveClick = () => {
@@ -61,18 +65,15 @@ export default function Profile() {
     formData.append("Email", user.email);
     formData.append("NameAr", user.nameAr);
     formData.append("NameEn", user.nameEn);
-    formData.append("GenderId", user.genderId);
+    formData.append("GenderId", parseInt(user.gender.id));
     formData.append("ProfileImageFile", profileFile);
     formData.append("DateOfBirth", user.dateOfBirth);
     formData.append("City", user.city);
     formData.append("Country", user.country);
     formData.append("Specialization", user.specialization);
-    formData.append("SpecializationCategoryId", user.specializationCategoryId);
+    formData.append("SpecializationCategoryId", user.specializationCategory.id);
     formData.append("PassportNumber", user.passportNumber);
-    formData.append(
-      "HealthAuthorityNumber",
-      user.healthAuthorityNumber || "No Health Authority Number"
-    );
+    formData.append("HealthAuthorityNumber", user.healthAuthorityNumber || "");
     formData.append("PassportImageFile", user.displayPassportImageURL);
     formData.append("CvFile", user.cvURL);
     formData.append("WalaaCarFile", user.walaaCardURL);
@@ -86,7 +87,6 @@ export default function Profile() {
     axios
       .put(`${BASE}/Auth/UpdateProfile`, formData)
       .then((data) => {
-        console.log(data);
         data.data.isSuccess ? setSuccesshowPopup(true) : setErrorhowPopup(true);
       })
       .catch((err) => console.log(err));
@@ -112,7 +112,6 @@ export default function Profile() {
 
   // [10] Get All Specialization Categories
   const [specializationCategories, setSpecializationCategories] = useState([]);
-  console.log(specializationCategories)
   useEffect(() => {
     axios
       .get(`${BASE}/MainData/GetAllSpecialization`)
@@ -133,13 +132,19 @@ export default function Profile() {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log(user);
   return (
     <>
       {user && (
         <div className="profile p-4 w-75">
-          {showSuccessPopup && <Success text="Profile Updated Successfully!" type="success" />}
-          {showErrorPopup && <Success text="Profile Updated Failed!" type="error" />}
+          {showSuccessPopup && (
+            <Success text="Profile Updated Successfully!" type="success" />
+          )}
+          {showErrorPopup && (
+            <Success text="Profile Updated Failed!" type="error" />
+          )}
 
+          {/* Head */}
           <div
             className="head d-flex gap-3 align-items-center pb-3"
             style={{ borderBottom: "1px solid #DCDCDC" }}
@@ -147,7 +152,11 @@ export default function Profile() {
             <div className="position-relative">
               {user.displayProfileImage ? (
                 <img
-                  src={profileFile ? URL.createObjectURL(profileFile) : user.displayProfileImage}
+                  src={
+                    profileFile
+                      ? URL.createObjectURL(profileFile)
+                      : user.displayProfileImage
+                  }
                   alt="personImg"
                   width={"120px"}
                   height={"120px"}
@@ -212,7 +221,9 @@ export default function Profile() {
                       className="border-0 mb-1"
                       style={{ outline: "0" }}
                       value={user.nameEn}
-                      onChange={(e) => setUser({ ...user, nameEn: e.target.value })}
+                      onChange={(e) =>
+                        setUser({ ...user, nameEn: e.target.value })
+                      }
                     />
                   </h3>
                   <p>
@@ -221,7 +232,9 @@ export default function Profile() {
                       className="border-0 mb-1 w-50"
                       style={{ outline: "0" }}
                       value={user.email}
-                      onChange={(e) => setUser({ ...user, email: e.target.value })}
+                      onChange={(e) =>
+                        setUser({ ...user, email: e.target.value })
+                      }
                     />
                   </p>
                 </div>
@@ -240,13 +253,16 @@ export default function Profile() {
             >
               <i
                 className={
-                  isEditMode ? "fa-regular fa-check-square" : "fa-regular fa-pen-to-square"
+                  isEditMode
+                    ? "fa-regular fa-check-square"
+                    : "fa-regular fa-pen-to-square"
                 }
               ></i>
               <span className="ms-2">{isEditMode ? "Save" : "Edit"}</span>
             </div>
           </div>
 
+          {/* Info */}
           <div
             className="info my-3 d-grid gap-4"
             style={{
@@ -254,7 +270,6 @@ export default function Profile() {
             }}
           >
             {/* ================== */}
-
             <div
               className={`info-item p-2 border rounded d-flex flex-column ${
                 isEditMode ? "edit-mode" : ""
@@ -293,7 +308,9 @@ export default function Profile() {
                   className="border-0 mb-1"
                   style={{ outline: "0" }}
                   value={user.phoneNumber}
-                  onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
+                  onChange={(e) =>
+                    setUser({ ...user, phoneNumber: e.target.value })
+                  }
                 />
               ) : (
                 <span className="fs-5">{user.phoneNumber}</span>
@@ -310,19 +327,27 @@ export default function Profile() {
 
             {/* ================== */}
             <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
+              {/* Date Input */}
               <div
-                className={`info-item p-2 d-flex flex-column ${isEditMode ? "edit-mode" : ""}`}
+                className={`info-item px-2 d-flex flex-column ${
+                  isEditMode ? "edit-mode" : ""
+                }`}
                 style={{ borderRight: "1px solid #DCDCDC" }}
               >
                 {isEditMode ? (
-                  <input
-                    type="date"
-                    className="border-0 mb-1"
-                    style={{ outline: "0" }}
-                    value={dateOfBirth}
-                    onChange={(e) => handleDateChange(e)}
-                    placeholder={formattedDateOfBirth}
-                  />
+                  <>
+                    <input
+                      type="date"
+                      className="border-0 mb-1"
+                      style={{ outline: "0" }}
+                      value={dateOfBirth}
+                      name="dateOfBirth"
+                      onChange={(e) => {
+                        handleDateChange(e);
+                        setUser({ ...user, dateOfBirth: e.target.value });
+                      }}
+                    />
+                  </>
                 ) : (
                   <span className="fs-5">{formattedDateOfBirth}</span>
                 )}
@@ -335,51 +360,46 @@ export default function Profile() {
                   date
                 </span>
               </div>
+              {/* Gender Input */}
               <div
                 className={`info-item p-2 d-flex flex-column flex-grow-1 ${
                   isEditMode ? "edit-mode" : ""
                 }`}
               >
                 {isEditMode ? (
-                  <>
-                    <select
-                      name="GenderId"
-                      className="p-0 px-2 text-muted"
-                      style={{
-                        outline: "0",
-                        border: "0",
-                        width: "100%",
-                        height: "100%",
-                        color: "#000",
-                      }}
-                      onChange={(e) =>
+                  <select
+                    name="GenderId"
+                    className="p-0"
+                    style={{
+                      outline: "0",
+                      border: "0",
+                      width: "100%",
+                      height: "100%",
+                      color: "#000",
+                    }}
+                    onChange={
+                      (e) =>
                         setUser({
                           ...user,
                           gender: {
-                            ...user.gender,
-                            name: e.target.value,
+                            id: parseInt(e.target.value),
+                            name: e.target.options[e.target.selectedIndex].text,
                           },
                         })
-                      }
-                    >
-                      {genders.map((gender, index) => (
-                        <option
-                          key={index}
-                          value={gender.name === "Male" ? 1 : gender.name === "Female" ? 2 : 3}
-                        >
-                          {gender.name}
-                        </option>
-                      ))}
-                    </select>
-                  </>
+                      // console.log(parseInt(e.target.value))
+                    }
+                  >
+                    <option disabled value="1" selected>
+                      Select Gender
+                    </option>
+                    {genders.map((gender) => (
+                      <option key={gender.id} value={gender.id}>
+                        {gender.name}
+                      </option>
+                    ))}
+                  </select>
                 ) : (
-                  <span className="fs-5">
-                    {user.gender?.name == "1"
-                      ? "Male"
-                      : user.gender?.name == "2"
-                      ? "Female"
-                      : "string"}
-                  </span>
+                  <span className="fs-5">{user && user.gender?.name}</span>
                 )}
                 <span
                   style={{
@@ -395,7 +415,9 @@ export default function Profile() {
             {/* ================== */}
             <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
               <div
-                className={`info-item p-2 d-flex flex-column ${isEditMode ? "edit-mode" : ""}`}
+                className={`info-item p-2 d-flex flex-column ${
+                  isEditMode ? "edit-mode" : ""
+                }`}
                 style={{ borderRight: "1px solid #DCDCDC" }}
               >
                 {isEditMode ? (
@@ -404,10 +426,15 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.country}
-                    onChange={(e) => setUser({ ...user, country: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, country: e.target.value })
+                    }
                   />
                 ) : (
-                  <span className="fs-5" style={{ display: "inline-block", marginRight: "50px" }}>
+                  <span
+                    className="fs-5"
+                    style={{ display: "inline-block", marginRight: "50px" }}
+                  >
                     {user.country}
                   </span>
                 )}
@@ -459,7 +486,9 @@ export default function Profile() {
                   className="border-0 mb-1"
                   style={{ outline: "0" }}
                   value={user?.healthAuthorityNumber}
-                  onChange={(e) => setUser({ ...user, healthAuthorityNumber: e.target.value })}
+                  onChange={(e) =>
+                    setUser({ ...user, healthAuthorityNumber: e.target.value })
+                  }
                 />
               ) : (
                 <span className="fs-5">{user?.healthAuthorityNumber}</span>
@@ -476,30 +505,54 @@ export default function Profile() {
 
             {/* ================== */}
             <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
+              {/* Specialization Category ID */}
               <div
                 className={`info-item p-2 d-flex flex-column flex-grow-1 ${
                   isEditMode ? "edit-mode" : ""
                 }`}
-                style={{ borderRight: "1px solid #DCDCDC" }}
               >
                 {isEditMode ? (
-                  <input
-                    type="text"
-                    className="border-0 mb-1"
-                    style={{ outline: "0" }}
-                    value={user.specializationCategory?.name}
-                    onChange={(e) =>
-                      setUser({
-                        ...user,
-                        specializationCategory: {
-                          ...user.specializationCategory,
-                          name: e.target.value,
-                        },
-                      })
-                    }
-                  />
+                  <>
+                    <select
+                      name="GenderId"
+                      className="p-0"
+                      style={{
+                        outline: "0",
+                        border: "0",
+                        width: "100%",
+                        height: "100%",
+                        color: "#000",
+                      }}
+                      onChange={
+                        (e) =>
+                          setUser({
+                            ...user,
+                            specializationCategory: {
+                              id: parseInt(e.target.value),
+                              name: e.target.options[e.target.selectedIndex]
+                                .text,
+                            },
+                          })
+                        // console.log(parseInt(e.target.value))
+                      }
+                    >
+                      <option disabled value="1" selected>
+                        Select Category
+                      </option>
+                      {specializationCategories.map((specialization) => (
+                        <option
+                          key={specialization.id}
+                          value={specialization.id}
+                        >
+                          {specialization.name}
+                        </option>
+                      ))}
+                    </select>
+                  </>
                 ) : (
-                  <span className="fs-5">{user.specializationCategory?.name}</span>
+                  <span className="fs-5">
+                    {user && user.specializationCategory?.name}
+                  </span>
                 )}
                 <span
                   style={{
@@ -507,9 +560,10 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  Specialist
+                  Specialization Category
                 </span>
               </div>
+              {/* Specialization */}
               <div
                 className={`info-item p-2 d-flex flex-column flex-grow-1 ${
                   isEditMode ? "edit-mode" : ""
@@ -521,7 +575,9 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.specialization}
-                    onChange={(e) => setUser({ ...user, specialization: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, specialization: e.target.value })
+                    }
                   />
                 ) : (
                   <span className="fs-5">{user.specialization}</span>

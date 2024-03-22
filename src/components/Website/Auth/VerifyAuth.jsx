@@ -14,7 +14,7 @@ export default function VirfyAuth() {
   const token = cookies.get("edu-caring");
 
   const decodedToken = token ? jwtDecode(token) : {};
-  console.log(decodedToken)
+  console.log(decodedToken);
 
   useEffect(() => {
     axios
@@ -39,5 +39,9 @@ export default function VirfyAuth() {
   console.log(user);
 
   // Edditting in the token prevent it
-  return token && decodedToken.uid ? <Outlet /> : <Navigate to="/login" replace={true} />;
+  return token && decodedToken.uid ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace={true} />
+  );
 }

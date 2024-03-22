@@ -99,7 +99,7 @@ export default function Recommendations() {
 
   return (
     <>
-      <div className="myevents">
+      <div className="recommendations">
         <div className="header">
           <select
             name="type"
@@ -304,35 +304,6 @@ export default function Recommendations() {
         ) : (
           <div className="body d-flex gap-4 p-4 flex-wrap">
             {filteredEvents.map((event, index) => (
-            //   <Link
-            //     to={`/home/event/${event.id}`}
-            //     className="event"
-            //     key={index}
-            //   >
-            //     <img src={event.displayPrimeImageURL} alt="eventImg" />
-            //     <div className="info">
-            //       <h6>{event.name}</h6>
-            //       <p>
-            //         <i className="fa-solid fa-calendar-days"></i>
-            //         {formatDate(event.startDay)}
-            //       </p>
-            //       <p>
-            //         <i className="bi bi-geo-alt-fill"></i>
-            //         {event.eventDays[0]?.address}
-            //       </p>
-            //       <div className="rate">
-            //         <span>({event.numberOfReviews || 0} reviews)</span>
-            //         <span>
-            //           <i className="bi bi-star-fill"></i>
-            //           {event.reviewRate || 0}
-            //         </span>
-            //       </div>
-            //     </div>
-            //     <div className="price">
-            //       <h6>{event.totalPrice}</h6>
-            //       <span>SAR</span>
-            //     </div>
-            //   </Link>
             <Link
             key={index}
             className="event"
