@@ -1,5 +1,5 @@
 import logo from "../../../assets/logo-removebg-preview.png";
-import { Link } from "react-router-dom";
+import { Link ,NavLink} from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import Cookie from "cookie-universal";
@@ -93,7 +93,7 @@ function SideBar() {
           <li
             className={`nav-item my-2 ${activeLink === "profile" && "active"}`}
           >
-            <Link
+            <NavLink
               to={`${
                 decodedToken.roles.includes("User")
                   ? "update-user-profile"
@@ -114,7 +114,7 @@ function SideBar() {
             >
               <i className="bi bi-person me-2 fs-6"></i>
               <span className="fs-6 ">Profile</span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
         <Logout />

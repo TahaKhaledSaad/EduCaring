@@ -7,6 +7,7 @@ import "./profiles.css";
 import upload from "./../../../assets/image.png";
 import pdf from "./../../../assets/pdf.png";
 import Success from "../Popups/Success";
+import DeleteModel from "./../Popups/DeleteModel";
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -29,8 +30,6 @@ export default function Profile() {
   const token = cookie.get("edu-caring");
 
   const decodedToken = jwtDecode(token);
-
-  console.log(user);
 
   useEffect(() => {
     axios
@@ -55,16 +54,16 @@ export default function Profile() {
   const handleEditClick = () => setIsEditMode(true);
 
   useEffect(() => {
-    user && user?.displayWalaaCardURL == undefined
+    user.displayWalaaCardURL
       ? setShowCommingWalaaFile(false)
       : setShowCommingWalaaFile(true);
-    user && user?.displayPassportImageURL == undefined
+    user.displayPassportImageURL
       ? setShowCommingPassportFile(false)
       : setShowCommingPassportFile(true);
-    user && user?.displayCvFileURL == undefined
+    user.displayCvFileURL
       ? setShowCommingCvFile(false)
       : setShowCommingCvFile(true);
-  }, [user]);
+  }, []);
 
   const handleSaveClick = () => {
     setIsEditMode(false);
@@ -76,7 +75,7 @@ export default function Profile() {
     formData.append("Email", user.email);
     formData.append("NameAr", user.nameAr);
     formData.append("NameEn", user.nameEn);
-    formData.append("GenderId", user.gender.id);
+    formData.append("GenderId", user.genderId);
     formData.append("ProfileImage", user.profileImage);
     formData.append("DateOfBirth", user.dateOfBirth);
     formData.append("City", user.city);
@@ -122,19 +121,35 @@ export default function Profile() {
   const formattedDateOfBirth = user && formatDate(user.dateOfBirth);
 
   // [8] Handle Delete Image
+// /////////////////////////////////////////////////////////////////////////////////////////////
+  const [showDeleteModel, setShowDeleteModel] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState(null);
+
   const handleDeleteImage = (imageType) => {
-    if (imageType === "WalaaCarFile") {
+    // Set the image to be deleted
+    setImageToDelete(imageType);
+    setShowDeleteModel(true); // Show the delete model
+  };
+
+  const handleDeleteConfirmed = () => {
+    if (imageToDelete === "WalaaCarFile") {
       setWalaaFile(null);
+      setShowCommingWalaaFile(true);
     }
-    if (imageType === "PassportImageFile") {
+    if (imageToDelete === "PassportImageFile") {
       setPassportFile(null);
+      setShowCommingPassportFile(true);
     }
-    if (imageType === "CvFile") {
+    if (imageToDelete === "CvFile") {
       setCvFile(null);
+      setShowCommingCvFile(true);
     }
-    if (imageType === "ProfileImageFile") {
-      setProfileFile(null);
-    }
+    setShowDeleteModel(false); // Hide the delete model
+  };
+  const handleClose = () => {
+    // Close the delete model without deleting the image
+    setImageToDelete(null); // Clear the imageToDelete state
+    setShowDeleteModel(false);
   };
 
   // [6] Handle Upload Change
@@ -154,17 +169,6 @@ export default function Profile() {
     }
   };
 
-  // [11] Get All Gender
-  const [genders, setGenders] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${BASE}/MainData/GetAllGender`)
-      .then((res) => {
-        setGenders(res.data.responseObject);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   return (
     <>
       {user && (
@@ -176,7 +180,6 @@ export default function Profile() {
             <Success text="Profile Updated Failed!" type="error" />
           )}
 
-          {/* Head */}
           <div
             className="head d-flex gap-3 align-items-center pb-3"
             style={{ borderBottom: "1px solid #DCDCDC" }}
@@ -294,10 +297,8 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Profile */}
           <div className="container-profile">
             <div className="without-bio my-3">
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -326,7 +327,6 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -355,9 +355,7 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
-                {/* Data of Birth */}
                 <div
                   className={`info-item p-2 d-flex flex-column ${
                     isEditMode ? "edit-mode" : ""
@@ -387,47 +385,29 @@ export default function Profile() {
                     date
                   </span>
                 </div>
-                {/* Gender Input */}
                 <div
                   className={`info-item p-2 d-flex flex-column flex-grow-1 ${
                     isEditMode ? "edit-mode" : ""
                   }`}
                 >
                   {isEditMode ? (
-                    <select
-                      name="GenderId"
-                      className="p-0"
-                      style={{
-                        outline: "0",
-                        border: "0",
-                        width: "100%",
-                        height: "100%",
-                        color: "#000",
-                      }}
-                      onChange={
-                        (e) =>
-                          setUser({
-                            ...user,
-                            gender: {
-                              id: parseInt(e.target.value),
-                              name: e.target.options[e.target.selectedIndex]
-                                .text,
-                            },
-                          })
-                        // console.log(parseInt(e.target.value))
+                    <input
+                      type="text"
+                      className="border-0 mb-1"
+                      style={{ outline: "0" }}
+                      value={user.gender?.name}
+                      onChange={(e) =>
+                        setUser({
+                          ...user,
+                          gender: {
+                            ...user.gender,
+                            name: e.target.value,
+                          },
+                        })
                       }
-                    >
-                      <option disabled value="1" selected>
-                        Select Gender
-                      </option>
-                      {genders.map((gender) => (
-                        <option key={gender.id} value={gender.id}>
-                          {gender.name}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   ) : (
-                    <span className="fs-5">{user && user.gender?.name}</span>
+                    <span className="fs-5">{user.gender?.name}</span>
                   )}
                   <span
                     style={{
@@ -440,7 +420,6 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -472,7 +451,6 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -483,13 +461,13 @@ export default function Profile() {
                     type="text"
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
-                    value={user?.passportNumber}
+                    value={user?.passportNumbe}
                     onChange={(e) =>
                       setUser({ ...user, passportNumber: e.target.value })
                     }
                   />
                 ) : (
-                  <span className="fs-5">{user?.passportNumber}</span>
+                  <span className="fs-5">{user?.passportNumbe}</span>
                 )}
                 <span
                   style={{
@@ -501,7 +479,6 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -530,7 +507,6 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -559,7 +535,6 @@ export default function Profile() {
                 </span>
               </div>
 
-              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -667,7 +642,7 @@ export default function Profile() {
                     style={{
                       display: user.displayWalaaCardURL ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -692,14 +667,16 @@ export default function Profile() {
                               )} KB`}
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                        style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => setShowCommingWalaaFile(false)}
-                      >
-                        <i className="fas fa-trash-alt fa-2xl"></i>
-                      </button>
+                      {isEditMode && (
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                          style={{ position: "absolute", bottom: "0" }}
+                          onClick={() => setShowCommingWalaaFile(false)}
+                        >
+                          <i className="fas fa-trash-alt fa-2xl"></i>
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -710,7 +687,7 @@ export default function Profile() {
                     style={{
                       display: walaaFile ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -790,7 +767,7 @@ export default function Profile() {
                     style={{
                       display: user.displayPassportImageURL ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       position: "relative",
                       borderRadius: "5px",
                       overflow: "hidden",
@@ -806,16 +783,18 @@ export default function Profile() {
                       }}
                       alt="Passport"
                     />
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                      style={{ position: "absolute", bottom: "0" }}
-                      onClick={() => {
-                        setShowCommingPassportFile(false);
-                      }}
-                    >
-                      <i className="fas fa-trash-alt fa-2xl"></i>
-                    </button>
+                    {isEditMode && (
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                        style={{ position: "absolute", bottom: "0" }}
+                        onClick={() => {
+                          setShowCommingPassportFile(false);
+                        }}
+                      >
+                        <i className="fas fa-trash-alt fa-2xl"></i>
+                      </button>
+                    )}
                   </div>
                 )}
                 {/* After Uploading */}
@@ -824,7 +803,7 @@ export default function Profile() {
                     style={{
                       display: passportFile ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       backgroundImage: `url(${URL.createObjectURL(
                         passportFile
                       )})`,
@@ -892,7 +871,7 @@ export default function Profile() {
                     style={{
                       display: user.displayCvURL ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -917,16 +896,18 @@ export default function Profile() {
                               )} KB`}
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                        style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => {
-                          setShowCommingCvFile(false);
-                        }}
-                      >
-                        <i className="fas fa-trash-alt fa-2xl"></i>
-                      </button>
+                      {isEditMode && (
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                          style={{ position: "absolute", bottom: "0" }}
+                          onClick={() => {
+                            setShowCommingCvFile(false);
+                          }}
+                        >
+                          <i className="fas fa-trash-alt fa-2xl"></i>
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -937,7 +918,7 @@ export default function Profile() {
                     style={{
                       display: cvFile ? "block" : "none",
                       width: "300px",
-                      height: "230px",
+                      height: `${isEditMode ? "230px" : "175px"}`,
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -955,14 +936,16 @@ export default function Profile() {
                             : `${(cvFile.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                        style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => handleDeleteImage("CvFile")}
-                      >
-                        <i className="fas fa-trash-alt fa-2xl"></i>
-                      </button>
+                      {isEditMode && (
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                          style={{ position: "absolute", bottom: "0" }}
+                          onClick={() => handleDeleteImage("CvFile")}
+                        >
+                          <i className="fas fa-trash-alt fa-2xl"></i>
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -974,6 +957,23 @@ export default function Profile() {
           {/* *** */}
           {/* *** */}
           {/* *** */}
+
+          <div
+            className="position-absolute top-50 start-50"
+            style={{
+              transition: "0.5",
+              transform: showDeleteModel
+                ? "translate(-50%,-50%)"
+                : "translate(200%, -50%)",
+            }}
+          >
+            {showDeleteModel && (
+              <DeleteModel
+                onDelete={handleDeleteConfirmed}
+                onClose={handleClose}
+              />
+            )}
+          </div>
         </div>
       )}
     </>

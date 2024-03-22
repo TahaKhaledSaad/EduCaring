@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { BASE } from "../../../Api";
 // Translation Work
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export default function Person() {
   // Translation Work
@@ -40,35 +41,43 @@ export default function Person() {
 
   return (
     <>
-      <div className="person d-flex gap-3 align-items-center">
-        {user.displayProfileImage && (
-          <img src={user.displayProfileImage} alt="person" />
-        )}
-        {!user.displayProfileImage && (
-          <div
-            style={{
-              width: "50px",
-              height: "50px",
-              borderRadius: "50%",
-              background: "#ddd",
-            }}
-            className="d-flex justify-content-center align-items-center text-white fs-5"
-          >
-            <span
-              className="text-dark fs-3 fw-bold"
-              style={{ userSelect: "none" }}
+      <Link
+        to={`${
+          decodedToken.roles.includes("User")
+            ? "update-user-profile"
+            : "update-speaker-profile"
+        }`}
+      >
+        <div className="person d-flex gap-3 align-items-center">
+          {user.displayProfileImage && (
+            <img src={user.displayProfileImage} alt="person" />
+          )}
+          {!user.displayProfileImage && (
+            <div
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                background: "#ddd",
+              }}
+              className="d-flex justify-content-center align-items-center text-white fs-5"
             >
-              {user.nameEn && user.nameEn.substring(0, 2).toUpperCase()}
+              <span
+                className="text-dark fs-3 fw-bold"
+                style={{ userSelect: "none" }}
+              >
+                {user.nameEn && user.nameEn.substring(0, 2).toUpperCase()}
+              </span>
+            </div>
+          )}
+          <div className="details mt-2">
+            <span className="name">
+              {i18n.language === "en" ? user.nameEn : user.nameAr}
             </span>
+            <p className="email">{user.email}</p>
           </div>
-        )}
-        <div className="details mt-2">
-          <span className="name">
-            {i18n.language === "en" ? user.nameEn : user.nameAr}
-          </span>
-          <p className="email">{user.email}</p>
         </div>
-      </div>
+      </Link>
     </>
   );
 }

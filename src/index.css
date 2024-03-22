@@ -51,6 +51,11 @@ i {
 .sideBar img {
   height: 65px;
 }
+.nav-pills .nav-link.active{
+  background-color: #3296d4;
+  color: white;
+
+}
 /* end of sidebar */
 
 /* start of top bar */

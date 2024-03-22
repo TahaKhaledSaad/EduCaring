@@ -24,7 +24,8 @@ export default function TopBar() {
       case "/home/recommendations":
         setRouteText("Recommendations");
         break;
-      case "/home/profile":
+      case "/home/update-user-profile":
+      case "/home/update-speaker-profile":
         setRouteText("Profile");
         break;
       case `/home/event/${eventId}`:

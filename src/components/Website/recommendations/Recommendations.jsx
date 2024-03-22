@@ -307,7 +307,7 @@ export default function Recommendations() {
             <Link
             key={index}
             className="event"
-            to={`event/${event.id}`}
+            to={`/home/event/${event.id}`}
           >
             <img src={event.displayPrimeImageURL} alt="event-Img" />
 

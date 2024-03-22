@@ -11,7 +11,7 @@ export default function Language() {
   //
   const [chosenLang, setChosenLang] = useState({
     img: en,
-    name: "english",
+    name: "English",
   });
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeChoice, setActiveChoice] = useState(null);
@@ -25,7 +25,7 @@ export default function Language() {
       setChosenLang({ img: imgSrc, name: langName });
       setPopupVisible(false);
       setActiveChoice(option);
-      langName === "english" ? i18n.changeLanguage("en") : i18n.changeLanguage("ar");
+      langName === "English" ? i18n.changeLanguage("en") : i18n.changeLanguage("ar");
     };
   }
 
@@ -60,7 +60,7 @@ export default function Language() {
               <p>العربية</p>
             </div>
             <div
-              onClick={handleChoiceClick(en, "english", en)}
+              onClick={handleChoiceClick(en, "English", en)}
               style={{ color: activeChoice === en ? "#3296D4" : "" }}
             >
               <img
@@ -72,7 +72,7 @@ export default function Language() {
                   border: activeChoice === en ? "1px solid #3296D4" : "",
                 }}
               />
-              <p>english</p>
+              <p>English</p>
             </div>
           </div>
         </div>

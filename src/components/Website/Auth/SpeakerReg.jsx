@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookie from "cookie-universal";
 import axios from "axios";
 import { BASE } from "../../../Api";
-import DeleteModel from "../Popups/DeleteModel";
+import DeleteModel from "./../Popups/DeleteModel";
 
 export default function SpeakerReg() {
   // [0] States
@@ -96,6 +96,7 @@ export default function SpeakerReg() {
     }
   };
 
+  // [7] Handle Submit
   async function handleSubmit(e) {
     e.preventDefault();
     console.log(userData);
@@ -117,7 +118,7 @@ export default function SpeakerReg() {
         .then((res) => {
           console.log(res.data);
 
-          cookies.set("edu-caring", res.data.responseObject.token);
+          cookies.set("edu-caring", res.data.responseObject?.token);
 
           if (res.data.isSuccess) {
             nav("/login");
@@ -136,8 +137,6 @@ export default function SpeakerReg() {
   }
 
   // [8] Handle Delete Image
-
-  // delele model
 
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
