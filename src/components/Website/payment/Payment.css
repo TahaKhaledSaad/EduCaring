@@ -1,0 +1,7 @@
+.hidden {
+  display: none;
+}
+.selected{
+    background-color: #3296D4 !important;
+    color: white !important;
+}
