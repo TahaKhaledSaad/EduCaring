@@ -7,7 +7,6 @@ import "./profiles.css";
 import upload from "./../../../assets/image.png";
 import pdf from "./../../../assets/pdf.png";
 import Success from "../Popups/Success";
-import DeleteModel from "./../Popups/DeleteModel";
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -30,6 +29,8 @@ export default function Profile() {
   const token = cookie.get("edu-caring");
 
   const decodedToken = jwtDecode(token);
+
+  console.log(user);
 
   useEffect(() => {
     axios
@@ -54,16 +55,16 @@ export default function Profile() {
   const handleEditClick = () => setIsEditMode(true);
 
   useEffect(() => {
-    user.displayWalaaCardURL
+    user && user?.displayWalaaCardURL == undefined
       ? setShowCommingWalaaFile(false)
       : setShowCommingWalaaFile(true);
-    user.displayPassportImageURL
+    user && user?.displayPassportImageURL == undefined
       ? setShowCommingPassportFile(false)
       : setShowCommingPassportFile(true);
-    user.displayCvFileURL
+    user && user?.displayCvFileURL == undefined
       ? setShowCommingCvFile(false)
       : setShowCommingCvFile(true);
-  }, []);
+  }, [user]);
 
   const handleSaveClick = () => {
     setIsEditMode(false);
@@ -75,16 +76,13 @@ export default function Profile() {
     formData.append("Email", user.email);
     formData.append("NameAr", user.nameAr);
     formData.append("NameEn", user.nameEn);
-    formData.append("GenderId", user.genderId);
+    formData.append("GenderId", user.gender?.id || 1);
     formData.append("ProfileImage", user.profileImage);
     formData.append("DateOfBirth", user.dateOfBirth);
     formData.append("City", user.city);
     formData.append("Country", user.country);
     formData.append("Specialization", user.specialization);
-    formData.append(
-      "SpecializationCategoryId",
-      user.specializationCategoryId || ""
-    );
+    formData.append("SpecializationCategoryId", user.specializationCategoryId || "");
     formData.append("PassportNumber", user.passportNumber);
     formData.append("HealthAuthorityNumber", user.healthAuthorityNumber);
     formData.append("Bio", user.bio);
@@ -121,36 +119,23 @@ export default function Profile() {
   const formattedDateOfBirth = user && formatDate(user.dateOfBirth);
 
   // [8] Handle Delete Image
-// /////////////////////////////////////////////////////////////////////////////////////////////
-  const [showDeleteModel, setShowDeleteModel] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState(null);
-
   const handleDeleteImage = (imageType) => {
-    // Set the image to be deleted
-    setImageToDelete(imageType);
-    setShowDeleteModel(true); // Show the delete model
+    if (imageType === "WalaaCarFile") {
+      setWalaaFile(null);
+    }
+    if (imageType === "PassportImageFile") {
+      setPassportFile(null);
+    }
+    if (imageType === "CvFile") {
+      setCvFile(null);
+    }
+    if (imageType === "ProfileImageFile") {
+      setProfileFile(null);
+    }
   };
 
-  const handleDeleteConfirmed = () => {
-    if (imageToDelete === "WalaaCarFile") {
-      setWalaaFile(null);
-      setShowCommingWalaaFile(true);
-    }
-    if (imageToDelete === "PassportImageFile") {
-      setPassportFile(null);
-      setShowCommingPassportFile(true);
-    }
-    if (imageToDelete === "CvFile") {
-      setCvFile(null);
-      setShowCommingCvFile(true);
-    }
-    setShowDeleteModel(false); // Hide the delete model
-  };
-  const handleClose = () => {
-    // Close the delete model without deleting the image
-    setImageToDelete(null); // Clear the imageToDelete state
-    setShowDeleteModel(false);
-  };
+  console.log(cvFile);
+  console.log(user.displayCvURL);
 
   // [6] Handle Upload Change
   const handleUploadChange = (e, fileType) => {
@@ -169,17 +154,25 @@ export default function Profile() {
     }
   };
 
+  // [11] Get All Gender
+  const [genders, setGenders] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BASE}/MainData/GetAllGender`)
+      .then((res) => {
+        setGenders(res.data.responseObject);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       {user && (
         <div className="p-4">
-          {showSuccessPopup && (
-            <Success text="Profile Updated Successfully!" type="success" />
-          )}
-          {showErrorPopup && (
-            <Success text="Profile Updated Failed!" type="error" />
-          )}
+          {showSuccessPopup && <Success text="Profile Updated Successfully!" type="success" />}
+          {showErrorPopup && <Success text="Profile Updated Failed!" type="error" />}
 
+          {/* Head */}
           <div
             className="head d-flex gap-3 align-items-center pb-3"
             style={{ borderBottom: "1px solid #DCDCDC" }}
@@ -187,11 +180,7 @@ export default function Profile() {
             <div className="position-relative">
               {user.displayProfileImage ? (
                 <img
-                  src={
-                    profileFile
-                      ? URL.createObjectURL(profileFile)
-                      : user.displayProfileImage
-                  }
+                  src={profileFile ? URL.createObjectURL(profileFile) : user.displayProfileImage}
                   alt="personImg"
                   width={"120px"}
                   height={"120px"}
@@ -256,9 +245,7 @@ export default function Profile() {
                       className="border-0 mb-1"
                       style={{ outline: "0" }}
                       value={user.nameEn}
-                      onChange={(e) =>
-                        setUser({ ...user, nameEn: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, nameEn: e.target.value })}
                     />
                   </h3>
                   <p>
@@ -267,9 +254,7 @@ export default function Profile() {
                       className="border-0 mb-1 w-50"
                       style={{ outline: "0" }}
                       value={user.email}
-                      onChange={(e) =>
-                        setUser({ ...user, email: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, email: e.target.value })}
                     />
                   </p>
                 </div>
@@ -288,17 +273,17 @@ export default function Profile() {
             >
               <i
                 className={
-                  isEditMode
-                    ? "fa-regular fa-check-square"
-                    : "fa-regular fa-pen-to-square"
+                  isEditMode ? "fa-regular fa-check-square" : "fa-regular fa-pen-to-square"
                 }
               ></i>
               <span className="ms-2">{isEditMode ? "Save" : "Edit"}</span>
             </div>
           </div>
 
+          {/* Profile */}
           <div className="container-profile">
             <div className="without-bio my-3">
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -310,9 +295,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.nameAr}
-                    onChange={(e) =>
-                      setUser({ ...user, nameAr: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, nameAr: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user.nameAr}</span>
@@ -327,6 +310,7 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -338,9 +322,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.phoneNumber}
-                    onChange={(e) =>
-                      setUser({ ...user, phoneNumber: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user.phoneNumber}</span>
@@ -355,11 +337,11 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
+                {/* Data of Birth */}
                 <div
-                  className={`info-item p-2 d-flex flex-column ${
-                    isEditMode ? "edit-mode" : ""
-                  }`}
+                  className={`info-item p-2 d-flex flex-column ${isEditMode ? "edit-mode" : ""}`}
                   style={{ borderRight: "1px solid #DCDCDC" }}
                 >
                   {isEditMode ? (
@@ -385,29 +367,46 @@ export default function Profile() {
                     date
                   </span>
                 </div>
+                {/* Gender Input */}
                 <div
                   className={`info-item p-2 d-flex flex-column flex-grow-1 ${
                     isEditMode ? "edit-mode" : ""
                   }`}
                 >
                   {isEditMode ? (
-                    <input
-                      type="text"
-                      className="border-0 mb-1"
-                      style={{ outline: "0" }}
-                      value={user.gender?.name}
-                      onChange={(e) =>
-                        setUser({
-                          ...user,
-                          gender: {
-                            ...user.gender,
-                            name: e.target.value,
-                          },
-                        })
+                    <select
+                      name="GenderId"
+                      className="p-0"
+                      style={{
+                        outline: "0",
+                        border: "0",
+                        width: "100%",
+                        height: "100%",
+                        color: "#000",
+                      }}
+                      onChange={
+                        (e) =>
+                          setUser({
+                            ...user,
+                            gender: {
+                              id: parseInt(e.target.value),
+                              name: e.target.options[e.target.selectedIndex].text,
+                            },
+                          })
+                        // console.log(parseInt(e.target.value))
                       }
-                    />
+                    >
+                      <option disabled value="1" selected>
+                        Select Gender
+                      </option>
+                      {genders.map((gender) => (
+                        <option key={gender.id} value={gender.id}>
+                          {gender.name}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
-                    <span className="fs-5">{user.gender?.name}</span>
+                    <span className="fs-5">{user && user.gender?.name}</span>
                   )}
                   <span
                     style={{
@@ -420,6 +419,7 @@ export default function Profile() {
                 </div>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -431,12 +431,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.healthAuthorityNumber}
-                    onChange={(e) =>
-                      setUser({
-                        ...user,
-                        healthAuthorityNumber: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setUser({ ...user, healthAuthorityNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.healthAuthorityNumber}</span>
@@ -451,6 +446,7 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -461,13 +457,11 @@ export default function Profile() {
                     type="text"
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
-                    value={user?.passportNumbe}
-                    onChange={(e) =>
-                      setUser({ ...user, passportNumber: e.target.value })
-                    }
+                    value={user?.passportNumber}
+                    onChange={(e) => setUser({ ...user, passportNumber: e.target.value })}
                   />
                 ) : (
-                  <span className="fs-5">{user?.passportNumbe}</span>
+                  <span className="fs-5">{user?.passportNumber}</span>
                 )}
                 <span
                   style={{
@@ -479,6 +473,7 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -490,9 +485,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.saudiAuthorityNumber}
-                    onChange={(e) =>
-                      setUser({ ...user, saudiAuthorityNumber: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, saudiAuthorityNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.saudiAuthorityNumber}</span>
@@ -507,6 +500,7 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -518,9 +512,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.currentWorkPlace}
-                    onChange={(e) =>
-                      setUser({ ...user, currentWorkPlace: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, currentWorkPlace: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.currentWorkPlace}</span>
@@ -535,6 +527,7 @@ export default function Profile() {
                 </span>
               </div>
 
+              {/* Input */}
               <div
                 className={`info-item p-2 border rounded d-flex flex-column ${
                   isEditMode ? "edit-mode" : ""
@@ -546,9 +539,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.bankAccount}
-                    onChange={(e) =>
-                      setUser({ ...user, bankAccount: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, bankAccount: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.bankAccount}</span>
@@ -600,15 +591,11 @@ export default function Profile() {
               <div className="elem">
                 <div className="text-muted my-2">
                   <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                  upload Wlaa Card{" "}
-                  <div className="text-danger d-inline">(not required)</div>
+                  upload Wlaa Card <div className="text-danger d-inline">(not required)</div>
                 </div>
                 {/* Upload Label */}
                 {!showCommingWalaaFile && (
-                  <div
-                    className="input-group"
-                    style={{ display: walaaFile ? "none" : "block" }}
-                  >
+                  <div className="input-group" style={{ display: walaaFile ? "none" : "block" }}>
                     <input
                       type="file"
                       className="form-control"
@@ -622,15 +609,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -642,7 +624,7 @@ export default function Profile() {
                     style={{
                       display: user.displayWalaaCardURL ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
+                      height: "230px",
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -653,30 +635,21 @@ export default function Profile() {
                     <div className="d-flex justify-content-center gap-3 align-items-center px-3">
                       <img src={pdf} alt="Wlaa Card" width="80px" />
                       <div>
-                        <p className="p-0 m-0 my-1 fs-5">
-                          {user.displayWalaaCardURL.name}
-                        </p>
+                        <p className="p-0 m-0 my-1 fs-5">{user.displayWalaaCardURL.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {user.displayWalaaCardURL.size > 1024 * 1024
-                            ? `${(
-                                user.displayWalaaCardURL.size /
-                                (1024 * 1024)
-                              ).toFixed(2)} MB`
-                            : `${(user.displayWalaaCardURL.size / 1024).toFixed(
-                                2
-                              )} KB`}
+                            ? `${(user.displayWalaaCardURL.size / (1024 * 1024)).toFixed(2)} MB`
+                            : `${(user.displayWalaaCardURL.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
-                      {isEditMode && (
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                          style={{ position: "absolute", bottom: "0" }}
-                          onClick={() => setShowCommingWalaaFile(false)}
-                        >
-                          <i className="fas fa-trash-alt fa-2xl"></i>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                        style={{ position: "absolute", bottom: "0" }}
+                        onClick={() => setShowCommingWalaaFile(false)}
+                      >
+                        <i className="fas fa-trash-alt fa-2xl"></i>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -687,7 +660,7 @@ export default function Profile() {
                     style={{
                       display: walaaFile ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
+                      height: "230px",
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -701,9 +674,7 @@ export default function Profile() {
                         <p className="p-0 m-0 my-1 fs-5">{walaaFile.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {walaaFile.size > 1024 * 1024
-                            ? `${(walaaFile.size / (1024 * 1024)).toFixed(
-                                2
-                              )} MB`
+                            ? `${(walaaFile.size / (1024 * 1024)).toFixed(2)} MB`
                             : `${(walaaFile.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
@@ -737,9 +708,7 @@ export default function Profile() {
                       type="file"
                       className="form-control"
                       id="PassportImage"
-                      onChange={(e) =>
-                        handleUploadChange(e, "PassportImageFile")
-                      }
+                      onChange={(e) => handleUploadChange(e, "PassportImageFile")}
                       hidden
                     />
                     <label
@@ -748,15 +717,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -767,7 +731,7 @@ export default function Profile() {
                     style={{
                       display: user.displayPassportImageURL ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
+                      height: "230px",
                       position: "relative",
                       borderRadius: "5px",
                       overflow: "hidden",
@@ -776,25 +740,19 @@ export default function Profile() {
                     <img
                       src={user.displayPassportImageURL}
                       className="d-block w-100"
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        objectFit: "cover",
-                      }}
+                      style={{ height: "100%", width: "100%", objectFit: "cover" }}
                       alt="Passport"
                     />
-                    {isEditMode && (
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                        style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => {
-                          setShowCommingPassportFile(false);
-                        }}
-                      >
-                        <i className="fas fa-trash-alt fa-2xl"></i>
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                      style={{ position: "absolute", bottom: "0" }}
+                      onClick={() => {
+                        setShowCommingPassportFile(false);
+                      }}
+                    >
+                      <i className="fas fa-trash-alt fa-2xl"></i>
+                    </button>
                   </div>
                 )}
                 {/* After Uploading */}
@@ -803,10 +761,8 @@ export default function Profile() {
                     style={{
                       display: passportFile ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
-                      backgroundImage: `url(${URL.createObjectURL(
-                        passportFile
-                      )})`,
+                      height: "230px",
+                      backgroundImage: `url(${URL.createObjectURL(passportFile)})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
@@ -834,10 +790,7 @@ export default function Profile() {
                 </div>
                 {/* Upload Label */}
                 {!showCommingCvFile && (
-                  <div
-                    className="input-group"
-                    style={{ display: cvFile ? "none" : "block" }}
-                  >
+                  <div className="input-group" style={{ display: cvFile ? "none" : "block" }}>
                     <input
                       type="file"
                       className="form-control"
@@ -851,15 +804,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -871,7 +819,7 @@ export default function Profile() {
                     style={{
                       display: user.displayCvURL ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
+                      height: "230px",
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -882,32 +830,21 @@ export default function Profile() {
                     <div className="d-flex justify-content-center gap-3 align-items-center px-3">
                       <img src={pdf} alt="Wlaa Card" width="80px" />
                       <div>
-                        <p className="p-0 m-0 my-1 fs-5">
-                          {user.displayCvURL.name}
-                        </p>
+                        <p className="p-0 m-0 my-1 fs-5">{user.displayCvURL.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {user.displayCvURL.size > 1024 * 1024
-                            ? `${(
-                                user.displayCvURL.size /
-                                (1024 * 1024)
-                              ).toFixed(2)} MB`
-                            : `${(user.displayCvURL.size / 1024).toFixed(
-                                2
-                              )} KB`}
+                            ? `${(user.displayCvURL.size / (1024 * 1024)).toFixed(2)} MB`
+                            : `${(user.displayCvURL.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
-                      {isEditMode && (
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                          style={{ position: "absolute", bottom: "0" }}
-                          onClick={() => {
-                            setShowCommingCvFile(false);
-                          }}
-                        >
-                          <i className="fas fa-trash-alt fa-2xl"></i>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                        style={{ position: "absolute", bottom: "0" }}
+                        onClick={() => setShowCommingWalaaFile(false)}
+                      >
+                        <i className="fas fa-trash-alt fa-2xl"></i>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -918,7 +855,7 @@ export default function Profile() {
                     style={{
                       display: cvFile ? "block" : "none",
                       width: "300px",
-                      height: `${isEditMode ? "230px" : "175px"}`,
+                      height: "230px",
                       border: "1px solid #dcdcdc",
                       borderRadius: "5px",
                       position: "relative",
@@ -936,16 +873,14 @@ export default function Profile() {
                             : `${(cvFile.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
-                      {isEditMode && (
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm py-3 w-100 rounded-0"
-                          style={{ position: "absolute", bottom: "0" }}
-                          onClick={() => handleDeleteImage("CvFile")}
-                        >
-                          <i className="fas fa-trash-alt fa-2xl"></i>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm py-3 w-100 rounded-0"
+                        style={{ position: "absolute", bottom: "0" }}
+                        onClick={() => handleDeleteImage("CvFile")}
+                      >
+                        <i className="fas fa-trash-alt fa-2xl"></i>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -957,23 +892,6 @@ export default function Profile() {
           {/* *** */}
           {/* *** */}
           {/* *** */}
-
-          <div
-            className="position-absolute top-50 start-50"
-            style={{
-              transition: "0.5",
-              transform: showDeleteModel
-                ? "translate(-50%,-50%)"
-                : "translate(200%, -50%)",
-            }}
-          >
-            {showDeleteModel && (
-              <DeleteModel
-                onDelete={handleDeleteConfirmed}
-                onClose={handleClose}
-              />
-            )}
-          </div>
         </div>
       )}
     </>
