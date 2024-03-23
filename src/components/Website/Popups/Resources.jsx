@@ -3,11 +3,13 @@ import { BASE } from "../../../Api";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import upload from "./../../../assets/image.png";
 
-export default function Resources({ eventId, eventDayId, userId }) {
-
+export default function Resources({ eventId, eventDayId, userId, addResourcesSpeaker }) {
   const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
+
+  // console.log("from resources:", eventId, eventDayId, userId, addResourcesSpeaker);
 
   useEffect(() => {
     axios
@@ -96,9 +98,9 @@ export default function Resources({ eventId, eventDayId, userId }) {
     setLinks(links);
   }, [resources]);
 
-  console.log(files);
-  console.log(imgs);
-  console.log(links);
+  // console.log(files);
+  // console.log(imgs);
+  // console.log(links);
 
   const [selectedOption, setSelectedOption] = useState("files");
 
@@ -284,7 +286,7 @@ export default function Resources({ eventId, eventDayId, userId }) {
         onClick={togglePopup}
       >
         <p className="m-0">
-          Resources{" "}
+          Resources
           <svg
             width="18"
             height="18"
@@ -311,13 +313,14 @@ export default function Resources({ eventId, eventDayId, userId }) {
       </div>
 
       <div
-        className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto"
+        className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup ? "translate(100%,-50%)" : "translate(-50%, -50%)",
+          transform: showPopup ? "translate(200%,-50%)" : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000",
           height: "80vh",
           scrollbarWidth: "none",
+          boxShadow: "0px 0px 30px #666",
         }}
       >
         <div
@@ -366,6 +369,51 @@ export default function Resources({ eventId, eventDayId, userId }) {
           </div>
 
           <div className="my-2 overflow-y-auto overflow-x-hidden">
+            {addResourcesSpeaker && (selectedOption === "files" || selectedOption === "images") && (
+              <div className="input-group p-1">
+                <input type="file" className="form-control" id="PassportImage" hidden multiple />
+                <label
+                  className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
+                  htmlFor="PassportImage"
+                >
+                  <img src={upload} alt="upload files" width="80px" />
+                  <div>
+                    <div className="text-center my-0">
+                      Drag and Drop image <p className="text-info d-inline">here</p>
+                    </div>
+                    <div className="text-center my-0">
+                      or <p className="text-info d-inline text-decoration-down">upload</p> image
+                    </div>
+                  </div>
+                </label>
+              </div>
+            )}
+
+            {addResourcesSpeaker && selectedOption === "links" && (
+              <div className="input-group p-2 mb-3 border border-muted rounded d-flex justify-content-between">
+                <input
+                  type="text"
+                  placeholder="Enter Link"
+                  style={{
+                    border: "none",
+                    outline: "none",
+                    width: "calc(100% - 150px)",
+                  }}
+                />
+                <button
+                  className="btn btn-success px-4 py-2"
+                  style={{
+                    backgroundColor: "#27AE60",
+                    border: "none",
+                    outline: "none",
+                    borderRadius: "10px",
+                  }}
+                >
+                  Add new Link
+                </button>
+              </div>
+            )}
+
             {selectedOption === "files" &&
               files.map((file, index) => (
                 <li
@@ -462,4 +510,7 @@ Resources.propTypes = {
 };
 Resources.propTypes = {
   userId: PropTypes.string.isRequired,
+};
+Resources.propTypes = {
+  addResourcesSpeaker: PropTypes.bool.isRequired,
 };

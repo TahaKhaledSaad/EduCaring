@@ -44,7 +44,7 @@ export default function Home() {
       .catch((err) => console.log(err));
   }, [i18n.language, decodedToken.uid]);
 
-  console.log(events);
+  // console.log(events);
 
   const [recommendEvents, setrecommendEvents] = useState([]);
 
