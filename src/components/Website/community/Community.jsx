@@ -111,25 +111,25 @@ export default function Community() {
                 className={` chat-item d-flex gap-2 p-2 position-relative ${
                   selectedChat === item ? "selected-chat" : ""
                 }
-                ${item?.eventData.isFinished ? "finished" : ""}
+                ${item?.eventData?.isFinished ? "finished" : ""}
                 `}
                 onClick={() => handleChatItemClick(item)}
               >
                 <img
-                  src={item.eventData.primeImageURL}
+                  src={item.eventData?.primeImageURL}
                   alt="chat-img"
                   width={"60px"}
                   height={"60px"}
                   className="rounded"
                 />
                 <div className="text">
-                  <h6>{item.eventData.name}</h6>
+                  <h6>{item.eventData?.name}</h6>
                   <p className="text-muted fs-11">
                     {item.messages[item.messages.length - 1]?.message}
                   </p>
                 </div>
                 {item.unreadCount ? (
-                  <span className="num">item.unreadCount </span>
+                  <span className="num">{item.unreadCount} </span>
                 ) : (
                   ""
                 )}
@@ -138,7 +138,7 @@ export default function Community() {
                     item.messages[item.messages.length - 1]?.timestamp
                   )}
                 </span>
-                {item?.eventData.isFinished && (
+                {item?.eventData?.isFinished && (
                   <span className="text-danger event-finished">
                     event finished
                   </span>

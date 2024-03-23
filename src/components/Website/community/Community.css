@@ -77,7 +77,7 @@
   border-radius: 50%;
 }
 .commuinty .chat-item span.event-finished{
-  bottom: 20px;
+  bottom: 0px;
   font-size: 12px;
   color: #747688;
 }
@@ -142,9 +142,9 @@
   cursor: pointer;
 }
 .commuinty .chat-content .close-btn {
-  position: absolute;
-  top: 5px;
-  right: 10px;
+  position: fixed;
+  top: 90px;
+  right: 20px;
   cursor: pointer;
   font-size: 20px;
   color: #a5a5a5;
