@@ -5,15 +5,6 @@ import landing1 from "../../../assets/landing1.png";
 import landing2 from "../../../assets/landing2.png";
 import landing3 from "../../../assets/landing3.png";
 import landing4 from "../../../assets/landing4.png";
-import spotify from "../../../assets/spotify.png";
-import google from "../../../assets/google.png";
-import stripe from "../../../assets/stripe.png";
-import youtube from "../../../assets/youtube.png";
-import microsoft from "../../../assets/microsoft.png";
-import medium from "../../../assets/medium.png";
-import zoom from "../../../assets/zoom.png";
-import uber from "../../../assets/uber.png";
-import grab from "../../../assets/grab.png";
 import photo2 from "../../../assets/photos2.png";
 import photo3 from "../../../assets/photos3.png";
 import photo1 from "../../../assets/photos1.png";
@@ -27,22 +18,21 @@ import photo10 from "../../../assets/photos10.png";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import s1 from "../../../assets/speaker1.png";
-import s2 from "../../../assets/speaker2.png";
-import s3 from "../../../assets/speaker3.png";
-import s4 from "../../../assets/speaker4.png";
 import Role from "../Popups/Role";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import Logout from "../Popups/Logout";
-
+import { BASE } from "../../../Api";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
 export default function LandingPage() {
+  const { i18n } = useTranslation();
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
 
   const decodedToken = token ? jwtDecode(token) : {};
-  console.log(decodedToken);
+  // console.log(decodedToken);
 
   let [role, setRole] = useState(false);
 
@@ -63,7 +53,7 @@ export default function LandingPage() {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 1,
+          slidesToScroll: 2,
           infinite: true,
           dots: true,
         },
@@ -85,6 +75,84 @@ export default function LandingPage() {
       },
     ],
   };
+
+  // get text
+
+  const [text, setText] = useState("");
+  useEffect(() => {
+    axios
+      .get(`${BASE}/LandingPage/GetLandingTextForApp`, {
+        headers: {
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        setText(response.data.responseObject);
+      })
+      .catch((error) => {
+        console.error("Error fetching text:", error);
+      });
+  }, [i18n.language]);
+
+  // console.log(text);
+
+  //  sponsers
+
+  const [sponsers, setSponsers] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BASE}/LandingPage/GetSponsers`, {
+        headers: {
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        setSponsers(response.data.responseObject);
+      })
+      .catch((error) => {
+        console.error("Error fetching sponsers:", error);
+      });
+  }, [i18n.language]);
+
+  // console.log(sponsers);
+
+  // About
+
+  const [about, setAbout] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BASE}/MainData/GetAboutUs`, {
+        headers: {
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        setAbout(response.data.responseObject);
+      })
+      .catch((error) => {
+        console.error("Error fetching about:", error);
+      });
+  }, [i18n.language]);
+  // console.log(about);
+
+  // speakers
+  const [speakers, setSpeakers] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BASE}/LandingPage/GetLandingSpeakerForApp`, {
+        headers: {
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        setSpeakers(response.data.responseObject);
+      })
+      .catch((error) => {
+        console.error("Error fetching speakers:", error);
+      });
+  }, [i18n.language]);
+
+  console.log(speakers);
   return (
     <>
       <div className="landing-page">
@@ -107,7 +175,10 @@ export default function LandingPage() {
               <span className="navbar-toggler-icon"></span>
             </button>
             {/* Menu content */}
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
               <ul className="navbar-nav mx-auto m-2 mb-lg-0">
                 <li className="nav-item active">
                   <NavLink className="nav-link" to="/home">
@@ -148,7 +219,10 @@ export default function LandingPage() {
                   </li>
 
                   <li className="nav-item">
-                    <button className="btn btn-info text-white m-2" onClick={() => setRole(!role)}>
+                    <button
+                      className="btn btn-info text-white m-2"
+                      onClick={() => setRole(!role)}
+                    >
                       Register
                     </button>
                   </li>
@@ -172,11 +246,7 @@ export default function LandingPage() {
               <h1>
                 Welcome To <span>Edu Caring</span>
               </h1>
-              <span>
-                Morbi sit egestas dignissim pharetra, sed amet. Tempus justo senectus risus ac vel,
-                velit, nunc. Eget commodo eget in aliquam facilisi facilisi nec magna hendrerit.
-                Placerat ipsum sit tellus urna, faucibus aenean lorem faucibus integer.
-              </span>
+              <span>{text.welcomeDescription}</span>
               <a className="button" onClick={() => setRole(!role)}>
                 Register <i className="fas fa-chevron-right"></i>
               </a>
@@ -224,15 +294,31 @@ export default function LandingPage() {
         {/* Start Social Media */}
         <div className="container-fluid">
           <div className="social-media">
-            <img src={spotify} width="167px" height="50px" alt="spotify" />
-            <img src={google} width="150px" height="50px" alt="google" />
-            <img src={stripe} width="132px" height="62px" alt="stripe" />
-            <img src={youtube} width="212px" height="131px" alt="youtube" />
-            <img src={microsoft} width="278px" height="124px" alt="microsoft" />
-            <img src={medium} width="275px" height="83px" alt="medium" />
-            <img src={zoom} width="170px" height="30px" alt="zoom" />
-            <img src={uber} width="125px" height="44px" alt="uber" />
-            <img src={grab} width="136px" height="52px" alt="grab" />
+            {sponsers.map((sponser, index) => (
+              <div
+                className="sponser"
+                key={index}
+                style={{
+                  boxShadow: " 0 0 10px 0 rgba(0, 0, 0, 0.1)",
+                  borderRadius: "19px",
+                  padding: "10px",
+                  margin: "10px",
+                }}
+              >
+                <img
+                  src={sponser.imageURL}
+                  alt="sponser"
+                  width="100px"
+                  height="100px"
+                />
+                <p
+                  className="text-center my-2 fw-bold"
+                  style={{ color: "#565656" }}
+                >
+                  {sponser.title}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
         {/* End Social Media */}
@@ -303,11 +389,7 @@ export default function LandingPage() {
             />
           </svg>
           <h2>About Us</h2>
-          <span>
-            Morbi sit egestas dignissim pharetra, sed amet. Tempus justo senectus risus ac vel,
-            velit, nunc. Eget commodo eget in aliquam facilisi facilisi nec magna hendrerit.
-            Placerat ipsum sit tellus urna, faucibus aenean lorem faucibus integer.
-          </span>
+          <span>{about.description}</span>
 
           <svg
             className="vector"
@@ -370,11 +452,7 @@ export default function LandingPage() {
 
           <div className="text">
             <h2>Photos and Videos</h2>
-            <span>
-              Morbi sit egestas dignissim pharetra, sed amet. Tempus justo senectus risus ac vel,
-              velit, nunc. Eget commodo eget in aliquam facilisi facilisi nec magna hendrerit.
-              Placerat ipsum sit tellus urna, faucibus aenean lorem faucibus integer.
-            </span>
+            <span>{text.photoAndVideoDescription}</span>
             <div className="more">
               <Link to="#">view more</Link>
               <svg
@@ -505,10 +583,13 @@ export default function LandingPage() {
               </defs>
             </svg>
           </div>
-          <span className="no-speakers">54 speakers</span>
+          <span className="no-speakers">{speakers?.length} speakers</span>
 
-          <Slider {...settings}>
-            <div className="speaker">
+          {speakers.length === 1 ? (
+            <div
+              className="speaker text-center"
+              style={{ width: "30%", margin: "0 auto" }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="238"
@@ -538,283 +619,61 @@ export default function LandingPage() {
                   </linearGradient>
                 </defs>
               </svg>
-              <img src={s1} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
+              <img
+                src={speakers[0].imageURL}
+                alt="speaker1"
+                width="249px"
+                height="249px"
+              />
+              <h4>{speakers[0].name}</h4>
+              <span>{speakers[0].title}</span>
             </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
+          ) : (
+            <Slider {...settings}>
+              {speakers.map((speaker, index) => (
+                <div className="speaker text-left" key={index}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="238"
+                    height="237"
+                    viewBox="0 0 238 237"
+                    fill="none"
                   >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s2} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s3} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s4} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s1} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s2} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s3} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s4} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-            <div className="speaker">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="238"
-                height="237"
-                viewBox="0 0 238 237"
-                fill="none"
-              >
-                <circle
-                  cx="119"
-                  cy="118.342"
-                  r="118"
-                  transform="rotate(35 119 118.342)"
-                  fill="url(#paint0_linear_734_4437)"
-                  fillOpacity="0.1"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_734_4437"
-                    x1="119"
-                    y1="0.341965"
-                    x2="102"
-                    y2="83.342"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#5CA9C3" />
-                    <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <img src={s1} alt="speaker1" width="249px" height="249px" />
-              <h4>Osama Montaser</h4>
-              <span>xDoctor</span>
-            </div>
-          </Slider>
+                    <circle
+                      cx="119"
+                      cy="118.342"
+                      r="118"
+                      transform="rotate(35 119 118.342)"
+                      fill="url(#paint0_linear_734_4437)"
+                      fillOpacity="0.1"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear_734_4437"
+                        x1="119"
+                        y1="0.341965"
+                        x2="102"
+                        y2="83.342"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#5CA9C3" />
+                        <stop offset="1" stopColor="#5CA9C3" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <img
+                    src={speaker.imageURL}
+                    alt="speaker1"
+                    width="249px"
+                    height="249px"
+                    className="text-center "
+                  />
+                  <h4>{speaker.name}</h4>
+                  <span>{speaker.title}</span>
+                </div>
+              ))}
+            </Slider>
+          )}
         </div>
         {/* End Speaker */}
 

@@ -224,6 +224,7 @@
 }
 .social-media img {
   margin: 5px 15px;
+  
 }
 @media (max-width: 920px) {
   .social-media {
@@ -498,11 +499,10 @@
     right: 0px;
   }
 }
+
 .speakers .speaker {
   margin: 20px 10px 0 10px;
-  display: flex;
   flex-direction: column;
-  text-align: center;
   position: relative;
 }
 .speakers .speaker svg {
@@ -534,9 +534,9 @@
   }
 }
 .register .person {
-  height: 250px;
+  height: 350px;
   width: 50%;
-  padding: 60px 50px 60px 50px;
+  padding: 90px 50px 60px 50px;
   background-image: url(../../../assets/re-attendance.jpg);
   background-size: cover;
   position: relative;

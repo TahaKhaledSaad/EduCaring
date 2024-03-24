@@ -286,7 +286,7 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
         onClick={togglePopup}
       >
         <p className="m-0">
-          Resources
+          Resources {" "}
           <svg
             width="18"
             height="18"

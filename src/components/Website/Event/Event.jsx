@@ -11,6 +11,8 @@ import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
 import "./Event.css";
 import Resources from "../Popups/Resources";
+import Gallary from "./../Popups/Gallary";
+import QrCode from './../Popups/QrCode';
 
 export default function EventDetails() {
   // Translation Work
@@ -62,8 +64,10 @@ export default function EventDetails() {
     return { formattedDate, formattedTime };
   };
   const { startDay, endDay } = eventDetails;
-  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(startDay);
-  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(endDay);
+  const { formattedDate: startDate, formattedTime: startTime } =
+    formatDateTime(startDay);
+  const { formattedDate: endDate, formattedTime: endTime } =
+    formatDateTime(endDay);
 
   // console.log(eventDetails);
 
@@ -71,11 +75,15 @@ export default function EventDetails() {
 
   const isValidImageUrl = (url) => {
     return (
-      url && !url.toLowerCase().endsWith("/null") && url.toLowerCase().startsWith("http" || "https")
+      url &&
+      !url.toLowerCase().endsWith("/null") &&
+      url.toLowerCase().startsWith("http" || "https")
     );
   };
 
-  const allEventDaysSpeakers = [...eventDetails.eventDays.map((d) => d.eventDaySpeakers)];
+  const allEventDaysSpeakers = [
+    ...eventDetails.eventDays.map((d) => d.eventDaySpeakers),
+  ];
 
   // console.log("Speaker1: ", allEventDaysSpeakers[0][0].speakerId);
   // console.log("Speaker2: ", allEventDaysSpeakers[0][1].speakerId);
@@ -84,7 +92,7 @@ export default function EventDetails() {
   let addResourcesSpeaker;
 
   allEventDaysSpeakers.map((speaker, index) => {
-    console.log(decodedToken.uid); // After: We will replace this with the current Speaker ID
+    // console.log(decodedToken.uid); // After: We will replace this with the current Speaker ID
     if (speaker[index].speakerId === "80d86b3a-7798-4a05-b8dd-33287dc95ec3") {
       addResourcesSpeaker = true;
     } else {
@@ -92,7 +100,7 @@ export default function EventDetails() {
     }
   });
 
-  console.log(addResourcesSpeaker);
+  // console.log(addResourcesSpeaker);
 
   return (
     <>
@@ -119,7 +127,8 @@ export default function EventDetails() {
               }`}
               style={{
                 fontSize: "20px",
-                backgroundColor: selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
+                backgroundColor:
+                  selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
                 color: selectedDayIndex === index ? "white" : "black",
                 cursor: "pointer",
               }}
@@ -136,71 +145,32 @@ export default function EventDetails() {
               <div className="details flex-grow-1">
                 <div className="d-flex gap-2 flex-column flex-md-row">
                   <div
-                    className="p-1 border border-info text-center"
+                    className="p-1 d-flex gap-2 align-items-center justify-content-center"
                     style={{
-                      width: "90px",
+                      width: "220px",
                       fontSize: "14px",
+                      border: "1px solid #BDBDBD",
                       borderRadius: "20px",
                     }}
                   >
                     <span>
                       {eventDetails.eventDays[selectedDayIndex].noOfAttend
                         ? eventDetails.eventDays[selectedDayIndex].noOfAttend
-                        : 0}
+                        : 0}{" "}
+                      Attendees
                     </span>
-                    <span className="text-secondary mx-1">
-                      /{eventDetails.eventDays[selectedDayIndex].noOfTickets}
-                    </span>
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M15.81 6.43503V11.565C15.81 12.405 15.36 13.185 14.6325 13.6125L10.1775 16.185C9.44999 16.605 8.55 16.605 7.815 16.185L3.36 13.6125C2.6325 13.1925 2.1825 12.4125 2.1825 11.565V6.43503C2.1825 5.59503 2.6325 4.81499 3.36 4.38749L7.815 1.815C8.5425 1.395 9.44249 1.395 10.1775 1.815L14.6325 4.38749C15.36 4.81499 15.81 5.58753 15.81 6.43503Z"
-                        stroke="#3296D4"
-                        strokeWidth="1.125"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M9 8.24998C9.96512 8.24998 10.7475 7.46759 10.7475 6.50247C10.7475 5.53735 9.96512 4.755 9 4.755C8.03488 4.755 7.2525 5.53735 7.2525 6.50247C7.2525 7.46759 8.03488 8.24998 9 8.24998Z"
-                        stroke="#3296D4"
-                        strokeWidth="1.125"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M12 12.495C12 11.145 10.6575 10.05 9 10.05C7.3425 10.05 6 11.145 6 12.495"
-                        stroke="#3296D4"
-                        strokeWidth="1.125"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-
-                  <div
-                    className="p-1 text-center d-flex gap-2 justify-content-center align-items-center"
-                    style={{
-                      width: "120px",
-                      fontSize: "14px",
-                      border: "1px solid #BDBDBD",
-                      borderRadius: "20px",
-                    }}
-                  >
-                    <p
+                    <span
                       className="m-0 fw-bold"
                       style={{
                         textDecoration: "underline",
                         color: "#6B0AB9",
                       }}
                     >
-                      ({eventDetails.eventDays[selectedDayIndex].numberOfReviews} reviews)
-                    </p>
-                    <p className="m-0 fw-bold d-flex align-items-center gap-1">
+                      (
+                      {eventDetails.eventDays[selectedDayIndex].numberOfReviews}{" "}
+                      reviews)
+                    </span>
+                    <span className="m-0 fw-bold d-flex align-items-center gap-1">
                       <svg
                         width="14"
                         height="13"
@@ -214,7 +184,7 @@ export default function EventDetails() {
                         />
                       </svg>
                       {eventDetails.eventDays[selectedDayIndex].reviewRate}
-                    </p>
+                    </span>
                   </div>
                   {eventDetails.eventDays[selectedDayIndex].isPaid ? (
                     <Resources
@@ -223,6 +193,25 @@ export default function EventDetails() {
                       userId={decodedToken.uid}
                       addResourcesSpeaker={addResourcesSpeaker}
                     />
+                  ) : (
+                    ""
+                  )}
+                  {eventDetails.eventDays[selectedDayIndex].isPaid ? (
+                    <Gallary
+                      eventId={eventId}
+                      eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                      userId={decodedToken.uid}
+                    ></Gallary>
+                  ) : (
+                    ""
+                  )}
+
+{eventDetails.eventDays[selectedDayIndex].isPaid ? (
+                    <QrCode
+                      eventId={eventId}
+                      eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                      userId={decodedToken.uid}
+                    ></QrCode>
                   ) : (
                     ""
                   )}
@@ -239,7 +228,8 @@ export default function EventDetails() {
                       }}
                     >
                       <span className="mx-1">
-                        Buy ticket {eventDetails.eventDays[selectedDayIndex].price} SAR
+                        Buy ticket{" "}
+                        {eventDetails.eventDays[selectedDayIndex].price} SAR
                       </span>
                       <svg
                         width="18"
@@ -276,7 +266,10 @@ export default function EventDetails() {
                   )}
                 </div>
 
-                <div className="general my-3" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="general my-3"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h2>{eventDetails.eventDays[selectedDayIndex].name}</h2>
                   <div className="date my-3 d-flex gap-2 align-items-center">
                     <svg
@@ -286,7 +279,13 @@ export default function EventDetails() {
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <rect width="48" height="48" rx="8" fill="#3296D4" fillOpacity="0.1" />
+                      <rect
+                        width="48"
+                        height="48"
+                        rx="8"
+                        fill="#3296D4"
+                        fillOpacity="0.1"
+                      />
                       <path
                         d="M28.75 15.56V14C28.75 13.59 28.41 13.25 28 13.25C27.59 13.25 27.25 13.59 27.25 14V15.5H20.75V14C20.75 13.59 20.41 13.25 20 13.25C19.59 13.25 19.25 13.59 19.25 14V15.56C16.55 15.81 15.24 17.42 15.04 19.81C15.02 20.1 15.26 20.34 15.54 20.34H32.46C32.75 20.34 32.99 20.09 32.96 19.81C32.76 17.42 31.45 15.81 28.75 15.56Z"
                         fill="#3296D4"
@@ -313,7 +312,10 @@ export default function EventDetails() {
                   </div>
                 </div>
 
-                <div className="desc py-2" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="desc py-2"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h3>{i18n.language === "en" ? "Description" : "الوصف"} </h3>
                   <span
                     style={{
@@ -332,9 +334,20 @@ export default function EventDetails() {
                     {eventDetails.eventDays[selectedDayIndex].address}
                   </p>
 
-                  <a href={eventDetails.eventDays[selectedDayIndex].addressGPSLink} target="blank">
+                  <a
+                    href={
+                      eventDetails.eventDays[selectedDayIndex].addressGPSLink
+                    }
+                    target="blank"
+                  >
                     {" "}
-                    <img src={map} alt="map" height={"220px"} width={"100%"} className="rounded" />
+                    <img
+                      src={map}
+                      alt="map"
+                      height={"220px"}
+                      width={"100%"}
+                      className="rounded"
+                    />
                   </a>
                 </div>
               </div>
@@ -344,7 +357,9 @@ export default function EventDetails() {
                 style={{ backgroundColor: "#F5F7FB", height: "50%" }}
               >
                 <div>
-                  <h5 className="text-left">{i18n.language === "en" ? "Speakers" : "المتحدثين"}</h5>
+                  <h5 className="text-left">
+                    {i18n.language === "en" ? "Speakers" : "المتحدثين"}
+                  </h5>
                   <div className="d-flex flex-wrap gap-3 justify-content-center">
                     {eventDetails.eventDays.map((d) =>
                       d.eventDaySpeakers.map((s) => {
@@ -360,7 +375,9 @@ export default function EventDetails() {
                               {s.speaker.displayProfileImage ? (
                                 <img
                                   src={
-                                    isValidImageUrl(s.speaker.displayProfileImage)
+                                    isValidImageUrl(
+                                      s.speaker.displayProfileImage
+                                    )
                                       ? s.speaker.displayProfileImage
                                       : ExMark
                                   }
@@ -386,7 +403,9 @@ export default function EventDetails() {
                                   </span>
                                 </div>
                               )}
-                              <p className="text-dark text-center">{s.speaker.name}</p>
+                              <p className="text-dark text-center">
+                                {s.speaker.name}
+                              </p>
                             </Link>
                           );
                         }
@@ -404,7 +423,9 @@ export default function EventDetails() {
                       paddingTop: "10px",
                     }}
                   >
-                    <h5 className="text-left">{i18n.language === "en" ? "Sessions" : "الجلسات"}</h5>
+                    <h5 className="text-left">
+                      {i18n.language === "en" ? "Sessions" : "الجلسات"}
+                    </h5>
                     <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
                       <Link
                         className="w-100 text-dark"
