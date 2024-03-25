@@ -23,7 +23,6 @@ export default function Gallary({ eventId, userId }) {
       });
   }, [eventId, userId, i18n.language]);
 
-  console.log(eventImages);
 
   const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {

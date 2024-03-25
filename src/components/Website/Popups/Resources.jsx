@@ -272,6 +272,41 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
     setShowPopup(!showPopup);
   };
 
+  // Select Files and send them to the server
+  const selectFiles = (e) => {
+    const files = e.target.files;
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("Content", files[i]);
+    }
+
+    axios
+      .post(
+        `${BASE}/SpeakerResors/Multiple`,
+        {
+          headers: {
+            ContentType: "multipart/form-data",
+            Accept: "text/plain",
+          },
+        },
+        {
+          Id: 2,
+          EventDaySpeakerId: 2,
+          SpeakerId: "80d86b3a-7798-4a05-b8dd-33287dc95ec3",
+          Link: "https://www.google.com/",
+          Title: "Test",
+          ResorsesFile: formData,
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error uploading files:", error);
+      });
+  };
+
   return (
     <>
       <div
@@ -286,7 +321,7 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
         onClick={togglePopup}
       >
         <p className="m-0">
-          Resources {" "}
+          Resources{" "}
           <svg
             width="18"
             height="18"
@@ -369,9 +404,17 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
           </div>
 
           <div className="my-2 overflow-y-auto overflow-x-hidden">
+            {/* Upload Resources */}
             {addResourcesSpeaker && (selectedOption === "files" || selectedOption === "images") && (
               <div className="input-group p-1">
-                <input type="file" className="form-control" id="PassportImage" hidden multiple />
+                <input
+                  type="file"
+                  className="form-control"
+                  id="PassportImage"
+                  hidden
+                  multiple
+                  onChange={selectFiles}
+                />
                 <label
                   className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
                   htmlFor="PassportImage"
@@ -389,6 +432,7 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
               </div>
             )}
 
+            {/* Add Links */}
             {addResourcesSpeaker && selectedOption === "links" && (
               <div className="input-group p-2 mb-3 border border-muted rounded d-flex justify-content-between">
                 <input
