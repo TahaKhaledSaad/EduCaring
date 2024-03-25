@@ -4,10 +4,26 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import upload from "./../../../assets/image.png";
+import Cookie from "cookie-universal";
+import { jwtDecode } from "jwt-decode";
 
-export default function Resources({ eventId, eventDayId, userId, addResourcesSpeaker }) {
+export default function Resources({
+  eventId,
+  eventDayId,
+  userId,
+  addResourcesSpeaker,
+  eventDaySpeakerId,
+  sendId,
+}) {
   const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
+
+  const cookie = new Cookie();
+  const token = cookie.get("edu-caring");
+
+  const decodedToken = token ? jwtDecode(token) : {};
+
+  // console.log(decodedToken);
 
   // console.log("from resources:", eventId, eventDayId, userId, addResourcesSpeaker);
 
@@ -267,38 +283,46 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
       );
     }
   };
+
   const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
-  // Select Files and send them to the server
-  const selectFiles = (e) => {
-    const files = e.target.files;
-    const formData = new FormData();
+  console.log(sendId, eventDaySpeakerId, decodedToken.uid);
 
+  // TODO Function to select files and send them to the server
+  const sendFiles = (e) => {
+    const files = e.target.files;
+    // const formData = new FormData();
+    const arrOfImgs = [];
+
+    // Iterate through the selected files and append them to FormData
     for (let i = 0; i < files.length; i++) {
-      formData.append("Content", files[i]);
+      // formData.append("Content", files[i]);
+      arrOfImgs.push(files[i]);
     }
 
+    // Construct the object to be sent to the server
+    const object = {
+      Id: eventDaySpeakerId, // 57
+      EventDaySpeakerId: sendId, // 56
+      SpeakerId: decodedToken.uid, // a1db4239-e0bf-4f99-a63a-28f87f495122
+      Link: "https://www.google.com/", // constant
+      Title: "Test", // constant
+      ResoursesFile: arrOfImgs, // files
+    };
+
+    // Log the object for debugging
+    console.log(object);
+
+    // Send the files to the server using axios
     axios
-      .post(
-        `${BASE}/SpeakerResors/Multiple`,
-        {
-          headers: {
-            ContentType: "multipart/form-data",
-            Accept: "text/plain",
-          },
+      .post(`${BASE}/SpeakerResors/Multiple`, object, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        {
-          Id: 2,
-          EventDaySpeakerId: 2,
-          SpeakerId: "80d86b3a-7798-4a05-b8dd-33287dc95ec3",
-          Link: "https://www.google.com/",
-          Title: "Test",
-          ResorsesFile: formData,
-        }
-      )
+      })
       .then((response) => {
         console.log(response.data);
       })
@@ -413,7 +437,7 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
                   id="PassportImage"
                   hidden
                   multiple
-                  onChange={selectFiles}
+                  onChange={sendFiles}
                 />
                 <label
                   className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
@@ -456,6 +480,21 @@ export default function Resources({ eventId, eventDayId, userId, addResourcesSpe
                   Add new Link
                 </button>
               </div>
+            )}
+
+            {/* Send Button */}
+            {addResourcesSpeaker && (
+              <button
+                className="btn btn-success px-4 py-2 my-2 w-100"
+                style={{
+                  backgroundColor: "#27AE60",
+                  border: "none",
+                  outline: "none",
+                  borderRadius: "10px",
+                }}
+              >
+                Send
+              </button>
             )}
 
             {selectedOption === "files" &&
@@ -557,4 +596,10 @@ Resources.propTypes = {
 };
 Resources.propTypes = {
   addResourcesSpeaker: PropTypes.bool.isRequired,
+};
+Resources.propTypes = {
+  eventDaySpeakerId: PropTypes.number.isRequired,
+};
+Resources.propTypes = {
+  sendId: PropTypes.number.isRequired,
 };

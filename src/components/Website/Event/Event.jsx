@@ -86,6 +86,8 @@ export default function EventDetails() {
   });
 
   let addResourcesSpeaker = false;
+  let eventDaySpeakerId;
+  let sendId;
 
   console.log("#", decodedToken.uid); // After: We will replace this with the current Speaker ID
 
@@ -96,6 +98,8 @@ export default function EventDetails() {
   allEventDaysSpeakers.map((speaker) => {
     if (speaker.speakerId === decodedToken.uid) {
       addResourcesSpeaker = true;
+      eventDaySpeakerId = speaker.eventDayId;
+      sendId = speaker.id;
     }
   });
 
@@ -191,6 +195,8 @@ export default function EventDetails() {
                       eventDayId={eventDetails.eventDays[selectedDayIndex].id}
                       userId={decodedToken.uid}
                       addResourcesSpeaker={addResourcesSpeaker}
+                      eventDaySpeakerId={eventDaySpeakerId}
+                      sendId={sendId}
                     />
                   ) : (
                     ""
