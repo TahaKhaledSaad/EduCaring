@@ -5,6 +5,7 @@ import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { BASE } from "../../../Api";
 import "./Community.css";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
@@ -31,13 +32,31 @@ export default function Community() {
         },
       })
       .then((data) => {
-        console.log(data);
         setChat(data.data.responseObject);
       })
       .catch((err) => console.log(err));
   }, [decodedToken.uid, i18n.language]);
 
   // console.log(chat);
+
+  useEffect(() => {
+    if (selectedChat) {
+      if (selectedChat) {
+        axios
+          .get(`${BASE}/Community/OpenChat`, {
+            headers: {
+              UserId: decodedToken.uid,
+              EventId: selectedChat.eventId,
+            },
+            params: { eventDayId: selectedChat?.eventId },
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => console.log(err));
+      }
+    }
+  }, [selectedChat, decodedToken.uid, selectedChat?.eventId]);
 
   const handleChatItemClick = (chatItem) => {
     setSelectedChat(chatItem);
@@ -116,14 +135,23 @@ export default function Community() {
                 onClick={() => handleChatItemClick(item)}
               >
                 <img
-                  src={item.eventData?.primeImageURL}
+                  src={
+                    item.eventData?.primeImageURL
+                      ? item.eventData?.primeImageURL
+                      : logo
+                  }
                   alt="chat-img"
                   width={"60px"}
                   height={"60px"}
+                  style={{
+                    boxShadow: !item.eventData?.primeImageURL
+                      ? "0 0 10px rgba(0, 0, 0, 0.1)"
+                      : "",
+                  }}
                   className="rounded"
                 />
                 <div className="text">
-                  <h6>{item.eventData?.name}</h6>
+                  <h6>{item.eventData ? item.eventData?.name : "Admin"}</h6>
                   <p className="text-muted fs-11">
                     {item.messages[item.messages.length - 1]?.message}
                   </p>
@@ -149,40 +177,66 @@ export default function Community() {
 
         {showChatContent && selectedChat && (
           <div className={`chat-content ${showChatContent ? "show" : "hide"}`}>
-            {selectedChat.messages.map((msg) => (
-              <div key={msg.id} className="message my-4">
-                <div className="sender d-flex gap-2 align-items-center">
-                  <div className="d-flex bg-light p-1 rounded-circle justify-content-center align-items-center">
-                    <img
-                      src={logo}
-                      alt="sender-img"
-                      width={"40px"}
-                      height={"40px"}
-                      className="rounded-circle"
-                      // style={{ objectFit: "cover" }}
-                    />
+            {selectedChat.messages.map((msg) => {
+              const docs =
+                msg.imageUrl !== "http://hossamelhadad-001-site12.atempurl.com/"
+                  ? [{ uri: msg.imageUrl }]
+                  : [];
+              return (
+                <div key={msg.id} className="message my-4">
+                  <div className="sender d-flex gap-2 align-items-center">
+                    <div className="d-flex bg-light p-1 rounded-circle justify-content-center align-items-center">
+                      <img
+                        src={logo}
+                        alt="sender-img"
+                        width={"40px"}
+                        height={"40px"}
+                        className="rounded-circle"
+                        // style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <span>
+                      {i18n.language === "en"
+                        ? "Event Organizer"
+                        : "منظم الحدث"}{" "}
+                    </span>
+                    <span className="date">
+                      {convertTimestampToFormattedDate(msg.timestamp)}
+                    </span>
                   </div>
-                  <span>
-                    {i18n.language === "en" ? "Event Organizer" : "منظم الحدث"}{" "}
-                  </span>
-                  <span className="date">
-                    {convertTimestampToFormattedDate(msg.timestamp)}
-                  </span>
+                  <div className="msg-text rounded p-2 m-2">
+                    <p>{msg.message}</p>
+                    {docs ? (
+                      <div>
+                        <span
+                          className="view my-2"
+                          style={{ display: docs.length ? "block" : "none" }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.open(docs[0].uri, "_blank"); // Access the first document URL
+                          }}
+                        >
+                          {" "}
+                          open
+                        </span>
+                        <DocViewer
+                          documents={docs}
+                          controls="false"
+                          pluginRenderers={DocViewerRenderers}
+                          style={{
+                            height: "250px",
+                            width: "400px",
+                            display: docs.length ? "block" : "none",
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-                <div className="msg-text rounded p-2 m-2">
-                  <p>{msg.message}</p>
-                  <span
-                    className="view"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.open(msg.imageUrl, "_blank");
-                    }}
-                  >
-                    view Resource
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
 
             <i
               className="fa-regular fa-circle-xmark close-btn"
@@ -197,30 +251,3 @@ export default function Community() {
     </>
   );
 }
-
-// useEffect(() => {
-//   // Create a FormData object
-//   const formData = new FormData();
-
-//   // Append the file object to the FormData object
-//   formData.append("ImageFile", "https://www.w3schools.com/w3images/lights.jpg");
-
-//   // Append other data to the FormData object
-//   formData.append("UserIds", userId);
-//   formData.append("Message", "Hello");
-//   formData.append("Timestamp", "2021-11-05T06:51:47");
-//   formData.append("EventDayId", 73);
-
-//   axios
-//     .post(`${BASE}/Community`, formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data", // No need for application/json
-//         accept: "multipart/form-data",
-//       },
-//     })
-//     .then((data) => {
-//       console.log(data);
-//       setCommunity(data.data.responseObject);
-//     })
-//     .catch((err) => console.log(err));
-// }, [userId]);

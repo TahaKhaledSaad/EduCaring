@@ -157,3 +157,9 @@
     flex: 1;
   }
 }
+#header-bar{
+  display: none;
+}
+#proxy-renderer{
+  scrollbar-width: none;
+}
