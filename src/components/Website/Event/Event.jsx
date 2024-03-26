@@ -184,7 +184,7 @@ export default function EventDetails() {
                       userId={decodedToken.uid}
                       addResourcesSpeaker={addResourcesSpeaker}
                       eventDaySpeakerId={eventDaySpeakerId}
-                      sendId={sendId}
+                      sendId={sendId ? sendId : ""}
                     />
                   ) : (
                     ""
