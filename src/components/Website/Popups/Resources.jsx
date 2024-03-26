@@ -316,9 +316,11 @@ export default function Resources({
   const sendFiles = (e) => {
     const files = e.target.files;
     const arrOfImgs = [];
+    // const imgFormData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
       arrOfImgs.push(files[i]);
+      // imgFormData.append("Content", files[i]);
     }
 
     const object = {
@@ -342,7 +344,7 @@ export default function Resources({
     console.log(object);
 
     axios
-      .post(`${BASE}/SpeakerResors/Multiple`, formData, {
+      .post(`${BASE}/SpeakerResors/Multiple`, object, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

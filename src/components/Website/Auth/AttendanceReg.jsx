@@ -108,7 +108,7 @@ export default function AttendanceReg() {
             : setErrorMessage(res.data.responseText);
 
           // Set Navigation
-          res.data.isSuccess && nav("/login");
+          res.data.isSuccess && nav("/verification");
         });
       console.log(result);
     } catch (error) {

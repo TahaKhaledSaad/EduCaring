@@ -310,6 +310,7 @@ export default function LandingPage() {
                   alt="sponser"
                   width="100px"
                   height="100px"
+                  style={{objectFit: "contain"}}
                 />
                 <p
                   className="text-center my-2 fw-bold"
