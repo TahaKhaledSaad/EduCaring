@@ -15,18 +15,14 @@ export default function Resources({
   eventDaySpeakerId,
   sendId,
 }) {
+  // [0] State Variables
   const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
-
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
-
   const decodedToken = token ? jwtDecode(token) : {};
 
-  // console.log(decodedToken);
-
-  // console.log("from resources:", eventId, eventDayId, userId, addResourcesSpeaker);
-
+  // [1] Fetch Event Days
   useEffect(() => {
     axios
       .get(`${BASE}/Event/GetForApp/${eventId}`, {
@@ -43,15 +39,14 @@ export default function Resources({
       });
   }, [eventId, userId, i18n.language]);
 
-  // console.log(eventDays);
-
+  // [2] Selected Event Day
   const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
 
-  //   console.log(selectedEventDay);
-
+  // [3] Speakers
   const [speakers, setSpeakers] = useState([]);
   const [resources, setResources] = useState([]);
 
+  // [4] Update Speakers
   useEffect(() => {
     if (selectedEventDay) {
       setSpeakers(selectedEventDay.eventDaySpeakers);
@@ -60,6 +55,7 @@ export default function Resources({
     }
   }, [eventDays, eventDayId, selectedEventDay]);
 
+  // [5] Update Resources
   useEffect(() => {
     // Create a set to store unique resources
     const uniqueResources = new Set();
@@ -79,12 +75,12 @@ export default function Resources({
     setResources(Array.from(uniqueResources));
   }, [speakers]);
 
-  //   console.log(resources);
-
+  // [6] File Icon
   const [files, setFiles] = useState([]);
   const [imgs, setImgs] = useState([]);
   const [links, setLinks] = useState([]);
 
+  // [7] Update Files, Images, and Links
   useEffect(() => {
     const files = [];
     const imgs = [];
@@ -114,16 +110,15 @@ export default function Resources({
     setLinks(links);
   }, [resources]);
 
-  // console.log(files);
-  // console.log(imgs);
-  // console.log(links);
-
+  // [8] Handle Option Change
   const [selectedOption, setSelectedOption] = useState("files");
 
+  // [9] Handle Option Change
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
 
+  // [10] Get File Icon
   const getFileIcon = (filename) => {
     const extension = filename.split(".").pop().toLowerCase();
     if (extension === "pdf") {
@@ -284,26 +279,21 @@ export default function Resources({
     }
   };
 
+  // [11] Popup
   const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
-  console.log(sendId, eventDaySpeakerId, decodedToken.uid);
-
-  // TODO Function to select files and send them to the server
+  // [12] Function to select files and send them to the server
   const sendFiles = (e) => {
     const files = e.target.files;
-    // const formData = new FormData();
     const arrOfImgs = [];
 
-    // Iterate through the selected files and append them to FormData
     for (let i = 0; i < files.length; i++) {
-      // formData.append("Content", files[i]);
       arrOfImgs.push(files[i]);
     }
 
-    // Construct the object to be sent to the server
     const object = {
       Id: eventDaySpeakerId, // 57
       EventDaySpeakerId: sendId, // 56
@@ -313,10 +303,6 @@ export default function Resources({
       ResoursesFile: arrOfImgs, // files
     };
 
-    // Log the object for debugging
-    console.log(object);
-
-    // Send the files to the server using axios
     axios
       .post(`${BASE}/SpeakerResors/Multiple`, object, {
         headers: {
@@ -330,6 +316,23 @@ export default function Resources({
         console.error("Error uploading files:", error);
       });
   };
+
+  // [13] Function to get resources of the speaker
+  useEffect(() => {
+    axios
+      .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
+        params: {
+          eventDayId: eventDayId,
+        },
+        headers: {
+          UserId: userId,
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  }, [eventDayId, userId, i18n.language]);
 
   return (
     <>

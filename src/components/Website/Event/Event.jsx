@@ -67,8 +67,6 @@ export default function EventDetails() {
   const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(startDay);
   const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(endDay);
 
-  // console.log(eventDetails);
-
   const uniqueSpeakers = {};
 
   const isValidImageUrl = (url) => {
@@ -89,12 +87,6 @@ export default function EventDetails() {
   let eventDaySpeakerId;
   let sendId;
 
-  console.log("#", decodedToken.uid); // After: We will replace this with the current Speaker ID
-
-  allEventDaysSpeakers.map((speaker) => {
-    console.log("-", speaker.speakerId);
-  });
-
   allEventDaysSpeakers.map((speaker) => {
     if (speaker.speakerId === decodedToken.uid) {
       addResourcesSpeaker = true;
@@ -102,10 +94,6 @@ export default function EventDetails() {
       sendId = speaker.id;
     }
   });
-
-  console.log(addResourcesSpeaker);
-
-  // console.log(addResourcesSpeaker);
 
   return (
     <>
