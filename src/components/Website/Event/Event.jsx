@@ -13,8 +13,9 @@ import "./Event.css";
 import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
+import {Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
-export default function EventDetails() {
+function EventDetails(props) {
   // Translation Work
   const { i18n } = useTranslation();
 
@@ -46,7 +47,7 @@ export default function EventDetails() {
   if (!eventDetails) {
     return <div className="p-4">Loading...</div>;
   }
-
+console.log(eventDetails);
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     const options = {
@@ -94,7 +95,7 @@ export default function EventDetails() {
       sendId = speaker.id;
     }
   });
-
+  const { google } = props;
   return (
     <>
       <div className="event-comp">
@@ -314,10 +315,26 @@ export default function EventDetails() {
                     {eventDetails.eventDays[selectedDayIndex].address}
                   </p>
 
-                  <a href={eventDetails.eventDays[selectedDayIndex].addressGPSLink} target="blank">
+                  {/* <a href={eventDetails.eventDays[selectedDayIndex].addressGPSLink} target="blank">
                     {" "}
                     <img src={map} alt="map" height={"220px"} width={"100%"} className="rounded" />
-                  </a>
+                  </a> */}
+     
+                  <Map
+                  google={google}
+                  zoom={10}
+                  style={{width: '60%', height: '50vh', borderRadius: '10px'}}
+                  initialCenter={{
+                    // lat: eventDetails.eventDays[selectedDayIndex].latitude,
+                    // lng: eventDetails.eventDays[selectedDayIndex].longitude
+                    lat:30.044420,
+                    lng:31.235712
+                  }}
+                  
+                  >
+                     <Marker position={{ lat: 30.044420, lng: 31.235712 }} />
+                  </Map>
+     
                 </div>
               </div>
 
@@ -439,3 +456,8 @@ export default function EventDetails() {
     </>
   );
 }
+const EventDetailsWithGoogleApi = GoogleApiWrapper({
+  apiKey:"AIzaSyCl-wnud9U-2MHCfjqtKodcp4lb8QVKHlk"
+})(EventDetails);
+
+export default EventDetailsWithGoogleApi;

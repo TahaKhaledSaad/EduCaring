@@ -27,7 +27,7 @@ export default function MyEvents() {
       axios
         .get(`${BASE}/Event/GetUserEvents`, {
           headers: {
-            UserId: userId,
+            UserId: decodedToken.uid,
             Language: i18n.language,
           },
         })

@@ -7,6 +7,7 @@ import { BASE } from "../../../Api";
 import "./Home.css";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
+import { PulseLoader } from "react-spinners";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,8 @@ export default function Home() {
   const token = cookie.get("edu-caring");
 
   const decodedToken = token ? jwtDecode(token) : {};
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const [events, setEvents] = useState([]);
 
@@ -41,7 +44,8 @@ export default function Home() {
       .then((data) => {
         setEvents(data.data.responseObject?.events);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
   // console.log(events);
@@ -59,7 +63,8 @@ export default function Home() {
       .then((data) => {
         setrecommendEvents(data.data.responseObject);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, []);
 
   const [reminder, setReminder] = useState([]);
@@ -74,7 +79,8 @@ export default function Home() {
       .then((data) => {
         setReminder(data.data.responseObject);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
   const [countdown, setCountdown] = useState({
@@ -126,6 +132,20 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, [reminder]);
 
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+        }}
+      >
+        <PulseLoader color="#3296d4" size={50} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <SideBar />
@@ -155,10 +175,10 @@ export default function Home() {
                   </div>
 
                   <div className="text">
-                    <p >{i18n.language === "en" ? "Days" : "أيام"}</p>
-                    <p >{i18n.language === "en" ? "Hours" : "ساعات"}</p>
-                    <p >{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
-                    <p >{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
+                    <p>{i18n.language === "en" ? "Days" : "أيام"}</p>
+                    <p>{i18n.language === "en" ? "Hours" : "ساعات"}</p>
+                    <p>{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
+                    <p>{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
                   </div>
                 </div>
               </div>
