@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import map from "../../../assets/map.jpeg";
 import ExMark from "../../../assets/Exclamation_mark.png";
 import Carousel from "react-bootstrap/Carousel";
 import { Link, useParams } from "react-router-dom";
@@ -13,7 +12,6 @@ import "./Event.css";
 import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
-import {Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 function EventDetails(props) {
   // Translation Work
@@ -47,7 +45,7 @@ function EventDetails(props) {
   if (!eventDetails) {
     return <div className="p-4">Loading...</div>;
   }
-console.log(eventDetails);
+  console.log(eventDetails);
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     const options = {
@@ -65,14 +63,18 @@ console.log(eventDetails);
     return { formattedDate, formattedTime };
   };
   const { startDay, endDay } = eventDetails;
-  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(startDay);
-  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(endDay);
+  const { formattedDate: startDate, formattedTime: startTime } =
+    formatDateTime(startDay);
+  const { formattedDate: endDate, formattedTime: endTime } =
+    formatDateTime(endDay);
 
   const uniqueSpeakers = {};
 
   const isValidImageUrl = (url) => {
     return (
-      url && !url.toLowerCase().endsWith("/null") && url.toLowerCase().startsWith("http" || "https")
+      url &&
+      !url.toLowerCase().endsWith("/null") &&
+      url.toLowerCase().startsWith("http" || "https")
     );
   };
 
@@ -95,7 +97,6 @@ console.log(eventDetails);
       sendId = speaker.id;
     }
   });
-  const { google } = props;
   return (
     <>
       <div className="event-comp">
@@ -121,7 +122,8 @@ console.log(eventDetails);
               }`}
               style={{
                 fontSize: "20px",
-                backgroundColor: selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
+                backgroundColor:
+                  selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
                 color: selectedDayIndex === index ? "white" : "black",
                 cursor: "pointer",
               }}
@@ -136,7 +138,7 @@ console.log(eventDetails);
           {selectedDayIndex !== null && (
             <div className="event-info m-3 d-flex gap-3">
               {/* Details */}
-              <div className="details flex-grow-1">
+              <div className="details w-75">
                 <div className="d-flex gap-2 flex-column flex-md-row">
                   <div
                     className="p-1 d-flex gap-2 align-items-center justify-content-center"
@@ -160,7 +162,9 @@ console.log(eventDetails);
                         color: "#6B0AB9",
                       }}
                     >
-                      ({eventDetails.eventDays[selectedDayIndex].numberOfReviews} reviews)
+                      (
+                      {eventDetails.eventDays[selectedDayIndex].numberOfReviews}{" "}
+                      reviews)
                     </span>
                     <span className="m-0 fw-bold d-flex align-items-center gap-1">
                       <svg
@@ -175,10 +179,11 @@ console.log(eventDetails);
                           fill="#F7CB15"
                         />
                       </svg>
-                      {eventDetails.eventDays[selectedDayIndex].reviewRate}
+                      {eventDetails.eventDays[selectedDayIndex].reviewRate.toFixed(1)}
                     </span>
                   </div>
-                  {eventDetails.eventDays[selectedDayIndex].isPaid || addResourcesSpeaker ? (
+                  {eventDetails.eventDays[selectedDayIndex].isPaid ||
+                  addResourcesSpeaker ? (
                     <Resources
                       eventId={eventId}
                       eventDayId={eventDetails.eventDays[selectedDayIndex].id}
@@ -210,7 +215,8 @@ console.log(eventDetails);
                     ""
                   )}
 
-                  {!eventDetails.eventDays[selectedDayIndex].isPaid && !addResourcesSpeaker ? (
+                  {!eventDetails.eventDays[selectedDayIndex].isPaid &&
+                  !addResourcesSpeaker ? (
                     <Link
                       to={`/home/payment/${eventId}`}
                       className="p-1 border text-white text-center"
@@ -222,7 +228,8 @@ console.log(eventDetails);
                       }}
                     >
                       <span className="mx-1">
-                        Buy ticket {eventDetails.eventDays[selectedDayIndex].price} SAR
+                        Buy ticket{" "}
+                        {eventDetails.eventDays[selectedDayIndex].price} SAR
                       </span>
                       <svg
                         width="18"
@@ -259,7 +266,10 @@ console.log(eventDetails);
                   )}
                 </div>
 
-                <div className="general my-3" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="general my-3"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h2>{eventDetails.eventDays[selectedDayIndex].name}</h2>
                   <div className="date my-3 d-flex gap-2 align-items-center">
                     <svg
@@ -269,7 +279,13 @@ console.log(eventDetails);
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <rect width="48" height="48" rx="8" fill="#3296D4" fillOpacity="0.1" />
+                      <rect
+                        width="48"
+                        height="48"
+                        rx="8"
+                        fill="#3296D4"
+                        fillOpacity="0.1"
+                      />
                       <path
                         d="M28.75 15.56V14C28.75 13.59 28.41 13.25 28 13.25C27.59 13.25 27.25 13.59 27.25 14V15.5H20.75V14C20.75 13.59 20.41 13.25 20 13.25C19.59 13.25 19.25 13.59 19.25 14V15.56C16.55 15.81 15.24 17.42 15.04 19.81C15.02 20.1 15.26 20.34 15.54 20.34H32.46C32.75 20.34 32.99 20.09 32.96 19.81C32.76 17.42 31.45 15.81 28.75 15.56Z"
                         fill="#3296D4"
@@ -296,7 +312,10 @@ console.log(eventDetails);
                   </div>
                 </div>
 
-                <div className="desc py-2" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                <div
+                  className="desc py-2"
+                  style={{ borderBottom: "1px solid #DCDCDC" }}
+                >
                   <h3>{i18n.language === "en" ? "Description" : "الوصف"} </h3>
                   <span
                     style={{
@@ -315,26 +334,27 @@ console.log(eventDetails);
                     {eventDetails.eventDays[selectedDayIndex].address}
                   </p>
 
-                  {/* <a href={eventDetails.eventDays[selectedDayIndex].addressGPSLink} target="blank">
-                    {" "}
-                    <img src={map} alt="map" height={"220px"} width={"100%"} className="rounded" />
-                  </a> */}
-     
-                  <Map
-                  google={google}
-                  zoom={10}
-                  style={{width: '60%', height: '50vh', borderRadius: '10px'}}
-                  initialCenter={{
-                    // lat: eventDetails.eventDays[selectedDayIndex].latitude,
-                    // lng: eventDetails.eventDays[selectedDayIndex].longitude
-                    lat:30.044420,
-                    lng:31.235712
-                  }}
-                  
+                  <div
+                    className="google-map"
+                    style={{
+                      width: "80%",
+                      height: "40vh",
+                      borderRadius: "10px",
+                    }}
                   >
-                     <Marker position={{ lat: 30.044420, lng: 31.235712 }} />
-                  </Map>
-     
+                    <iframe
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "10px",
+                      }}
+                      
+                      src= {"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14838.061717140828!2d39.109334!3d21.60483!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15c3dbd751aa2b57%3A0xd32f14ab8ce46662!2z2YfZitmE2KrZiNmGINis2K_YqQ!5e0!3m2!1sar!2seg!4v1711573959820!5m2!1sar!2seg"}
+                      allowfullscreen="true"
+                      aria-hidden="false"
+                      tabIndex="0"
+                    ></iframe>
+                  </div>
                 </div>
               </div>
 
@@ -343,7 +363,9 @@ console.log(eventDetails);
                 style={{ backgroundColor: "#F5F7FB", height: "50%" }}
               >
                 <div>
-                  <h5 className="text-left">{i18n.language === "en" ? "Speakers" : "المتحدثين"}</h5>
+                  <h5 className="text-left">
+                    {i18n.language === "en" ? "Speakers" : "المتحدثين"}
+                  </h5>
                   <div className="d-flex flex-wrap gap-3 justify-content-center">
                     {eventDetails.eventDays.map((d) =>
                       d.eventDaySpeakers.map((s) => {
@@ -359,7 +381,9 @@ console.log(eventDetails);
                               {s.speaker.displayProfileImage ? (
                                 <img
                                   src={
-                                    isValidImageUrl(s.speaker.displayProfileImage)
+                                    isValidImageUrl(
+                                      s.speaker.displayProfileImage
+                                    )
                                       ? s.speaker.displayProfileImage
                                       : ExMark
                                   }
@@ -385,7 +409,9 @@ console.log(eventDetails);
                                   </span>
                                 </div>
                               )}
-                              <p className="text-dark text-center">{s.speaker.name}</p>
+                              <p className="text-dark text-center">
+                                {s.speaker.name}
+                              </p>
                             </Link>
                           );
                         }
@@ -403,7 +429,9 @@ console.log(eventDetails);
                       paddingTop: "10px",
                     }}
                   >
-                    <h5 className="text-left">{i18n.language === "en" ? "Sessions" : "الجلسات"}</h5>
+                    <h5 className="text-left">
+                      {i18n.language === "en" ? "Sessions" : "الجلسات"}
+                    </h5>
                     <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
                       <Link
                         className="w-100 text-dark"
@@ -456,8 +484,5 @@ console.log(eventDetails);
     </>
   );
 }
-const EventDetailsWithGoogleApi = GoogleApiWrapper({
-  apiKey:"AIzaSyCl-wnud9U-2MHCfjqtKodcp4lb8QVKHlk"
-})(EventDetails);
 
-export default EventDetailsWithGoogleApi;
+export default EventDetails;
