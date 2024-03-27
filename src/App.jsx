@@ -7,7 +7,6 @@ import SpeakerReg from "./components/Website/Auth/SpeakerReg.jsx";
 import RequireAuth from "./components/Website/Auth/RequireAuth.jsx";
 import SpeakerAuth from "./components/Website/Auth/SpeakerAuth.jsx";
 import UserAuth from "./components/Website/Auth/UserAuth.jsx";
-import Verfication from "./components/Website/verfiy-number/Verfication.jsx";
 
 // Profile
 import UpdateSpeakerProfile from "./components/Website/Profile/UpdateSpeakerProfile.jsx";
@@ -44,7 +43,6 @@ function App() {
         <Route path="test" element={<Test />} />
 
         <Route element={<RequireAuth />}>
-          <Route path="verification" element={<Verfication />} />
 
           <Route path="/home" element={<Home />}>
             <Route path="event/:eventId" element={<Event />} />

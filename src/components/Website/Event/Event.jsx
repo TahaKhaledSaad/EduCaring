@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import map from "../../../assets/map.jpeg";
 import ExMark from "../../../assets/Exclamation_mark.png";
 import Carousel from "react-bootstrap/Carousel";
 import { Link, useParams } from "react-router-dom";
@@ -13,7 +12,8 @@ import "./Event.css";
 import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
-import {Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker } from "google-maps-react";
+import PropTypes from "prop-types";
 
 function EventDetails(props) {
   // Translation Work
@@ -47,7 +47,7 @@ function EventDetails(props) {
   if (!eventDetails) {
     return <div className="p-4">Loading...</div>;
   }
-console.log(eventDetails);
+  console.log(eventDetails);
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     const options = {
@@ -319,22 +319,20 @@ console.log(eventDetails);
                     {" "}
                     <img src={map} alt="map" height={"220px"} width={"100%"} className="rounded" />
                   </a> */}
-     
+
                   <Map
-                  google={google}
-                  zoom={10}
-                  style={{width: '60%', height: '50vh', borderRadius: '10px'}}
-                  initialCenter={{
-                    // lat: eventDetails.eventDays[selectedDayIndex].latitude,
-                    // lng: eventDetails.eventDays[selectedDayIndex].longitude
-                    lat:30.044420,
-                    lng:31.235712
-                  }}
-                  
+                    google={google}
+                    zoom={10}
+                    style={{ width: "60%", height: "50vh", borderRadius: "10px" }}
+                    initialCenter={{
+                      // lat: eventDetails.eventDays[selectedDayIndex].latitude,
+                      // lng: eventDetails.eventDays[selectedDayIndex].longitude
+                      lat: 30.04442,
+                      lng: 31.235712,
+                    }}
                   >
-                     <Marker position={{ lat: 30.044420, lng: 31.235712 }} />
+                    <Marker position={{ lat: 30.04442, lng: 31.235712 }} />
                   </Map>
-     
                 </div>
               </div>
 
@@ -367,6 +365,7 @@ console.log(eventDetails);
                                   className="rounded-circle mb-2"
                                   width={"65px"}
                                   height={"65px"}
+                                  style={{ objectFit: "cover" }}
                                 />
                               ) : (
                                 <div
@@ -457,7 +456,11 @@ console.log(eventDetails);
   );
 }
 const EventDetailsWithGoogleApi = GoogleApiWrapper({
-  apiKey:"AIzaSyCl-wnud9U-2MHCfjqtKodcp4lb8QVKHlk"
+  apiKey: "AIzaSyCl-wnud9U-2MHCfjqtKodcp4lb8QVKHlk",
 })(EventDetails);
 
 export default EventDetailsWithGoogleApi;
+
+EventDetails.propTypes = {
+  google: PropTypes.object.isRequired,
+};

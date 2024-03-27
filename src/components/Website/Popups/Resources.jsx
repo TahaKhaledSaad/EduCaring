@@ -22,6 +22,8 @@ export default function Resources({
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
   const [speakerResourses, setSpeakerResourses] = useState([]);
+  const [link, setLink] = useState("");
+  const [flag, setFlag] = useState(false);
 
   console.log(eventDaySpeakerId, sendId);
   console.log(userId);
@@ -41,7 +43,7 @@ export default function Resources({
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, userId, i18n.language]);
+  }, [eventId, userId, i18n.language, link]);
 
   // [13] Function to get resources of the speaker
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function Resources({
           )
         );
       });
-  }, [eventDayId, userId, i18n.language, decodedToken.uid]);
+  }, [eventDayId, userId, i18n.language, decodedToken.uid, eventDaySpeakerId, flag]);
 
   // [2] Selected Event Day
   const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
@@ -317,6 +319,41 @@ export default function Resources({
   };
 
   // [12] Function to select files and send them to the server
+  const sendLinks = () => {
+    const object = {
+      Id: eventDaySpeakerId, // 57
+      EventDaySpeakerId: sendId, // 56
+      SpeakerId: decodedToken.uid, // a1db4239-e0bf-4f99-a63a-28f87f495122
+      Link: link, // constant
+      Title: null, // constant
+      ResoursesFile: null, // files
+    };
+
+    const formData = new FormData();
+
+    formData.append("Id", object.Id);
+    formData.append("EventDaySpeakerId", object.EventDaySpeakerId);
+    formData.append("SpeakerId", object.SpeakerId);
+    formData.append("Link", link);
+    formData.append("Title", null);
+    // formData.append("ResorsesFile", imgFormData);
+
+    axios
+      .post(`${BASE}/SpeakerResors/Multiple`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFlag(!flag);
+      })
+      .catch((error) => {
+        console.error("Error uploading files:", error);
+      });
+  };
+
+  // [12] Function to select files and send them to the server
   const sendFiles = (e) => {
     const files = e.target.files;
     const arrOfImgs = [];
@@ -336,8 +373,8 @@ export default function Resources({
     formData.append("Id", object.Id);
     formData.append("EventDaySpeakerId", object.EventDaySpeakerId);
     formData.append("SpeakerId", object.SpeakerId);
-    formData.append("Link", object.Link);
-    formData.append("Title", object.Title);
+    formData.append("Link", null);
+    formData.append("Title", null);
     // formData.append("ResorsesFile", imgFormData);
 
     console.log(object);
@@ -354,6 +391,7 @@ export default function Resources({
       })
       .then((response) => {
         console.log(response.data);
+        setFlag(!flag);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
@@ -496,6 +534,8 @@ export default function Resources({
                     outline: "none",
                     width: "calc(100% - 150px)",
                   }}
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
                 />
                 <button
                   className="btn btn-success px-4 py-2"
@@ -505,6 +545,10 @@ export default function Resources({
                     outline: "none",
                     borderRadius: "10px",
                   }}
+                  onClick={() => {
+                    sendLinks();
+                    setLink("");
+                  }}
                 >
                   Add new Link
                 </button>
@@ -512,7 +556,7 @@ export default function Resources({
             )}
 
             {/* Send Button */}
-            {addResourcesSpeaker && (
+            {/* {addResourcesSpeaker && (
               <button
                 className="btn btn-success px-4 py-2 my-2 w-100"
                 style={{
@@ -524,7 +568,7 @@ export default function Resources({
               >
                 Send
               </button>
-            )}
+            )} */}
 
             {selectedOption === "files" &&
               files.map((file, index) => (
@@ -552,6 +596,20 @@ export default function Resources({
                   <img
                     key={index}
                     src={img}
+                    alt={`Image ${index}`}
+                    className="rounded col-3"
+                    style={{ objectFit: "cover" }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {selectedOption === "images" && addResourcesSpeaker && (
+              <div className="row gap-2 my-2 justify-content-center">
+                {speakerResourses.map((resource, index) => (
+                  <img
+                    key={index}
+                    src={resource.resorsesURL}
                     alt={`Image ${index}`}
                     className="rounded col-3"
                     style={{ objectFit: "cover" }}

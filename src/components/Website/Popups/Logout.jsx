@@ -1,5 +1,6 @@
 import { useState } from "react";
 import cookie from "cookie-universal";
+import { useNavigate } from "react-router-dom";
 
 export default function Logout() {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -13,6 +14,8 @@ export default function Logout() {
   const handleHidePopup = () => {
     setPopupVisible(false);
   };
+
+  const nav = useNavigate();
   return (
     <>
       <div
@@ -84,7 +87,8 @@ export default function Logout() {
               onClick={() => {
                 cookies.remove("edu-caring");
                 cookies.remove("userId");
-                window.location.href = "/";
+                nav("/");
+                window.location.reload();
               }}
             >
               Yes, Log out
