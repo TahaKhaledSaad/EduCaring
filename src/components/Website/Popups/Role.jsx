@@ -21,9 +21,9 @@ function Role({ roleCase }) {
 
   function definePath() {
     if (selectedRole === "attendance") {
-      window.location.pathname = "register-attendance";
+      return "/register-attendance";
     } else if (selectedRole === "speaker") {
-      window.location.pathname = "register-speaker";
+      return "/register-speaker";
     }
   }
 
@@ -35,17 +35,39 @@ function Role({ roleCase }) {
             <h4>Register as a</h4>
           </div>
           <div className="roles">
-            <div className="role-item" onClick={() => handleRoleItemClick("attendance")}>
-              <img src={selectedRole === "attendance" ? attColored : att} alt="attendance" />
-              <h5 style={{ color: selectedRole === "attendance" ? "#3296D4" : "" }}>Attendance</h5>
+            <div
+              className="role-item"
+              onClick={() => handleRoleItemClick("attendance")}
+            >
+              <img
+                src={selectedRole === "attendance" ? attColored : att}
+                alt="attendance"
+              />
+              <h5
+                style={{
+                  color: selectedRole === "attendance" ? "#3296D4" : "",
+                }}
+              >
+                Attendance
+              </h5>
             </div>
-            <div className="role-item" onClick={() => handleRoleItemClick("speaker")}>
-              <img src={selectedRole === "speaker" ? spkColored : spk} alt="speaker" />
-              <h5 style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}>Speaker</h5>
+            <div
+              className="role-item"
+              onClick={() => handleRoleItemClick("speaker")}
+            >
+              <img
+                src={selectedRole === "speaker" ? spkColored : spk}
+                alt="speaker"
+              />
+              <h5
+                style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}
+              >
+                Speaker
+              </h5>
             </div>
           </div>
           <div className="btns">
-            <Link onClick={definePath}>Ok</Link>
+            <Link to={definePath()}>Ok</Link>
             <button onClick={handleCloseClick}>Cancel</button>
           </div>
         </div>

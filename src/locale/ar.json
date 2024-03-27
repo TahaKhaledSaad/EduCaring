@@ -1,3 +1,31 @@
 {
-    "title": "The Bigamist"
+  "title": "The Bigamist",
+  "Notifications": "الاشعارات",
+  "MarkAllAsRead": "جعل جميع الاشعارات كمقروءة",
+  "EventOrganizer": "منظم الحدث",
+  "PleaseAnswerTheseQuestions": "يرجى الاجابة على هذه الأسئلة !",
+  "Questions": "الأسئلة",
+  "SaveAndClose": "حفظ واغلاق",
+  "AreYouGoingToTheNightEvent": "هل أنت ذاهب في حدث الليل؟",
+  "Yes": "نعم",
+  "No": "لا",
+  "pleaseRateSpeakers": "يرجى تقييم المحاضريين",
+  "Vote": "التقييم",
+  "ChooseYourFavoriteSpeaker": "اختر المحاضر المفضل لك",
+
+  "Review": "مراجعة",
+  "PleaseGiveUsYourReview": "يرجى تقديم مراجعتك",
+  "Submit": "تقديم",
+  "Cancel": "إلغاء",
+  "PleaseWeNeedYourSurvey": " نحتاج لتقييمك من فضلك",
+  "NewUpdateInSpeakersRating": "تحديث جديد في تقييم المحاضرين",
+  "WinnerSpeaker": "المحاضر الفائز",
+  "TheWinnerIs": "الفائز هو",
+  "With": "مع",
+  "Votes": "تصويت",
+  "Support": "الدعم",
+  "Details": "تفاصيل",
+  "Title": "العنوان",
+  "Send": "إرسال",
+  "YourFeedBackIsImportant": "تعليقك هو مهم جدا"
 }
