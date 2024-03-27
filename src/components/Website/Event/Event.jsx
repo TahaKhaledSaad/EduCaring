@@ -391,6 +391,7 @@ function EventDetails(props) {
                                   className="rounded-circle mb-2"
                                   width={"65px"}
                                   height={"65px"}
+                                  style={{ objectFit: "cover" }}
                                 />
                               ) : (
                                 <div
