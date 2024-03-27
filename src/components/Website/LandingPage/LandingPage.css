@@ -42,7 +42,18 @@
 .navbar-nav .nav-link {
   padding: 10px 0;
 }
-
+.navbar-nav .nav-link.active {
+  color: #3296d4 !important;
+}
+.navbar-nav .nav-link:hover {
+  color: #3296d4;
+  transition: all 0.3s;
+}
+.register-btn:hover {
+  color: #fff !important;
+  background-color: #3296d4 !important;
+  transition: all 0.3s !important;
+}
 /*  End NavBar */
 /* ////////////////////////////////// */
 
@@ -177,7 +188,7 @@
   margin: 5px 0;
 }
 .button {
-  padding: 12px 30px;
+  padding: 12px 40px;
   border: 0;
   outline: 0;
   background-color: #3296d4;
@@ -224,7 +235,6 @@
 }
 .social-media img {
   margin: 5px 15px;
-  
 }
 @media (max-width: 920px) {
   .social-media {
@@ -719,11 +729,10 @@
     transform: translateY(0);
   }
 }
-.navbar-collapse .logout{
-text-align: center;
-padding: 10px 0;
+.navbar-collapse .logout {
+  text-align: center;
+  padding: 10px 0;
 }
-
 
 /* //////////////////////// */
 
@@ -782,9 +791,8 @@ padding: 10px 0;
   color: #565656;
   font-size: 25px;
 }
-.landing-page .period .content p:nth-child(2){
+.landing-page .period .content p:nth-child(2) {
   margin-left: 50px;
-
 }
 .landing-page .period .content p:nth-child(3) {
   margin-left: 40px;
