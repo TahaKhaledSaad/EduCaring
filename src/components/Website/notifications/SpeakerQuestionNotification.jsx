@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import person from "../../../assets/person.jpeg";
+
+import logo from "../../../assets/logo.jpg";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { BASE, SPEAKER_QUESTIONS_ANSWERS } from "../../../Api";
@@ -74,7 +75,7 @@ const SpeakerQuestionNotification = ({ sendTime, notification }) => {
   return (
     <div ref={questionsRef} className="question">
       <div className="notif-row" onClick={togglePopup}>
-        <img src={person} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6>{notification[0].speakerName}</h6>
           <p>{t("PleaseAnswerTheseQuestions")}</p>

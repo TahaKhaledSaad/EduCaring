@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import person1 from "../../../assets/person1.jpeg";
+import logo from "../../../assets/logo.jpg";
 import Form from "react-bootstrap/Form";
 import StarRating from "./StarRating";
 import { ADD_REVIEW, BASE } from "../../../Api";
@@ -78,7 +78,7 @@ export default function SurveyNotification({ notification, sendTime }) {
   return (
     <div ref={questionsRef} className="question">
       <div className="notif-row" onClick={togglePopup}>
-        <img src={person1} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6> {t("EventOrganizer")}</h6>
           <p className="survey">{t("PleaseWeNeedYourSurvey")}</p>

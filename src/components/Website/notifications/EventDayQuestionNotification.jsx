@@ -1,4 +1,4 @@
-import imgEvent from "../../../assets/event-img1.jpeg";
+import logo from "../../../assets/logo.jpg";
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
@@ -86,7 +86,7 @@ const EventDayQuestionNotification = ({
   return (
     <div ref={questionsRef} className="question">
       <div className="notif-row" onClick={togglePopup}>
-        <img src={imgEvent} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6>{t("EventOrganizer")}</h6>
           <p>{t("PleaseAnswerTheseQuestions")} !</p>

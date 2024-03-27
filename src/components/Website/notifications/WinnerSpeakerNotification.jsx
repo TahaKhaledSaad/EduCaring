@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import imgEvent from "../../../assets/event-img1.jpeg";
+import { useEffect, useRef, useState } from "react";
+
+import logo from "../../../assets/logo.jpg";
 import { useTranslation } from "react-i18next";
 const WinnerSpeakerNotification = ({ notifications, sendTime }) => {
   const { t } = useTranslation();
@@ -55,7 +56,7 @@ const WinnerSpeakerNotification = ({ notifications, sendTime }) => {
   return (
     <div ref={node} className="question">
       <div className="notif-row" onClick={toggleIsOpen}>
-        <img src={imgEvent} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6>{t("EventOrganizer")}</h6>
           <p className="new">{t("NewUpdateInSpeakersRating")}</p>

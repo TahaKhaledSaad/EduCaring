@@ -1,4 +1,4 @@
-import imgEvent from "../../../assets/event-img1.jpeg";
+import logo from "../../../assets/logo.jpg";
 import axios from "axios";
 import { BASE, NIGHT_EVENT } from "../../../Api";
 import Cookie from "cookie-universal";
@@ -48,7 +48,7 @@ export default function NightEventNotification({ notification, sendTime }) {
   return (
     <div className="question">
       <div className="notif-row">
-        <img src={imgEvent} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6>{t("EventOrganizer")}</h6>
           <p className="details">{t("AreYouGoingToTheNightEvent")}</p>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import imgEvent from "../../../assets/event-img1.jpeg";
+import logo from "../../../assets/logo.jpg";
+
 import axios from "axios";
 import { BASE, SPEAKER_RATE_ANSWER } from "../../../Api";
 import Cookie from "cookie-universal";
@@ -7,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
-const SpeakerRateNotification = ({ sendTime, notification, eventId }) => {
+const SpeakerRateNotification = ({ sendTime, notification }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [selectedSpeaker, setSelectedSpeaker] = useState(null);
   const questionsRef = useRef(null);
@@ -91,7 +92,7 @@ const SpeakerRateNotification = ({ sendTime, notification, eventId }) => {
   return (
     <div ref={questionsRef} className="question">
       <div className="notif-row" onClick={togglePopup}>
-        <img src={imgEvent} alt="notify-img" />
+        <img src={logo} alt="notify-img" />
         <div className="text">
           <h6>{t("EventOrganizer")}</h6>
           <p className="new">{t("pleaseRateSpeakers")}</p>
