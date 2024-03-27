@@ -570,6 +570,7 @@ export default function Resources({
               </button>
             )} */}
 
+            {/* User */}
             {selectedOption === "files" &&
               files.map((file, index) => (
                 <li
@@ -590,6 +591,7 @@ export default function Resources({
                 </li>
               ))}
 
+            {/* User */}
             {selectedOption === "images" && (
               <div className="row gap-2 my-2 justify-content-center">
                 {imgs.map((img, index) => (
@@ -604,6 +606,7 @@ export default function Resources({
               </div>
             )}
 
+            {/* Speaker */}
             {selectedOption === "images" && addResourcesSpeaker && (
               <div className="row gap-2 my-2 justify-content-center">
                 {speakerResourses.map((resource, index) => (
@@ -618,6 +621,7 @@ export default function Resources({
               </div>
             )}
 
+            {/* User */}
             {selectedOption === "links" && // Links For All Users
               links.map((link, index) => (
                 <div
@@ -667,6 +671,7 @@ export default function Resources({
                 </div>
               ))}
 
+            {/* Speaker */}
             {selectedOption === "links" && // Links For a Speaker
               addResourcesSpeaker &&
               speakerResourses.map((resource, index) => (
