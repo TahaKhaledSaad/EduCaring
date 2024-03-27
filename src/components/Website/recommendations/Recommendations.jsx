@@ -324,12 +324,12 @@ export default function Recommendations() {
                   <p>
                     <i className="bi bi-geo-alt-fill"></i>
                     {event.eventDays[0].address
-                          .split(" ")
-                          .slice(0, 2)
-                          .join(" ") +
-                          (event.eventDays[0].address.split(" ").length > 3
-                            ? "..."
-                            : "")}
+                      .split(" ")
+                      .slice(0, 2)
+                      .join(" ") +
+                      (event.eventDays[0].address.split(" ").length > 3
+                        ? "..."
+                        : "")}
                   </p>
                   <div className="btns">
                     {event.isOnline && (

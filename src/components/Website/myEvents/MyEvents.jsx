@@ -40,8 +40,8 @@ export default function MyEvents() {
   }, [i18n.language, userId]);
 
   // Filtered events based on dropdown selection and search term
-  const filteredEvents = (userEvents && userEvents[(selectedType || "All").toLowerCase()]) || [];
-
+  const filteredEvents =
+    (userEvents && userEvents[(selectedType || "All").toLowerCase()]) || [];
 
   const searchedEvents = filteredEvents.filter((event) =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -80,10 +80,19 @@ export default function MyEvents() {
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
           >
-            <option value="All">{i18n.language === "en" ? "All" : "الكل"} </option>
-            <option value="Comming">{i18n.language === "en" ? "Comming" : "القادم"}</option>
-            <option value="Finished">{i18n.language === "en" ? "Finished" : "تم الانتهاء"}</option>
-            <option value="Running"> {i18n.language === "en" ? "Running" : "الجاري"}</option>
+            <option value="All">
+              {i18n.language === "en" ? "All" : "الكل"}{" "}
+            </option>
+            <option value="Comming">
+              {i18n.language === "en" ? "Comming" : "القادم"}
+            </option>
+            <option value="Finished">
+              {i18n.language === "en" ? "Finished" : "تم الانتهاء"}
+            </option>
+            <option value="Running">
+              {" "}
+              {i18n.language === "en" ? "Running" : "الجاري"}
+            </option>
           </select>
           <div className="search">
             <i className="bi bi-search"></i>
@@ -272,23 +281,38 @@ export default function MyEvents() {
         ) : (
           <div className="body d-flex gap-4 p-4 flex-wrap">
             {searchedEvents.map((event, index) => (
-              <Link to={`/home/event/${event.id}`} className="event" key={index}>
+              <Link
+                to={`/home/event/${event.id}`}
+                className="event"
+                key={index}
+              >
                 <img src={event.displayPrimeImageURL} alt="eventImg" />
                 <div className="info">
-                  <h6>{event.name}</h6>
+                  <h6>
+                    {event.name.split(" ").slice(0, 4).join(" ")}{" "}
+                    {event.name.split(" ").length > 3 ? "..." : ""}
+                  </h6>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
                     {formatDate(event.startDay)}
                   </p>
                   <p>
                     <i className="bi bi-geo-alt-fill"></i>
-                    {event.eventDays[0]?.address}
+                    {event.eventDays[0].address
+                      .split(" ")
+                      .slice(0, 2)
+                      .join(" ") +
+                      (event.eventDays[0].address.split(" ").length > 3
+                        ? "..."
+                        : "")}
                   </p>
                   <div className="rate">
                     <span>({event.numberOfReviews || 0} reviews)</span>
                     <span>
                       <i className="bi bi-star-fill"></i>
-                      {event.reviewRate || 0}
+                      {(event.reviewRate || 0) === 0
+                        ? 0
+                        : (event.reviewRate || 0).toFixed(1)}
                     </span>
                   </div>
                 </div>
