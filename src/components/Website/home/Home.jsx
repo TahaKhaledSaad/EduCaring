@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
+import { HashLoader } from "react-spinners";
 
 export default function Home() {
   // Translation Work
@@ -126,6 +127,19 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, [reminder]);
 
+  if (!reminder || !events || !recommendEvents) {
+    return (
+      <div className="d-flex justify-content-center align-items-center w-100 h-100">
+        <HashLoader
+          color="#3296d4"
+          cssOverride={{}}
+          loading={true}
+          size={60}
+          speedMultiplier={1}
+        />
+      </div>
+    );
+  }
   return (
     <div>
       <SideBar />
@@ -155,10 +169,10 @@ export default function Home() {
                   </div>
 
                   <div className="text">
-                    <p >{i18n.language === "en" ? "Days" : "أيام"}</p>
-                    <p >{i18n.language === "en" ? "Hours" : "ساعات"}</p>
-                    <p >{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
-                    <p >{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
+                    <p>{i18n.language === "en" ? "Days" : "أيام"}</p>
+                    <p>{i18n.language === "en" ? "Hours" : "ساعات"}</p>
+                    <p>{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
+                    <p>{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
                   </div>
                 </div>
               </div>
