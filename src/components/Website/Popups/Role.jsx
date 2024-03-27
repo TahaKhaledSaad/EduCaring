@@ -35,13 +35,35 @@ function Role({ roleCase }) {
             <h4>Register as a</h4>
           </div>
           <div className="roles">
-            <div className="role-item" onClick={() => handleRoleItemClick("attendance")}>
-              <img src={selectedRole === "attendance" ? attColored : att} alt="attendance" />
-              <h5 style={{ color: selectedRole === "attendance" ? "#3296D4" : "" }}>Attendance</h5>
+            <div
+              className="role-item"
+              onClick={() => handleRoleItemClick("attendance")}
+            >
+              <img
+                src={selectedRole === "attendance" ? attColored : att}
+                alt="attendance"
+              />
+              <h5
+                style={{
+                  color: selectedRole === "attendance" ? "#3296D4" : "",
+                }}
+              >
+                Attendance
+              </h5>
             </div>
-            <div className="role-item" onClick={() => handleRoleItemClick("speaker")}>
-              <img src={selectedRole === "speaker" ? spkColored : spk} alt="speaker" />
-              <h5 style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}>Speaker</h5>
+            <div
+              className="role-item"
+              onClick={() => handleRoleItemClick("speaker")}
+            >
+              <img
+                src={selectedRole === "speaker" ? spkColored : spk}
+                alt="speaker"
+              />
+              <h5
+                style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}
+              >
+                Speaker
+              </h5>
             </div>
           </div>
           <div className="btns">
@@ -53,5 +75,4 @@ function Role({ roleCase }) {
     </>
   );
 }
-
 export default Role;

@@ -178,10 +178,11 @@ export default function Community() {
         {showChatContent && selectedChat && (
           <div className={`chat-content ${showChatContent ? "show" : "hide"}`}>
             {selectedChat.messages.map((msg) => {
-              const docs =
-                msg.imageUrl !== "http://hossamelhadad-001-site12.atempurl.com/"
-                  ? [{ uri: msg.imageUrl }]
-                  : [];
+             const docs =
+             msg.imageUrl !== "http://educarringapi.com/" && msg.imageUrl !== "https://educarringapi.com/"
+               ? [{ uri: msg.imageUrl }]
+               : [];
+           
               return (
                 <div key={msg.id} className="message my-4">
                   <div className="sender d-flex gap-2 align-items-center">

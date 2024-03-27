@@ -77,25 +77,54 @@ export default function Home() {
       .catch((err) => console.log(err));
   }, [i18n.language, decodedToken.uid]);
 
-  const dateString = reminder?.startDay;
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
-  // Convert the date string to a Date object
-  const eventDate = new Date(dateString);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (reminder) {
+        const eventDate = new Date(reminder.startDay);
+        const currentDate = new Date();
+        const timeDifference = eventDate.getTime() - currentDate.getTime();
 
-  // Get the current date
-  const currentDate = new Date();
+        if (timeDifference < 0) {
+          // Set all countdown values to 0 if time difference is negative
+          setCountdown({
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+          });
+        } else {
+          const daysDifference = Math.floor(
+            timeDifference / (1000 * 60 * 60 * 24)
+          );
+          const hoursDifference = Math.floor(
+            (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutesDifference = Math.floor(
+            (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const secondsDifference = Math.floor(
+            (timeDifference % (1000 * 60)) / 1000
+          );
 
-  // Calculate the time difference in milliseconds
-  const timeDifference = eventDate.getTime() - currentDate.getTime();
+          setCountdown({
+            days: daysDifference,
+            hours: hoursDifference,
+            minutes: minutesDifference,
+            seconds: secondsDifference,
+          });
+        }
+      }
+    }, 1000);
 
-  // Calculate the difference in days, hours, and minutes
-  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  const hoursDifference = Math.floor(
-    (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  );
-  const minutesDifference = Math.floor(
-    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-  );
+    return () => clearInterval(intervalId);
+  }, [reminder]);
 
   return (
     <div>
@@ -114,17 +143,22 @@ export default function Home() {
                 </h3>
                 <div className="content">
                   <div className="nums">
-                    <h4>{String(daysDifference ? daysDifference : "")}</h4>:
-                    <h4>{String(hoursDifference ? hoursDifference : "")}</h4>:
+                    <h4>{String(countdown.days ? countdown.days : "0")}</h4>:
+                    <h4>{String(countdown.hours ? countdown.hours : "0")}</h4>:
                     <h4>
-                      {String(minutesDifference ? minutesDifference : "")}
+                      {String(countdown.minutes ? countdown.minutes : "0")}
+                    </h4>
+                    :
+                    <h4>
+                      {String(countdown.seconds ? countdown.seconds : "0")}
                     </h4>
                   </div>
 
                   <div className="text">
-                    <p>{i18n.language === "en" ? "Days" : "أيام"}</p>
-                    <p>{i18n.language === "en" ? "Hours" : "ساعات"}</p>
-                    <p>{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
+                    <p >{i18n.language === "en" ? "Days" : "أيام"}</p>
+                    <p >{i18n.language === "en" ? "Hours" : "ساعات"}</p>
+                    <p >{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
+                    <p >{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
                   </div>
                 </div>
               </div>

@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 240px;
+  width: 300px;
   font-size: 24px;
   color: #3296d4;
 }
@@ -30,6 +30,7 @@
 }
 .home-comp .content .text {
   padding: 0 10px;
+  margin-left: 5px;
 }
 .home-comp .content .nums h4 {
   background-color: #fff;

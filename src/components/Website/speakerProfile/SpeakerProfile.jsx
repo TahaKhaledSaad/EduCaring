@@ -169,7 +169,7 @@ export default function SpeakerProfile() {
                 borderRadius: "12px",
                 // marginLeft: "40px",
               }}
-              onClick={downloadCV}
+              onClick={speakerObj.speakerObj ? downloadCV : () => alert("There Is No CV")}
             >
               <svg
                 width="24"
@@ -325,7 +325,7 @@ export default function SpeakerProfile() {
               </svg>
 
               <span className="px-1 fw-bold" style={{ color: "#3296D4" }}>
-                {speakerObj.gender.name}
+                {speakerObj.gender?.name}
               </span>
               <p className="py-2" style={{ color: "#747688" }}>
                 Gender
