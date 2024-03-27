@@ -197,11 +197,23 @@ export default function Home() {
 
                     <div className="content">
                       <div className="txt">
-                        <h5 className="text-start">{event.name}</h5>
+                        <h5 className="text-start">
+                          {event.name.split(" ").slice(0, 4).join(" ")}{" "}
+                          {event.name.split(" ").length > 3 ? "..." : ""}
+                        </h5>
                         <div className="info">
                           <div className="location">
                             <i className="bi bi-geo-alt-fill"></i>
-                            <span>{event.eventDays[0].address}</span>
+                            <span>
+                              {event.eventDays[0].address
+                                .split(" ")
+                                .slice(0, 2)
+                                .join(" ") +
+                                (event.eventDays[0].address.split(" ").length >
+                                3
+                                  ? "..."
+                                  : "")}
+                            </span>
                           </div>
                           <div className="money">
                             <i className="bi bi-cash-stack"></i>
@@ -255,7 +267,11 @@ export default function Home() {
 
                     <div className="info">
                       <h6>
-                        {i18n.language === "en" ? event.nameEn : event.nameAr}
+                        {i18n.language === "en"
+                          ? event.nameEn.split(" ").slice(0, 3).join(" ") +
+                            (event.nameEn.split(" ").length > 3 ? "..." : "")
+                          : event.nameAr.split(" ").slice(0, 3).join(" ") +
+                            (event.nameAr.split(" ").length > 3 ? "..." : "")}
                       </h6>
                       <p>
                         <i className="fa-solid fa-calendar-days"></i>
@@ -263,9 +279,15 @@ export default function Home() {
                       </p>
                       <p>
                         <i className="bi bi-geo-alt-fill"></i>
-                        {event.eventDays[0].address}
+                        {event.eventDays[0].address
+                          .split(" ")
+                          .slice(0, 2)
+                          .join(" ") +
+                          (event.eventDays[0].address.split(" ").length > 3
+                            ? "..."
+                            : "")}
                       </p>
-                      <div className="btns">
+                      <div className="btns my-2">
                         {event.isOnline && (
                           <span className="online">
                             {i18n.language === "en" ? "Online" : "بث مباشر"}

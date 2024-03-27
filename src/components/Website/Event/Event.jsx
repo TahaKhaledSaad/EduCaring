@@ -13,7 +13,7 @@ import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
 
-function EventDetails(props) {
+function EventDetails() {
   // Translation Work
   const { i18n } = useTranslation();
 
@@ -179,7 +179,9 @@ function EventDetails(props) {
                           fill="#F7CB15"
                         />
                       </svg>
-                      {eventDetails.eventDays[selectedDayIndex].reviewRate.toFixed(1)}
+                      {eventDetails.eventDays[
+                        selectedDayIndex
+                      ].reviewRate.toFixed(1)}
                     </span>
                   </div>
                   {eventDetails.eventDays[selectedDayIndex].isPaid ||
@@ -348,11 +350,14 @@ function EventDetails(props) {
                         height: "100%",
                         borderRadius: "10px",
                       }}
-                      
-                      src= {"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14838.061717140828!2d39.109334!3d21.60483!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15c3dbd751aa2b57%3A0xd32f14ab8ce46662!2z2YfZitmE2KrZiNmGINis2K_YqQ!5e0!3m2!1sar!2seg!4v1711573959820!5m2!1sar!2seg"}
+                      src={
+                        eventDetails.eventDays[selectedDayIndex]
+                          .iFramAddressLink
+                      }
                       allowfullscreen="true"
                       aria-hidden="false"
                       tabIndex="0"
+                      loading="lazy"
                     ></iframe>
                   </div>
                 </div>
