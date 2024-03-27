@@ -28,7 +28,7 @@ export default function NightEventNotification({ notification, sendTime }) {
     ) {
       axios
         .post(`${BASE}/${NIGHT_EVENT}`, {
-          id: notification.id,
+          id: 0,
           eventDayId: Number(notification.eventDayId),
           userId: decodedToken.uid,
           isAccept: bool,
