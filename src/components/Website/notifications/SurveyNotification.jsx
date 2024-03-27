@@ -7,8 +7,14 @@ import Form from "react-bootstrap/Form";
 import StarRating from "./StarRating";
 import { ADD_REVIEW, BASE } from "../../../Api";
 import { useTranslation } from "react-i18next";
-export default function SurveyNotification({ notification, sendTime }) {
+import { Toast } from "primereact/toast";
+export default function SurveyNotification({
+  notification,
+  sendTime,
+  onHandleMenu,
+}) {
   const { t } = useTranslation();
+  const toast = useRef(null);
   const [popupVisible, setPopupVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
@@ -66,8 +72,17 @@ export default function SurveyNotification({ notification, sendTime }) {
       })
       .then((res) => {
         if (res.data.isSuccess === true) {
+          toast.current.show({
+            severity: "info",
+            summary: t("SurveySent"),
+            detail: t("ThanksForYourFeedback"),
+            life: 3000,
+          });
+
+          setTimeout(() => {
+            onHandleMenu(false);
+          }, 3000);
           setPopupVisible(false);
-          window.location.reload();
         }
       })
       .catch((err) => {
@@ -77,6 +92,7 @@ export default function SurveyNotification({ notification, sendTime }) {
 
   return (
     <div ref={questionsRef} className="question">
+      <Toast ref={toast} />
       <div className="notif-row" onClick={togglePopup}>
         <img src={logo} alt="notify-img" />
         <div className="text">
@@ -132,7 +148,7 @@ export default function SurveyNotification({ notification, sendTime }) {
           <div className="btns p-3 d-flex gap-5 justify-content-center send-close-container">
             <button
               className={`send-question-btn survey-rate-btn btn  flex-column d-flex justify-content-center
-           ${rating !== 0 && comment ? "" : "disabled bt-disabled-op"} `}
+           ${comment ? "" : "disabled bt-disabled-op"} `}
               style={{ cursor: "pointer" }}
               onClick={handleSend}
             >

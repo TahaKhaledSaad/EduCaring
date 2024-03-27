@@ -7,10 +7,12 @@ import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { Toast } from "primereact/toast";
 
-const SpeakerRateNotification = ({ sendTime, notification }) => {
+const SpeakerRateNotification = ({ sendTime, notification, onHandleMenu }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [selectedSpeaker, setSelectedSpeaker] = useState(null);
+  const toast = useRef(null);
   const questionsRef = useRef(null);
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
@@ -61,8 +63,17 @@ const SpeakerRateNotification = ({ sendTime, notification }) => {
         )
         .then((res) => {
           if (res.data.isSuccess === true) {
+            toast.current.show({
+              severity: "info",
+              summary: t("RateSent"),
+              detail: t("YourRateHasBeenSubmittedSuccessfully"),
+              life: 3000,
+            });
+
+            setTimeout(() => {
+              onHandleMenu(false);
+            }, 3000);
             setPopupVisible(false);
-            window.location.reload();
           }
         })
         .catch((err) => console.log(err));
@@ -91,6 +102,7 @@ const SpeakerRateNotification = ({ sendTime, notification }) => {
   };
   return (
     <div ref={questionsRef} className="question">
+      <Toast ref={toast} />
       <div className="notif-row" onClick={togglePopup}>
         <img src={logo} alt="notify-img" />
         <div className="text">

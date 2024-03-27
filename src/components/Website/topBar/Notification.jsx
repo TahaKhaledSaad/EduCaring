@@ -17,6 +17,7 @@ import WinnerSpeakerNotification from "../notifications/WinnerSpeakerNotificatio
 import SurveyNotification from "../notifications/SurveyNotification";
 import NightEventNotification from "../notifications/NightEventNotification";
 import { useTranslation } from "react-i18next";
+import CommunityNotification from "../notifications/CommunityNotification";
 export default function Notification() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [notificationTypes, setNotificationTypes] = useState([]);
@@ -192,6 +193,17 @@ export default function Notification() {
                       sendTime={notification.sendTime}
                       eventId={notification.eventId}
                       eventDayId={notification.eventDayId}
+                      onHandleMenu={setPopupVisible}
+                    />
+                  );
+                case "Community":
+                  return (
+                    <CommunityNotification
+                      key={index}
+                      notification={notification.data}
+                      sendTime={notification.sendTime}
+                      eventId={notification.eventId}
+                      eventDayId={notification.eventDayId}
                     />
                   );
                 case "SpeakerQuestion":
@@ -200,6 +212,7 @@ export default function Notification() {
                       key={index}
                       notification={notification.data}
                       sendTime={notification.sendTime}
+                      onHandleMenu={setPopupVisible}
                     />
                   );
                 case "SpeakerRate":
@@ -209,6 +222,7 @@ export default function Notification() {
                       notification={notification.data}
                       sendTime={notification.sendTime}
                       eventId={notification.eventId}
+                      onHandleMenu={setPopupVisible}
                     />
                   );
                 case "Survey":
@@ -217,6 +231,7 @@ export default function Notification() {
                       key={index}
                       notification={notification.data}
                       sendTime={notification.sendTime}
+                      onHandleMenu={setPopupVisible}
                     />
                   );
                 case "NightEvent":
@@ -225,6 +240,7 @@ export default function Notification() {
                       key={index}
                       notification={notification.data}
                       sendTime={notification.sendTime}
+                      onHandleMenu={setPopupVisible}
                     />
                   );
                 case "WinnerSpeaker":

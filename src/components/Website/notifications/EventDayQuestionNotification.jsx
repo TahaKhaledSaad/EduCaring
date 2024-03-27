@@ -7,15 +7,20 @@ import { BASE, EVENT_QUESTIONS_ANSWERS } from "../../../Api";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
+import { Toast } from "primereact/toast";
 
 const EventDayQuestionNotification = ({
   sendTime,
   eventId,
   notification,
   eventDayId,
+  onHandleMenu,
 }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const questionsRef = useRef(null);
+  const toast = useRef(null);
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
@@ -66,8 +71,18 @@ const EventDayQuestionNotification = ({
         },
       })
       .then((response) => {
-        console.log("Answers submitted successfully:", response.data);
-        setPopupVisible(false);
+        if (response.data.isSuccess === true) {
+          toast.current.show([
+            {
+              severity: "success",
+              summary: t("AnswersSent"),
+              detail: t("AnswersSubmittedSuccessfully"),
+              life: 3000,
+            },
+          ]);
+          setShowScore(true);
+          setScore(response.data.responseObject.score);
+        }
       })
       .catch((error) => {
         console.error("Error submitting answers:", error);
@@ -85,6 +100,7 @@ const EventDayQuestionNotification = ({
   }
   return (
     <div ref={questionsRef} className="question">
+      <Toast ref={toast} />
       <div className="notif-row" onClick={togglePopup}>
         <img src={logo} alt="notify-img" />
         <div className="text">
@@ -106,28 +122,34 @@ const EventDayQuestionNotification = ({
         <div className="body">
           <div className="form">
             <div className="questions-body">
-              {notification.map((question) => (
-                <div className="question" key={question.id}>
-                  <h5>{question.question}</h5>
+              {showScore ? (
+                <h2 className="score text-center text-success mt-5 p-3 ">
+                  {t("YourTotalPoints")}: <span>{Math.round(score)}</span>
+                </h2>
+              ) : (
+                notification.map((question) => (
+                  <div className="question" key={question.id}>
+                    <h5>{question.question}</h5>
 
-                  {question.eventDayQuestionAnswers.map((answer) => (
-                    <div className="answer" key={question.id + answer.id}>
-                      <Form.Check // prettier-ignore
-                        type={"radio"}
-                        id={`default-${question.id}-${answer.id}`}
-                        label={`${answer.answer}`}
-                        value={question.id + answer.id}
-                        onChange={() =>
-                          handleAnswerChange(question.id, answer.id)
-                        }
-                        checked={selectedAnswers[question.id] === answer.id}
-                        className="question-answer-input"
-                        name={`question-${question.id}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ))}
+                    {question.eventDayQuestionAnswers.map((answer) => (
+                      <div className="answer" key={question.id + answer.id}>
+                        <Form.Check // prettier-ignore
+                          type={"radio"}
+                          id={`default-${question.id}-${answer.id}`}
+                          label={`${answer.answer}`}
+                          value={question.id + answer.id}
+                          onChange={() =>
+                            handleAnswerChange(question.id, answer.id)
+                          }
+                          checked={selectedAnswers[question.id] === answer.id}
+                          className="question-answer-input"
+                          name={`question-${question.id}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))
+              )}
             </div>
             <ProgressBar now={progress} className="questions-progress-bar" />
             <div className="btns p-3">
@@ -135,9 +157,9 @@ const EventDayQuestionNotification = ({
                 className={`send-question-btn answer-question-btn btn btn-success flex-column d-flex justify-content-center ${
                   progress !== 100 ? "disabled bt-disabled-op" : ""
                 } `}
-                onClick={handleSend}
+                onClick={showScore ? () => onHandleMenu(false) : handleSend}
               >
-                {t("SaveAndClose")}
+                {showScore ? t("Close") : t("SaveAndClose")}
               </button>
             </div>
           </div>

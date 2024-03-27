@@ -5,6 +5,8 @@ import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
 
 NightEventNotification.propTypes = {
   notification: PropTypes.exact({
@@ -14,7 +16,12 @@ NightEventNotification.propTypes = {
   sendTime: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default function NightEventNotification({ notification, sendTime }) {
+export default function NightEventNotification({
+  notification,
+  sendTime,
+  onHandleMenu,
+}) {
+  const toast = useRef(null);
   const { t } = useTranslation();
   const handleSend = (bool) => {
     const cookie = new Cookie();
@@ -34,8 +41,18 @@ export default function NightEventNotification({ notification, sendTime }) {
           isAccept: bool,
         })
         .then((response) => {
-          console.log("Answers submitted successfully:", response.data);
-          // Handle success
+          if (response.data.isSuccess === true) {
+            toast.current.show({
+              severity: "info",
+              summary: t("answerSent"),
+              detail: t("YourResponseHasBeenSubmittedSuccessfully"),
+              life: 3000,
+            });
+
+            setTimeout(() => {
+              onHandleMenu(false);
+            }, 3000);
+          }
         })
         .catch((error) => {
           console.error("Error submitting answers:", error);
@@ -47,6 +64,7 @@ export default function NightEventNotification({ notification, sendTime }) {
   };
   return (
     <div className="question">
+      <Toast ref={toast} />
       <div className="notif-row">
         <img src={logo} alt="notify-img" />
         <div className="text">

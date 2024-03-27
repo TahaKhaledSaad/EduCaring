@@ -4,11 +4,13 @@ import { ADD_SUPPORT, BASE } from "../../../Api";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
+import { Toast } from "primereact/toast";
 export default function Support() {
   const { t } = useTranslation();
   const [popupVisible, setPopupVisible] = useState(false);
   const [supportData, setSupportData] = useState({ title: "", content: "" });
   const suppRef = useRef(null);
+  const toast = useRef(null);
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
@@ -53,7 +55,16 @@ export default function Support() {
         isSpeaker: false, // Update this based on your requirement
       })
       .then((response) => {
-        setPopupVisible(false);
+        if (response.data.isSuccess === true) {
+          toast.current.show({
+            severity: "info",
+            summary: t("MessageSent"),
+            detail: t("MessageSentSuccessfullyWeWillContactYou"),
+            life: 3000,
+          });
+
+          setPopupVisible(false);
+        }
         // Clear the input fields
         setSupportData({ title: "", content: "" });
       })

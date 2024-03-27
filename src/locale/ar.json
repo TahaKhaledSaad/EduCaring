@@ -27,5 +27,21 @@
   "Details": "تفاصيل",
   "Title": "العنوان",
   "Send": "إرسال",
-  "YourFeedBackIsImportant": "تعليقك هو مهم جدا"
+  "YourFeedBackIsImportant": "تعليقك هو مهم جدا",
+
+  "newUpdateInCommunity": "تحديث جديد في المجتمع",
+  "SurveySent": "تم ارسال الاستبيان",
+  "ThanksForYourFeedback": "شكرا لك على رأيك",
+  "AnswersSent": "تم ارسال الاجابات",
+  "AnswersSubmittedSuccessfully": "تم تقديم الاجابات بنجاح",
+  "YourPoints": "نقاطك",
+  "YourTotalPoints": "اجمالي نقاطك",
+
+  "Close": "اغلاق",
+  "answerSent": "تم الرد",
+  "YourResponseHasBeenSubmittedSuccessfully": "تم تقديم الرد بنجاح",
+  "YourRateHasBeenSubmittedSuccessfully": "تم تقديم التقييم بنجاح",
+  "RateSent": "تم ارسال التقييم",
+  "MessageSent": "تم ارسال الرسالة",
+  "MessageSentSuccessfullyWeWillContactYou": "تم بنجاح سيتم التواصل معك"
 }

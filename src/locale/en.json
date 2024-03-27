@@ -26,5 +26,19 @@
   "Details": "Details",
   "Title": "Title",
   "Send": "Send",
-  "YourFeedBackIsImportant": "Your FeedBack Is Important"
+  "YourFeedBackIsImportant": "Your FeedBack Is Important",
+  "newUpdateInCommunity": "New Update in Community",
+  "SurveySent": "Survey Sent",
+  "ThanksForYourFeedback": "Thanks for your feedback",
+  "AnswersSubmittedSuccessfully": "Answers Submitted Successfully",
+  "AnswersSent": "Answers Sent",
+  "YourPoints": "Your Points",
+  "YourTotalPoints": "Your Total Points",
+  "Close": "Close",
+  "answerSent": "Answer Sent",
+  "YourResponseHasBeenSubmittedSuccessfully": "Your Response Has Been Submitted Successfully",
+  "YourRateHasBeenSubmittedSuccessfully": "Your Rate Has Been Submitted Successfully",
+  "RateSent": "Rate Sent",
+  "MessageSent": "Message Sent",
+  "MessageSentSuccessfullyWeWillContactYou": "Sent Successfully We Will Contact You"
 }
