@@ -61,14 +61,14 @@ export default function Notification() {
   const handleNotificationTypesResponse = (response) => {
     setNotificationTypes(response.data.responseObject);
     response.data.responseObject.forEach((notification) => {
-      // if (!notification.isAnswered)
-      fetchNotificationsByType(
-        notification.type,
-        notification.requestedId,
-        notification.sendTime,
-        notification.eventId,
-        notification.id
-      );
+      if (!notification.isAnswered)
+        fetchNotificationsByType(
+          notification.type,
+          notification.requestedId,
+          notification.sendTime,
+          notification.eventId,
+          notification.id
+        );
     });
   };
 
