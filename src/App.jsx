@@ -34,7 +34,7 @@ function App() {
         {/* Puplic Routes */}
         <Route path="/" element={<LandingPage />}></Route>
         {/* Auth */}
-        <Route element={<RequireBack />}>
+        <Route element={<RequireBack />}> 
           <Route path="login" element={<Login />}></Route>
           <Route path="register-attendance" element={<AttendanceReg />}></Route>
           <Route path="register-speaker" element={<SpeakerReg />}></Route>

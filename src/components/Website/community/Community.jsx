@@ -41,22 +41,20 @@ export default function Community() {
 
   useEffect(() => {
     if (selectedChat) {
-      if (selectedChat) {
-        axios
-          .get(`${BASE}/Community/OpenChat`, {
-            headers: {
-              UserId: decodedToken.uid,
-              EventId: selectedChat.eventId,
-            },
-            params: { eventDayId: selectedChat?.eventId },
-          })
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => console.log(err));
-      }
+      axios
+        .get(`${BASE}/Community/OpenChat`, {
+          headers: {
+            UserId: decodedToken.uid,
+            EventId: selectedChat.eventId,
+          },
+          params: { eventDayId: selectedChat?.eventId },
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
     }
-  }, [selectedChat, decodedToken.uid, selectedChat?.eventId]);
+  }, [selectedChat, decodedToken.uid, selectedChat?.eventDayId]);
 
   const handleChatItemClick = (chatItem) => {
     setSelectedChat(chatItem);
@@ -67,6 +65,8 @@ export default function Community() {
   const handleBackClick = () => {
     setShowChatContent(false);
   };
+
+  console.log(selectedChat);
 
   const convertTimestampToFormattedDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -135,18 +135,12 @@ export default function Community() {
                 onClick={() => handleChatItemClick(item)}
               >
                 <img
-                  src={
-                    item.eventData?.primeImageURL
-                      ? item.eventData?.primeImageURL
-                      : logo
-                  }
+                  src={item.eventData?.primeImageURL ? item.eventData?.primeImageURL : logo}
                   alt="chat-img"
                   width={"60px"}
                   height={"60px"}
                   style={{
-                    boxShadow: !item.eventData?.primeImageURL
-                      ? "0 0 10px rgba(0, 0, 0, 0.1)"
-                      : "",
+                    boxShadow: !item.eventData?.primeImageURL ? "0 0 10px rgba(0, 0, 0, 0.1)" : "",
                   }}
                   className="rounded"
                 />
@@ -156,20 +150,12 @@ export default function Community() {
                     {item.messages[item.messages.length - 1]?.message}
                   </p>
                 </div>
-                {item.unreadCount ? (
-                  <span className="num">{item.unreadCount} </span>
-                ) : (
-                  ""
-                )}
+                {item.unreadCount ? <span className="num">{item.unreadCount} </span> : ""}
                 <span className="time">
-                  {calculateTimeDifference(
-                    item.messages[item.messages.length - 1]?.timestamp
-                  )}
+                  {calculateTimeDifference(item.messages[item.messages.length - 1]?.timestamp)}
                 </span>
                 {item?.eventData?.isFinished && (
-                  <span className="text-danger event-finished">
-                    event finished
-                  </span>
+                  <span className="text-danger event-finished">event finished</span>
                 )}
               </div>
             ))}
@@ -178,11 +164,12 @@ export default function Community() {
         {showChatContent && selectedChat && (
           <div className={`chat-content ${showChatContent ? "show" : "hide"}`}>
             {selectedChat.messages.map((msg) => {
-             const docs =
-             msg.imageUrl !== "http://educarringapi.com/" && msg.imageUrl !== "https://educarringapi.com/"
-               ? [{ uri: msg.imageUrl }]
-               : [];
-           
+              const docs =
+                msg.imageUrl !== "http://educarringapi.com/" &&
+                msg.imageUrl !== "https://educarringapi.com/"
+                  ? [{ uri: msg.imageUrl }]
+                  : [];
+
               return (
                 <div key={msg.id} className="message my-4">
                   <div className="sender d-flex gap-2 align-items-center">
@@ -196,14 +183,8 @@ export default function Community() {
                         // style={{ objectFit: "cover" }}
                       />
                     </div>
-                    <span>
-                      {i18n.language === "en"
-                        ? "Event Organizer"
-                        : "منظم الحدث"}{" "}
-                    </span>
-                    <span className="date">
-                      {convertTimestampToFormattedDate(msg.timestamp)}
-                    </span>
+                    <span>{i18n.language === "en" ? "Event Organizer" : "منظم الحدث"} </span>
+                    <span className="date">{convertTimestampToFormattedDate(msg.timestamp)}</span>
                   </div>
                   <div className="msg-text rounded p-2 m-2">
                     <p>{msg.message}</p>

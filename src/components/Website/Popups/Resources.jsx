@@ -23,6 +23,9 @@ export default function Resources({
   const decodedToken = token ? jwtDecode(token) : {};
   const [speakerResourses, setSpeakerResourses] = useState([]);
 
+  console.log(eventDaySpeakerId, sendId);
+  console.log(userId);
+
   // [1] Fetch Event Days
   useEffect(() => {
     axios
@@ -45,7 +48,7 @@ export default function Resources({
     axios
       .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
         params: {
-          eventDayId: eventDayId,
+          eventDayId: eventDaySpeakerId,
         },
         headers: {
           UserId: userId,
@@ -53,6 +56,7 @@ export default function Resources({
         },
       })
       .then((response) => {
+        console.log(response);
         console.log(
           response.data.responseObject[0].eventDaySpeakerResorses.filter(
             (item) => item.speakerId === decodedToken.uid
@@ -318,11 +322,6 @@ export default function Resources({
     const arrOfImgs = [];
     // const imgFormData = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      arrOfImgs.push(files[i]);
-      // imgFormData.append("Content", files[i]);
-    }
-
     const object = {
       Id: eventDaySpeakerId, // 57
       EventDaySpeakerId: sendId, // 56
@@ -339,12 +338,16 @@ export default function Resources({
     formData.append("SpeakerId", object.SpeakerId);
     formData.append("Link", object.Link);
     formData.append("Title", object.Title);
-    formData.append("ResorsesFile", object.ResoursesFile);
+    // formData.append("ResorsesFile", imgFormData);
 
     console.log(object);
+    for (let i = 0; i < files.length; i++) {
+      arrOfImgs.push(files[i]);
+      formData.append("ResorsesFile", files[i]);
+    }
 
     axios
-      .post(`${BASE}/SpeakerResors/Multiple`, object, {
+      .post(`${BASE}/SpeakerResors/Multiple`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -509,7 +512,7 @@ export default function Resources({
             )}
 
             {/* Send Button */}
-            {/* {addResourcesSpeaker && (
+            {addResourcesSpeaker && (
               <button
                 className="btn btn-success px-4 py-2 my-2 w-100"
                 style={{
@@ -521,7 +524,7 @@ export default function Resources({
               >
                 Send
               </button>
-            )} */}
+            )}
 
             {selectedOption === "files" &&
               files.map((file, index) => (
