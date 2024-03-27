@@ -103,7 +103,14 @@ export default function SpeakerProfile() {
   const downloadCV = () => {
     window.open(speakerObj.displayCvURL, "_blank");
   };
-
+  const [showAlert, setShowAlert] = useState(false);
+  const handleClick = () => {
+    if (speakerObj.speakerObj) {
+      downloadCV();
+    } else {
+      setShowAlert(true);
+    }
+  };
   const isValidImageUrl = (url) => {
     return (
       url &&
@@ -117,7 +124,7 @@ export default function SpeakerProfile() {
       {speakerObj && (
         <div className="speakerProfile p-4 w-sm-100">
           <div className="d-flex flex-column flex-md-row align-items-center py-3 gap-4">
-            <div className="text-center text-md-start">
+            <div className="text-center text-md-start position-relative">
               {speakerObj.displayProfileImage ? (
                 <img
                   src={
@@ -132,7 +139,7 @@ export default function SpeakerProfile() {
                   style={{
                     boxShadow: !isValidImageUrl(speakerObj.displayProfileImage)
                       ? "0px 0px 5px 0px #000000"
-                      : "none"
+                      : "none",
                   }}
                 />
               ) : (
@@ -162,14 +169,27 @@ export default function SpeakerProfile() {
                 {speakerObj.email}
               </p>
             </div>
+            {showAlert && (
+              <div
+                className="alert alert-danger w-25 fw-bold position-absolute d-flex justify-content-between align-items-center"
+                style={{ right: "30%" }}
+                role="alert"
+              >
+                There Is No CV For This Speaker Yet
+                <i
+                  className="bi bi-x close fw-bold fs-4"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowAlert(false)}
+                ></i>
+              </div>
+            )}
             <button
               className="border-0 p-2 px-3 text-white "
               style={{
                 backgroundColor: "#3296D4",
                 borderRadius: "12px",
-                // marginLeft: "40px",
               }}
-              onClick={speakerObj.speakerObj ? downloadCV : () => alert("There Is No CV")}
+              onClick={handleClick}
             >
               <svg
                 width="24"

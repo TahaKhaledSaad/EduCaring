@@ -7,10 +7,10 @@ import { BASE } from "../../../Api";
 import "./Home.css";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
+import { PulseLoader } from "react-spinners";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
-import { HashLoader } from "react-spinners";
 
 export default function Home() {
   // Translation Work
@@ -24,6 +24,8 @@ export default function Home() {
   const token = cookie.get("edu-caring");
 
   const decodedToken = token ? jwtDecode(token) : {};
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const [events, setEvents] = useState([]);
 
@@ -42,7 +44,8 @@ export default function Home() {
       .then((data) => {
         setEvents(data.data.responseObject?.events);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
   // console.log(events);
@@ -60,7 +63,8 @@ export default function Home() {
       .then((data) => {
         setrecommendEvents(data.data.responseObject);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, []);
 
   const [reminder, setReminder] = useState([]);
@@ -75,7 +79,8 @@ export default function Home() {
       .then((data) => {
         setReminder(data.data.responseObject);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
   const [countdown, setCountdown] = useState({
@@ -127,19 +132,20 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, [reminder]);
 
-  if (!reminder || !events || !recommendEvents) {
+  if (loading) {
+    // Render loading spinner while loading is true
     return (
-      <div className="d-flex justify-content-center align-items-center w-100 h-100">
-        <HashLoader
-          color="#3296d4"
-          cssOverride={{}}
-          loading={true}
-          size={60}
-          speedMultiplier={1}
-        />
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+        }}
+      >
+        <PulseLoader color="#3296d4" size={50} />
       </div>
     );
   }
+
   return (
     <div>
       <SideBar />
