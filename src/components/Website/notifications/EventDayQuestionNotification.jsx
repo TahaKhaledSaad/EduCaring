@@ -8,6 +8,9 @@ import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import ChangingProgressProvider from "./ChangingProgressProvider";
+import "react-circular-progressbar/dist/styles.css";
 
 const EventDayQuestionNotification = ({
   sendTime,
@@ -123,9 +126,24 @@ const EventDayQuestionNotification = ({
           <div className="form">
             <div className="questions-body">
               {showScore ? (
-                <h2 className="score text-center text-success mt-5 p-3 ">
-                  {t("YourTotalPoints")}: <span>{Math.round(score)}</span>
-                </h2>
+                <ScoreContainer
+                  label={` ${t("YourTotalPoints")}: ${Math.round(score)}`}
+                >
+                  <ChangingProgressProvider values={[0, Math.round(score)]}>
+                    {(score) => (
+                      <CircularProgressbar
+                        value={Math.round(score)}
+                        text={`${Math.round(score)}%`}
+                        styles={buildStyles({
+                          pathTransition:
+                            score === 0
+                              ? "none"
+                              : "stroke-dashoffset 0.5s ease 0s",
+                        })}
+                      />
+                    )}
+                  </ChangingProgressProvider>
+                </ScoreContainer>
               ) : (
                 notification.map((question) => (
                   <div className="question" key={question.id}>
@@ -170,3 +188,17 @@ const EventDayQuestionNotification = ({
 };
 
 export default EventDayQuestionNotification;
+function ScoreContainer(props) {
+  return (
+    <div>
+      <hr style={{ border: "4px solid #ddd" }} className="mt-5" />
+      <div style={{ marginTop: 30, display: "flex" }} className=" mt-5 p-3 ">
+        <div style={{ width: "30%", paddingRight: 30 }}>{props.children}</div>
+        <div style={{ width: "70%" }}>
+          <h3 className="h5 score text-success">{props.label}</h3>
+          <p>{props.description}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
