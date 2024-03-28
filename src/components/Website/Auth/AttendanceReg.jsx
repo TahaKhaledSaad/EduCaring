@@ -279,7 +279,15 @@ export default function AttendanceReg() {
               {/* input */}
               <div>
                 <div className={style.input}>
-                  <select name="GenderId" className="p-0 px-2 text-muted" onChange={handleChange}>
+                  <select
+                    name="GenderId"
+                    className="p-0 px-2 text-muted"
+                    onChange={handleChange}
+                    defaultValue="0"
+                  >
+                    <option value="0" disabled>
+                      Select Gender
+                    </option>
                     {genders.map((gender, index) => (
                       <option
                         key={index}
@@ -303,11 +311,6 @@ export default function AttendanceReg() {
                     onChange={handleChange}
                   />
                 </div>
-                {showError && userData.Specialization.length < 3 && (
-                  <span className="m-0 my-0 text-danger">
-                    Specialization Should be More 3 characters
-                  </span>
-                )}
               </div>
 
               {/* input */}
@@ -317,7 +320,11 @@ export default function AttendanceReg() {
                     name="SpecializationCategoryId"
                     className="p-0 px-2 text-muted"
                     onChange={handleChange}
+                    defaultValue="1"
                   >
+                    <option value="1" disabled>
+                      Select Specialization Category
+                    </option>
                     {specializationCategories.map((category, index) => (
                       <option value={category.id} key={index}>
                         {category.name}
@@ -424,8 +431,7 @@ export default function AttendanceReg() {
                   userData.Email.includes("@") &&
                   userData.PhoneNumber.length > 10 &&
                   userData.DateOfBirth.length > 8 &&
-                  userData.Specialization.length > 3 &&
-                  userData.SpecializationCategoryId !== 1 &&
+                  userData.SpecializationCategoryId !== 0 &&
                   userData.Country.length > 3 &&
                   userData.City.length > 3 &&
                   userData.Password.length >= 8 &&

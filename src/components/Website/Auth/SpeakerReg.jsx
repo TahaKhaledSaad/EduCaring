@@ -537,11 +537,6 @@ export default function SpeakerReg() {
                     />
                     <i className="fab fa-cc-visa"></i>
                   </div>
-                  {showError2 && userData.BankAccount.length < 16 && (
-                    <span className="m-0 my-0 text-danger">
-                      Bank Account Should be More 16 characters
-                    </span>
-                  )}
                 </div>
               </div>
 
@@ -565,8 +560,7 @@ export default function SpeakerReg() {
                     userData.Bio.length >= 10 &&
                     userData.SaudiAuthorityNumber.length >= 10 &&
                     userData.ExpYears > 1 &&
-                    userData.CurrentWorkPlace.length > 2 &&
-                    userData.BankAccount.length >= 16
+                    userData.CurrentWorkPlace.length > 2
                   ) {
                     setShow(false);
                     setShow2(false);

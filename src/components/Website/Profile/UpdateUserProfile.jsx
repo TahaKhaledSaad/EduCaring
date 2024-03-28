@@ -73,7 +73,7 @@ export default function Profile() {
     formData.append("Specialization", user.specialization);
     formData.append("SpecializationCategoryId", user.specializationCategory.id);
     formData.append("PassportNumber", user.passportNumber);
-    formData.append("HealthAuthorityNumber", user.healthAuthorityNumber || "");
+    formData.append("HealthAuthorityNumber", user.healthAuthorityNumber || "No Numbers");
     formData.append("PassportImageFile", user.displayPassportImageURL);
     formData.append("CvFile", user.cvURL);
     formData.append("WalaaCarFile", user.walaaCardURL);
@@ -132,17 +132,18 @@ export default function Profile() {
       .catch((err) => console.log(err));
   }, []);
 
+  const [showSelect, setShowSelect] = useState(true);
+  const [showDateOfBirth, setShowDateOfBirth] = useState(true);
+  const [showSelectSpecialization, setShowSelectSpecialization] = useState(true);
+
+
   console.log(user);
   return (
     <>
       {user && (
         <div className="profile p-4 w-75">
-          {showSuccessPopup && (
-            <Success text="Profile Updated Successfully!" type="success" />
-          )}
-          {showErrorPopup && (
-            <Success text="Profile Updated Failed!" type="error" />
-          )}
+          {showSuccessPopup && <Success text="Profile Updated Successfully!" type="success" />}
+          {showErrorPopup && <Success text="Profile Updated Failed!" type="error" />}
 
           {/* Head */}
           <div
@@ -152,11 +153,7 @@ export default function Profile() {
             <div className="position-relative">
               {user.displayProfileImage ? (
                 <img
-                  src={
-                    profileFile
-                      ? URL.createObjectURL(profileFile)
-                      : user.displayProfileImage
-                  }
+                  src={profileFile ? URL.createObjectURL(profileFile) : user.displayProfileImage}
                   alt="personImg"
                   width={"120px"}
                   height={"120px"}
@@ -221,9 +218,7 @@ export default function Profile() {
                       className="border-0 mb-1"
                       style={{ outline: "0" }}
                       value={user.nameEn}
-                      onChange={(e) =>
-                        setUser({ ...user, nameEn: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, nameEn: e.target.value })}
                     />
                   </h3>
                   <p>
@@ -232,9 +227,7 @@ export default function Profile() {
                       className="border-0 mb-1 w-50"
                       style={{ outline: "0" }}
                       value={user.email}
-                      onChange={(e) =>
-                        setUser({ ...user, email: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, email: e.target.value })}
                     />
                   </p>
                 </div>
@@ -253,9 +246,7 @@ export default function Profile() {
             >
               <i
                 className={
-                  isEditMode
-                    ? "fa-regular fa-check-square"
-                    : "fa-regular fa-pen-to-square"
+                  isEditMode ? "fa-regular fa-check-square" : "fa-regular fa-pen-to-square"
                 }
               ></i>
               <span className="ms-2">{isEditMode ? "Save" : "Edit"}</span>
@@ -308,9 +299,7 @@ export default function Profile() {
                   className="border-0 mb-1"
                   style={{ outline: "0" }}
                   value={user.phoneNumber}
-                  onChange={(e) =>
-                    setUser({ ...user, phoneNumber: e.target.value })
-                  }
+                  onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
                 />
               ) : (
                 <span className="fs-5">{user.phoneNumber}</span>
@@ -326,27 +315,38 @@ export default function Profile() {
             </div>
 
             {/* ================== */}
+            {/* Input */}
             <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
-              {/* Date Input */}
+              {/* Data of Birth */}
               <div
-                className={`info-item px-2 d-flex flex-column ${
-                  isEditMode ? "edit-mode" : ""
-                }`}
+                className={`info-item p-2 d-flex flex-column ${isEditMode ? "edit-mode" : ""}`}
                 style={{ borderRight: "1px solid #DCDCDC" }}
               >
                 {isEditMode ? (
                   <>
-                    <input
-                      type="date"
-                      className="border-0 mb-1"
-                      style={{ outline: "0" }}
-                      value={dateOfBirth}
-                      name="dateOfBirth"
-                      onChange={(e) => {
-                        handleDateChange(e);
-                        setUser({ ...user, dateOfBirth: e.target.value });
-                      }}
-                    />
+                    {!showDateOfBirth && (
+                      <input
+                        type="date"
+                        className="border-0 mb-1"
+                        style={{ outline: "0" }}
+                        value={dateOfBirth}
+                        onChange={(e) => {
+                          setDateOfBirth(e.target.value);
+                          setUser({ ...user, dateOfBirth: e.target.value });
+                          showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
+                        }}
+                      />
+                    )}
+                    {showDateOfBirth && (
+                      <span
+                        className="fs-5"
+                        onClick={() => {
+                          showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
+                        }}
+                      >
+                        {formattedDateOfBirth}
+                      </span>
+                    )}
                   </>
                 ) : (
                   <span className="fs-5">{formattedDateOfBirth}</span>
@@ -367,37 +367,53 @@ export default function Profile() {
                 }`}
               >
                 {isEditMode ? (
-                  <select
-                    name="GenderId"
-                    className="p-0"
-                    style={{
-                      outline: "0",
-                      border: "0",
-                      width: "100%",
-                      height: "100%",
-                      color: "#000",
-                    }}
-                    onChange={
-                      (e) =>
-                        setUser({
-                          ...user,
-                          gender: {
-                            id: parseInt(e.target.value),
-                            name: e.target.options[e.target.selectedIndex].text,
-                          },
-                        })
-                      // console.log(parseInt(e.target.value))
-                    }
-                  >
-                    <option disabled value="1" selected>
-                      Select Gender
-                    </option>
-                    {genders.map((gender) => (
-                      <option key={gender.id} value={gender.id}>
-                        {gender.name}
-                      </option>
-                    ))}
-                  </select>
+                  <>
+                    {!showSelect && (
+                      <select
+                        name="GenderId"
+                        className="p-0"
+                        defaultValue="0"
+                        style={{
+                          outline: "0",
+                          border: "0",
+                          width: "100%",
+                          height: "100%",
+                          color: "#000",
+                        }}
+                        onChange={(e) => {
+                          setUser({
+                            ...user,
+                            gender: {
+                              id: parseInt(e.target.value),
+                              name: e.target.options[e.target.selectedIndex].text,
+                            },
+                          });
+                          showSelect ? setShowSelect(false) : setShowSelect(true);
+                        }}
+                      >
+                        <option disabled value="0">
+                          Select Gender
+                        </option>
+                        {genders.map((gender) => (
+                          <option key={gender.id} value={gender.id}>
+                            {gender.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {showSelect && (
+                      <span
+                        className="fs-5"
+                        onClick={() => {
+                          console.log("delete me!");
+                          showSelect ? setShowSelect(false) : setShowSelect(true);
+                        }}
+                      >
+                        {user && user.gender?.name}
+                      </span>
+                    )}
+                  </>
                 ) : (
                   <span className="fs-5">{user && user.gender?.name}</span>
                 )}
@@ -408,68 +424,6 @@ export default function Profile() {
                   }}
                 >
                   gender
-                </span>
-              </div>
-            </div>
-
-            {/* ================== */}
-            <div className="d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
-              <div
-                className={`info-item p-2 d-flex flex-column ${
-                  isEditMode ? "edit-mode" : ""
-                }`}
-                style={{ borderRight: "1px solid #DCDCDC" }}
-              >
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    className="border-0 mb-1"
-                    style={{ outline: "0" }}
-                    value={user.country}
-                    onChange={(e) =>
-                      setUser({ ...user, country: e.target.value })
-                    }
-                  />
-                ) : (
-                  <span
-                    className="fs-5"
-                    style={{ display: "inline-block", marginRight: "50px" }}
-                  >
-                    {user.country}
-                  </span>
-                )}
-                <span
-                  style={{
-                    color: "#747688",
-                    fontSize: isEditMode ? "12px" : "14px",
-                  }}
-                >
-                  country
-                </span>
-              </div>
-              <div
-                className={`info-item p-2 d-flex flex-column flex-grow-1 ${
-                  isEditMode ? "edit-mode" : ""
-                }`}
-              >
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    className="border-0 mb-1"
-                    style={{ outline: "0" }}
-                    value={user.city}
-                    onChange={(e) => setUser({ ...user, city: e.target.value })}
-                  />
-                ) : (
-                  <span className="fs-5"> {user.city}</span>
-                )}
-                <span
-                  style={{
-                    color: "#747688",
-                    fontSize: isEditMode ? "12px" : "14px",
-                  }}
-                >
-                  City
                 </span>
               </div>
             </div>
@@ -486,9 +440,7 @@ export default function Profile() {
                   className="border-0 mb-1"
                   style={{ outline: "0" }}
                   value={user?.healthAuthorityNumber}
-                  onChange={(e) =>
-                    setUser({ ...user, healthAuthorityNumber: e.target.value })
-                  }
+                  onChange={(e) => setUser({ ...user, healthAuthorityNumber: e.target.value })}
                 />
               ) : (
                 <span className="fs-5">{user?.healthAuthorityNumber}</span>
@@ -523,36 +475,31 @@ export default function Profile() {
                         height: "100%",
                         color: "#000",
                       }}
+                      defaultValue="1"
                       onChange={
                         (e) =>
                           setUser({
                             ...user,
                             specializationCategory: {
                               id: parseInt(e.target.value),
-                              name: e.target.options[e.target.selectedIndex]
-                                .text,
+                              name: e.target.options[e.target.selectedIndex].text,
                             },
                           })
                         // console.log(parseInt(e.target.value))
                       }
                     >
-                      <option disabled value="1" selected>
+                      <option disabled value="1">
                         Select Category
                       </option>
                       {specializationCategories.map((specialization) => (
-                        <option
-                          key={specialization.id}
-                          value={specialization.id}
-                        >
+                        <option key={specialization.id} value={specialization.id}>
                           {specialization.name}
                         </option>
                       ))}
                     </select>
                   </>
                 ) : (
-                  <span className="fs-5">
-                    {user && user.specializationCategory?.name}
-                  </span>
+                  <span className="fs-5">{user && user.specializationCategory?.name}</span>
                 )}
                 <span
                   style={{
@@ -575,9 +522,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.specialization}
-                    onChange={(e) =>
-                      setUser({ ...user, specialization: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, specialization: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user.specialization}</span>
