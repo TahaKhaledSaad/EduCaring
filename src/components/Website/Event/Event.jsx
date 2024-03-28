@@ -26,6 +26,13 @@ function EventDetails() {
 
   const decodedToken = token ? jwtDecode(token) : {};
 
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+  const description = eventDetails?.eventDays[selectedDayIndex].description;
+  const words = description?.split(" ");
+
   useEffect(() => {
     axios
       .get(`${BASE}/Event/GetForApp/${eventId}`, {
@@ -326,8 +333,18 @@ function EventDetails() {
                       margin: "10px 0",
                     }}
                   >
-                    {eventDetails.eventDays[selectedDayIndex].description}
+                    {showFullDescription
+                      ? description
+                      : words.slice(0, 40).join(" ")}
                   </span>
+                  {words.length > 40 && (
+                    <button
+                      className="border-0 bg-transparent text-primary px-2"
+                      onClick={toggleDescription}
+                    >
+                      {showFullDescription ? "Read less..." : "Read more..."}
+                    </button>
+                  )}
                 </div>
 
                 <div className="location py-2">

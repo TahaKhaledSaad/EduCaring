@@ -267,7 +267,7 @@ export default function LandingPage() {
               <h1>
                 Welcome To <span>Edu Caring</span>
               </h1>
-              <span>{text.welcomeDescription}</span>
+              <span className="d-block">{text.welcomeDescription}</span>
               {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>
                   Register <i className="fas fa-chevron-right"></i>
@@ -562,7 +562,7 @@ export default function LandingPage() {
 
           <div className="text">
             <h2>Photos and Videos</h2>
-            <span>{text.photoAndVideoDescription}</span>
+            <span className="d-block w-75">{text.photoAndVideoDescription}</span>
             <div className="more">
               <Link to="#">view more</Link>
               <svg
