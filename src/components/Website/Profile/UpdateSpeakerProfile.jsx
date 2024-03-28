@@ -61,7 +61,7 @@ export default function Profile() {
     user && user?.displayPassportImageURL == undefined
       ? setShowCommingPassportFile(false)
       : setShowCommingPassportFile(true);
-    user && user?.displayCvFileURL == undefined
+    user && user?.displayCvURL == undefined
       ? setShowCommingCvFile(false)
       : setShowCommingCvFile(true);
   }, [user]);
@@ -134,8 +134,10 @@ export default function Profile() {
     }
   };
 
-  console.log(cvFile);
+  // console.log(cvFile);
   console.log(user.displayCvURL);
+  console.log(showCommingCvFile);
+  console.log(showCommingPassportFile);
 
   // [6] Handle Upload Change
   const handleUploadChange = (e, fileType) => {
@@ -164,6 +166,9 @@ export default function Profile() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const [showSelect, setShowSelect] = useState(true);
+  const [showDateOfBirth, setShowDateOfBirth] = useState(true);
 
   return (
     <>
@@ -345,16 +350,31 @@ export default function Profile() {
                   style={{ borderRight: "1px solid #DCDCDC" }}
                 >
                   {isEditMode ? (
-                    <input
-                      type="date"
-                      className="border-0 mb-1"
-                      style={{ outline: "0" }}
-                      value={dateOfBirth}
-                      onChange={(e) => {
-                        setDateOfBirth(e.target.value);
-                        setUser({ ...user, dateOfBirth: e.target.value });
-                      }}
-                    />
+                    <>
+                      {!showDateOfBirth && (
+                        <input
+                          type="date"
+                          className="border-0 mb-1"
+                          style={{ outline: "0" }}
+                          value={dateOfBirth}
+                          onChange={(e) => {
+                            setDateOfBirth(e.target.value);
+                            setUser({ ...user, dateOfBirth: e.target.value });
+                            showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
+                          }}
+                        />
+                      )}
+                      {showDateOfBirth && (
+                        <span
+                          className="fs-5"
+                          onClick={() => {
+                            showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
+                          }}
+                        >
+                          {formattedDateOfBirth}
+                        </span>
+                      )}
+                    </>
                   ) : (
                     <span className="fs-5">{formattedDateOfBirth}</span>
                   )}
@@ -374,37 +394,53 @@ export default function Profile() {
                   }`}
                 >
                   {isEditMode ? (
-                    <select
-                      name="GenderId"
-                      className="p-0"
-                      style={{
-                        outline: "0",
-                        border: "0",
-                        width: "100%",
-                        height: "100%",
-                        color: "#000",
-                      }}
-                      onChange={
-                        (e) =>
-                          setUser({
-                            ...user,
-                            gender: {
-                              id: parseInt(e.target.value),
-                              name: e.target.options[e.target.selectedIndex].text,
-                            },
-                          })
-                        // console.log(parseInt(e.target.value))
-                      }
-                    >
-                      <option disabled value="1" selected>
-                        Select Gender
-                      </option>
-                      {genders.map((gender) => (
-                        <option key={gender.id} value={gender.id}>
-                          {gender.name}
-                        </option>
-                      ))}
-                    </select>
+                    <>
+                      {!showSelect && (
+                        <select
+                          name="GenderId"
+                          className="p-0"
+                          defaultValue="0"
+                          style={{
+                            outline: "0",
+                            border: "0",
+                            width: "100%",
+                            height: "100%",
+                            color: "#000",
+                          }}
+                          onChange={(e) => {
+                            setUser({
+                              ...user,
+                              gender: {
+                                id: parseInt(e.target.value),
+                                name: e.target.options[e.target.selectedIndex].text,
+                              },
+                            });
+                            showSelect ? setShowSelect(false) : setShowSelect(true);
+                          }}
+                        >
+                          <option disabled value="0">
+                            Select Gender
+                          </option>
+                          {genders.map((gender) => (
+                            <option key={gender.id} value={gender.id}>
+                              {gender.name}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+
+                      {showSelect && (
+                        <span
+                          className="fs-5"
+                          onClick={() => {
+                            console.log("delete me!");
+                            showSelect ? setShowSelect(false) : setShowSelect(true);
+                          }}
+                        >
+                          {user && user.gender?.name}
+                        </span>
+                      )}
+                    </>
                   ) : (
                     <span className="fs-5">{user && user.gender?.name}</span>
                   )}
