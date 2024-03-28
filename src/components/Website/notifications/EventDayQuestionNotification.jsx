@@ -126,10 +126,8 @@ const EventDayQuestionNotification = ({
           <div className="form">
             <div className="questions-body">
               {showScore ? (
-                <ScoreContainer
-                  label={` ${t("YourTotalPoints")}: ${Math.round(score)}`}
-                >
-                  <ChangingProgressProvider values={[0, Math.round(score)]}>
+                <ScoreContainer>
+                  <ChangingProgressProvider values={[Math.round(score)]}>
                     {(score) => (
                       <CircularProgressbar
                         value={Math.round(score)}
@@ -192,11 +190,20 @@ function ScoreContainer(props) {
   return (
     <div>
       <hr style={{ border: "4px solid #ddd" }} className="mt-5" />
-      <div style={{ marginTop: 30, display: "flex" }} className=" mt-5 p-3 ">
-        <div style={{ width: "30%", paddingRight: 30 }}>{props.children}</div>
-        <div style={{ width: "70%" }}>
-          <h3 className="h5 score text-success">{props.label}</h3>
-          <p>{props.description}</p>
+      <div
+        style={{
+          marginTop: 30,
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+        }}
+        className=" mt-5 p-3 "
+      >
+        <div
+          className=" circular-progressbar-answer"
+          style={{ width: "30%", paddingRight: 30 }}
+        >
+          {props.children}
         </div>
       </div>
     </div>

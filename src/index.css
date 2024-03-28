@@ -280,6 +280,14 @@ i {
   justify-content: space-between;
   padding: 5px;
   font-size: 20px;
+  padding-left: 15px;
+  h4 {
+    font-size: 18px;
+    font-weight: bolder;
+    color: #565656;
+    margin: 0;
+    line-height: 30px;
+  }
 }
 .support-popup .body {
   display: flex;
@@ -303,6 +311,7 @@ i {
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 5px;
+  margin-bottom: 30px;
 }
 .support-popup .form div input {
   width: 100%;
@@ -542,6 +551,7 @@ i {
   flex-direction: column;
   gap: 10px;
   padding: 5px;
+  padding-left: 15px;
   text-align: start;
   h5 {
     color: #000;
@@ -803,6 +813,9 @@ i {
     padding: 20px 40px;
     font-size: 18px;
   }
+  .circular-progressbar-answer {
+    width: 200px !important;
+  }
 }
 
 @media screen and (min-width: 769px) and (max-width: 992px) {
@@ -840,6 +853,9 @@ i {
   }
   .send-close-container {
     margin-top: 15px !important;
+  }
+  .circular-progressbar-answer {
+    width: 200px !important;
   }
 }
 /*  */

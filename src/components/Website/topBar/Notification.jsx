@@ -111,7 +111,7 @@ export default function Notification() {
     // If the notification type is Survey or NightEvent
     // then we already have the data, so we can save
     // an API call and just format the data
-    if (type === "Survey" || type === "NightEvent") {
+    if (type === "Survey" || type === "NightEvent" || type === "Community") {
       const not = {
         data: {
           responseObject:
