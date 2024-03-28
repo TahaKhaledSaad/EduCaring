@@ -11,6 +11,7 @@ import "./Payment.css";
 import applePay from "../../../assets/Apple_Pay_logo.png";
 import mada from "../../../assets/Mada_Logo.png";
 import paypal from "../../../assets/PayPal_Logo.png";
+import { PulseLoader } from "react-spinners";
 
 export default function Payment() {
   const { i18n } = useTranslation();
@@ -24,6 +25,8 @@ export default function Payment() {
   const [userEventDays, setUserEventDays] = useState([]);
 
   const [userId, setUserId] = useState("");
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = cookie.get("edu-caring");
@@ -44,7 +47,8 @@ export default function Payment() {
         })
         .catch((error) => {
           console.error("Error fetching event details:", error);
-        });
+        })
+        .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [eventId, i18n.language]);
 
@@ -61,7 +65,9 @@ export default function Payment() {
       setSelectedDayIndices(selectedDayIndices.filter((i) => i !== index));
       // Remove the day from userEventDays
       setUserEventDays(
-        userEventDays.filter((day) => day.eventDayId !== eventDetails.eventDays[index].id)
+        userEventDays.filter(
+          (day) => day.eventDayId !== eventDetails.eventDays[index].id
+        )
       );
     } else {
       // If not selected, add to selection
@@ -111,7 +117,8 @@ export default function Payment() {
           console.log(data);
           setTickets(data.data.responseObject);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [isPaid, userEventDays, eventId]);
 
@@ -123,6 +130,7 @@ export default function Payment() {
     setIsPaid(true); // Set isPaid state to true when "Continue" button is clicked
     setShow(false);
     setShow2(true);
+    setLoading(true);
   };
 
   function expDateValidate(month, year) {
@@ -163,7 +171,10 @@ export default function Payment() {
     const month = months[date.getMonth()];
     const year = date.getFullYear();
 
-    const formattedDate = `${day < 10 ? "0" + day : day} ${month.slice(0, 3)}, ${year}`;
+    const formattedDate = `${day < 10 ? "0" + day : day} ${month.slice(
+      0,
+      3
+    )}, ${year}`;
 
     return formattedDate;
   };
@@ -184,6 +195,30 @@ export default function Payment() {
   };
   const [selectedDayTicket, setSelectedDayTicket] = useState(0);
 
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       {show && show ? (
@@ -192,7 +227,9 @@ export default function Payment() {
             <div className=" border rounded p-4 d-flex gap-4">
               <div className="d-flex flex-column align-items-center justify-content-around gap-4">
                 <div
-                  className={`p-2 ${selectedPaymentMethod === "mada" ? " rounded" : ""}`}
+                  className={`p-2 ${
+                    selectedPaymentMethod === "mada" ? " rounded" : ""
+                  }`}
                   style={
                     selectedPaymentMethod === "mada"
                       ? {
@@ -203,10 +240,17 @@ export default function Payment() {
                   }
                   onClick={() => handlePaymentMethodClick("mada")}
                 >
-                  <img src={mada} alt="mada pay img" height={"30px"} width={"45px"} />
+                  <img
+                    src={mada}
+                    alt="mada pay img"
+                    height={"30px"}
+                    width={"45px"}
+                  />
                 </div>
                 <div
-                  className={`p-2  ${selectedPaymentMethod === "paypal" ? "rounded" : ""}`}
+                  className={`p-2  ${
+                    selectedPaymentMethod === "paypal" ? "rounded" : ""
+                  }`}
                   style={
                     selectedPaymentMethod === "paypal"
                       ? {
@@ -217,10 +261,17 @@ export default function Payment() {
                   }
                   onClick={() => handlePaymentMethodClick("paypal")}
                 >
-                  <img src={paypal} alt="paypal pay img" height={"30px"} width={"45px"} />
+                  <img
+                    src={paypal}
+                    alt="paypal pay img"
+                    height={"30px"}
+                    width={"45px"}
+                  />
                 </div>
                 <div
-                  className={`p-2 ${selectedPaymentMethod === "applePay" ? " rounded" : ""}`}
+                  className={`p-2 ${
+                    selectedPaymentMethod === "applePay" ? " rounded" : ""
+                  }`}
                   style={
                     selectedPaymentMethod === "applePay"
                       ? {
@@ -231,13 +282,21 @@ export default function Payment() {
                   }
                   onClick={() => handlePaymentMethodClick("applePay")}
                 >
-                  <img src={applePay} alt="apple pay img" height={"30px"} width={"45px"} />
+                  <img
+                    src={applePay}
+                    alt="apple pay img"
+                    height={"30px"}
+                    width={"45px"}
+                  />
                 </div>
               </div>
 
               <div className="form flex-grow-1 overflow-hidden">
                 <div className="d-flex flex-column my-3 position-relative">
-                  <label htmlFor="numCard" style={{ color: "#747688", fontSize: "14px" }}>
+                  <label
+                    htmlFor="numCard"
+                    style={{ color: "#747688", fontSize: "14px" }}
+                  >
                     {i18n.language === "en" ? "Card Number" : "رقم البطاقة"}
                   </label>
                   <input
@@ -248,7 +307,10 @@ export default function Payment() {
                     {...getCardNumberProps()}
                   />
 
-                  <small className="text-danger position-absolute" style={{ bottom: "-20px" }}>
+                  <small
+                    className="text-danger position-absolute"
+                    style={{ bottom: "-20px" }}
+                  >
                     {i18n.language === "en"
                       ? erroredInputs.cardNumber && erroredInputs.cardNumber
                       : "ادخل رقم البطاقة الصحيح"}
@@ -256,8 +318,13 @@ export default function Payment() {
                 </div>
 
                 <div className="d-flex flex-column my-3">
-                  <label htmlFor="name" style={{ color: "#747688", fontSize: "14px" }}>
-                    {i18n.language === "en" ? "Name On Card" : "الاسم المكتوب على البطاقة"}
+                  <label
+                    htmlFor="name"
+                    style={{ color: "#747688", fontSize: "14px" }}
+                  >
+                    {i18n.language === "en"
+                      ? "Name On Card"
+                      : "الاسم المكتوب على البطاقة"}
                   </label>
                   <input
                     type="text"
@@ -269,7 +336,10 @@ export default function Payment() {
 
                 <div className="d-flex flex-column flex-md-row justify-content-between  my-3 ">
                   <div className="d-flex flex-column col-md-6 col-lg-7 position-relative my-2">
-                    <label htmlFor="exDate" style={{ color: "#747688", fontSize: "14px" }}>
+                    <label
+                      htmlFor="exDate"
+                      style={{ color: "#747688", fontSize: "14px" }}
+                    >
                       {i18n.language === "en" ? "Exp Date" : "انتهاء الصلاحية"}
                     </label>
                     <input
@@ -279,7 +349,10 @@ export default function Payment() {
                       style={{ borderColor: "#DCDCDC", outline: "none" }}
                       {...getExpiryDateProps()}
                     />
-                    <small className="text-danger position-absolute" style={{ bottom: "-20px" }}>
+                    <small
+                      className="text-danger position-absolute"
+                      style={{ bottom: "-20px" }}
+                    >
                       {i18n.language === "en"
                         ? erroredInputs.expiryDate && erroredInputs.expiryDate
                         : "أدخل تاريخ انتهاء الصلاحية الصحيح"}
@@ -287,7 +360,10 @@ export default function Payment() {
                   </div>
 
                   <div className="d-flex flex-column col-lg-4 col-md-3 position-relative my-2">
-                    <label htmlFor="cvv" style={{ color: "#747688", fontSize: "14px" }}>
+                    <label
+                      htmlFor="cvv"
+                      style={{ color: "#747688", fontSize: "14px" }}
+                    >
                       CVC
                     </label>
                     <input
@@ -297,7 +373,10 @@ export default function Payment() {
                       style={{ borderColor: "#DCDCDC", outline: "none" }}
                       {...getCVCProps()}
                     />
-                    <small className="text-danger position-absolute" style={{ bottom: "-20px" }}>
+                    <small
+                      className="text-danger position-absolute"
+                      style={{ bottom: "-20px" }}
+                    >
                       {erroredInputs.cvc && erroredInputs.cvc}
                     </small>
                   </div>
@@ -338,7 +417,9 @@ export default function Payment() {
                 type="text"
                 className="border-0 outline-0 flex-grow-1 px-2"
                 style={{ color: "#C8C8C8", outline: 0 }}
-                placeholder={i18n.language === "en" ? "Promocode" : "رقم العرض الترويجي"}
+                placeholder={
+                  i18n.language === "en" ? "Promocode" : "رقم العرض الترويجي"
+                }
               />
               <button className="btn btn-secondary">
                 {i18n.language === "en" ? "Apply" : "تم"}{" "}
@@ -364,14 +445,21 @@ export default function Payment() {
                           backgroundColor: selectedDayIndices.includes(index)
                             ? "#3296D4"
                             : "#F2F2F2",
-                          color: selectedDayIndices.includes(index) ? "white" : "black",
+                          color: selectedDayIndices.includes(index)
+                            ? "white"
+                            : "black",
                           cursor: "pointer",
                         }}
                         onClick={() => toggleDaySelection(index)}
                       >
-                        {i18n.language === "en" ? `Day ${index + 1}` : `اليوم ${index + 1}`}
+                        {i18n.language === "en"
+                          ? `Day ${index + 1}`
+                          : `اليوم ${index + 1}`}
                       </div>
-                      <p className="text-center" style={{ fontSize: "16px", color: "#27AE60" }}>
+                      <p
+                        className="text-center"
+                        style={{ fontSize: "16px", color: "#27AE60" }}
+                      >
                         {day.price ? `${day.price} SAR ` : "free"}
                       </p>
                     </div>
@@ -393,7 +481,10 @@ export default function Payment() {
                 className="rounded"
               />
               <div className="flex-grow-1 ">
-                <h5 style={{ fontWeight: "900" }}>{eventDetails?.name}</h5>
+                <h5 style={{ fontWeight: "900" }}>
+                  {eventDetails.name.split(" ").slice(0, 9).join(" ")}{" "}
+                  {eventDetails.name.split(" ").length > 3 ? "..." : ""}
+                </h5>
                 <p className="m-0">
                   <span className="px-1">
                     <svg
@@ -440,23 +531,36 @@ export default function Payment() {
             <div className="w-75 mt-5 mx-auto">
               <h4>{i18n.language === "en" ? "Summary" : "الفاتورة"}</h4>
               <div className="border-bottom mt-4 mx-1">
-                <div className="d-flex justify-content-between my-2" style={{ color: "#747688" }}>
-                  <span>{i18n.language === "en" ? "Subtotal" : "المجموع الفرعي"} </span>
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
+                  <span>
+                    {i18n.language === "en" ? "Subtotal" : "المجموع الفرعي"}{" "}
+                  </span>
                   <span>{subtotal}</span>
                 </div>
 
-                <div className="d-flex justify-content-between my-2" style={{ color: "#747688" }}>
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
                   <span>{i18n.language === "en" ? "Fees" : "المصاريف"} </span>
                   <span>00 SAR</span>
                 </div>
 
-                <div className="d-flex justify-content-between my-2" style={{ color: "#747688" }}>
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
                   <span>{i18n.language === "en" ? "Discount" : "الخصم"}</span>
                   <span>00 SAR</span>
                 </div>
               </div>
               <div className="total fw-bold d-flex justify-content-between pt-3">
-                <span>{i18n.language === "en" ? "Total" : "المجموع الكلي"} </span>
+                <span>
+                  {i18n.language === "en" ? "Total" : "المجموع الكلي"}{" "}
+                </span>
                 <span>{subtotal}</span>
               </div>
               <Link
@@ -497,7 +601,10 @@ export default function Payment() {
                     </mask>
                     <g mask="url(#mask0_927_9270)">
                       <g opacity="0.5">
-                        <path d="M35.4297 112.911L154.385 44.5641L35.4297 112.911Z" fill="white" />
+                        <path
+                          d="M35.4297 112.911L154.385 44.5641L35.4297 112.911Z"
+                          fill="white"
+                        />
                         <path
                           d="M35.4297 112.911L154.385 44.5641"
                           stroke="#3296D4"
@@ -506,7 +613,10 @@ export default function Payment() {
                         />
                       </g>
                       <g opacity="0.5">
-                        <path d="M63.7241 157.739L182.68 89.3914L63.7241 157.739Z" fill="white" />
+                        <path
+                          d="M63.7241 157.739L182.68 89.3914L63.7241 157.739Z"
+                          fill="white"
+                        />
                         <path
                           d="M63.7241 157.739L182.68 89.3914"
                           stroke="#3296D4"
@@ -515,7 +625,10 @@ export default function Payment() {
                         />
                       </g>
                       <g opacity="0.5">
-                        <path d="M213.152 72.2165L222.423 66.8196L213.152 72.2165Z" fill="white" />
+                        <path
+                          d="M213.152 72.2165L222.423 66.8196L213.152 72.2165Z"
+                          fill="white"
+                        />
                         <path
                           d="M213.152 72.2165L222.423 66.8196"
                           stroke="#3296D4"
@@ -524,7 +637,10 @@ export default function Payment() {
                         />
                       </g>
                       <g opacity="0.5">
-                        <path d="M105.691 194.618L196.033 141.85L105.691 194.618Z" fill="white" />
+                        <path
+                          d="M105.691 194.618L196.033 141.85L105.691 194.618Z"
+                          fill="white"
+                        />
                         <path
                           d="M105.691 194.618L196.033 141.85"
                           stroke="#3296D4"
@@ -612,7 +728,11 @@ export default function Payment() {
                   {" "}
                   {i18n.language === "en" ? "Congratulations" : "مبروك"}
                 </h3>
-                <p>{i18n.language === "en" ? "you have a ticket now" : "لديك التذكرة الآن"}</p>
+                <p>
+                  {i18n.language === "en"
+                    ? "you have a ticket now"
+                    : "لديك التذكرة الآن"}
+                </p>
               </div>
 
               <div className="col-md-6 col-lg-4">
@@ -632,7 +752,9 @@ export default function Payment() {
                           }}
                           onClick={() => setSelectedDayTicket(index)}
                         >
-                          {i18n.language === "en" ? ` Day ${index + 1}` : `اليوم ${index + 1}`}
+                          {i18n.language === "en"
+                            ? ` Day ${index + 1}`
+                            : `اليوم ${index + 1}`}
                         </div>
                       </div>
                     ))}
@@ -666,22 +788,36 @@ export default function Payment() {
                               display: "block",
                             }}
                           >
-                            {new Date(t.eventStartDay).toLocaleDateString("en-US", {
-                              month: "short",
-                            })}
+                            {new Date(t.eventStartDay).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                              }
+                            )}
                           </span>
                           <p className="fw-bold p-0 m-0 fs-2">
-                            {new Date(t.eventStartDay).toLocaleDateString("en-US", {
-                              day: "numeric",
-                            })}
+                            {new Date(t.eventStartDay).toLocaleDateString(
+                              "en-US",
+                              {
+                                day: "numeric",
+                              }
+                            )}
                           </p>
                         </div>
                         <p className="fs-4 fw-bold">{t.eventDayName}</p>
                       </div>
 
                       <div className="QR p-3 text-center">
-                        <img src={t.qrCode} alt="qrCode" width={"265px"} height={"244px"} />
-                        <p className="m-0" style={{ fontSize: "12px", color: "#323232" }}>
+                        <img
+                          src={t.qrCode}
+                          alt="qrCode"
+                          width={"265px"}
+                          height={"244px"}
+                        />
+                        <p
+                          className="m-0"
+                          style={{ fontSize: "12px", color: "#323232" }}
+                        >
                           {i18n.language === "en"
                             ? "verified by @EduCaring"
                             : `@EduCaring تم التحقق منها بواسطة`}
@@ -751,14 +887,20 @@ export default function Payment() {
                             class="month"
                             
                           >
-                            ${new Date(t.eventStartDay).toLocaleDateString("en-US", {
-                              month: "short",
-                            })}
+                            ${new Date(t.eventStartDay).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                              }
+                            )}
                           </span>
                           <p class="day">
-                            ${new Date(t.eventStartDay).toLocaleDateString("en-US", {
-                              day: "numeric",
-                            })}
+                            ${new Date(t.eventStartDay).toLocaleDateString(
+                              "en-US",
+                              {
+                                day: "numeric",
+                              }
+                            )}
                           </p>
                         </div>
                         <p class="name">${t.eventDayName}</p>
@@ -788,7 +930,9 @@ export default function Payment() {
                             printWindow.print();
                           }}
                         >
-                          {i18n.language === "en" ? `print pdf ` : " pdf طباعة "}
+                          {i18n.language === "en"
+                            ? `print pdf `
+                            : " pdf طباعة "}
 
                           <svg
                             width="30"

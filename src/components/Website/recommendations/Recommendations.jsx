@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { BASE } from "../../../Api";
 import { Link } from "react-router-dom";
 import "./Recommendation.css";
+import { PulseLoader } from "react-spinners";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
@@ -18,6 +19,9 @@ export default function Recommendations() {
 
   const { i18n } = useTranslation();
   const cookie = new Cookie();
+
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = cookie.get("edu-caring");
@@ -37,15 +41,17 @@ export default function Recommendations() {
           },
         })
         .then((data) => {
-          setRecommendEvents(data.data.responseObject.events);
+          setRecommendEvents(data.data.responseObject?.events);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [i18n.language, userId]);
 
+  console.log(recommendEvents);
   useEffect(() => {
     // Filter events based on selected type and search term
-    let filtered = recommendEvents.filter((event) => {
+    let filtered = recommendEvents?.filter((event) => {
       // Filter by type
       if (selectedType !== "All") {
         if (selectedType === "Comming") {
@@ -97,6 +103,31 @@ export default function Recommendations() {
     return `${day < 10 ? "0" + day : day} ${month}, ${year}`;
   };
 
+
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="recommendations">
@@ -127,7 +158,7 @@ export default function Recommendations() {
             />
           </div>
         </div>
-        {filteredEvents.length === 0 ? (
+        {filteredEvents?.length === 0 ? (
           <div
             className="d-flex justify-content-center align-items-center flex-column gap-3"
             style={{ height: "75vh" }}
@@ -303,40 +334,47 @@ export default function Recommendations() {
           </div>
         ) : (
           <div className="body d-flex gap-4 p-4 flex-wrap">
-            {filteredEvents.map((event, index) => (
-            <Link
-            key={index}
-            className="event"
-            to={`/home/event/${event.id}`}
-          >
-            <img src={event.displayPrimeImageURL} alt="event-Img" />
+            {filteredEvents?.map((event, index) => (
+              <Link
+                key={index}
+                className="event"
+                to={`/home/event/${event.id}`}
+              >
+                <img src={event.displayPrimeImageURL} alt="event-Img" />
 
-            <div className="info">
-              <h6>
-                {i18n.language === "en" ? event.nameEn : event.nameAr}
-              </h6>
-              <p>
-                <i className="fa-solid fa-calendar-days"></i>
-                05 Mars, 2023
-              </p>
-              <p>
-                <i className="bi bi-geo-alt-fill"></i>
-                {event.eventDays[0].address}
-              </p>
-              <div className="btns">
-                {event.isOnline && (
-                  <span className="online">
-                    {i18n.language === "en" ? "Online" : "بث مباشر"}
-                  </span>
-                )}
-                {event.isOffline && (
-                  <span className="offline">
-                    {i18n.language === "en" ? "Offline" : "مكان محدد"}
-                  </span>
-                )}
-              </div>
-            </div>
-          </Link>
+                <div className="info">
+                  <h6>
+                    {event.name.split(" ").slice(0, 4).join(" ")}{" "}
+                    {event.name.split(" ").length > 3 ? "..." : ""}
+                  </h6>
+                  <p>
+                    <i className="fa-solid fa-calendar-days"></i>
+                    05 Mars, 2023
+                  </p>
+                  <p>
+                    <i className="bi bi-geo-alt-fill"></i>
+                    {event.eventDays[0].address
+                      .split(" ")
+                      .slice(0, 2)
+                      .join(" ") +
+                      (event.eventDays[0].address.split(" ").length > 3
+                        ? "..."
+                        : "")}
+                  </p>
+                  <div className="btns">
+                    {event.isOnline && (
+                      <span className="online">
+                        {i18n.language === "en" ? "Online" : "بث مباشر"}
+                      </span>
+                    )}
+                    {event.isOffline && (
+                      <span className="offline">
+                        {i18n.language === "en" ? "Offline" : "مكان محدد"}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         )}

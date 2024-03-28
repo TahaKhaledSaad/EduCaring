@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { BASE } from "../../../Api";
 import "./Community.css";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import { PulseLoader } from "react-spinners";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,8 @@ export default function Community() {
 
   const decodedToken = token ? jwtDecode(token) : {};
 
+  const [loading, setLoading] = useState(true); // Add loading state
+
   useEffect(() => {
     axios
       .get(`${BASE}/Community/GetByUserId`, {
@@ -34,7 +37,8 @@ export default function Community() {
       .then((data) => {
         setChat(data.data.responseObject);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [decodedToken.uid, i18n.language]);
 
   // console.log(chat);
@@ -114,6 +118,30 @@ export default function Community() {
     }
   };
 
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="commuinty d-flex gap-3 p-3">
@@ -135,12 +163,18 @@ export default function Community() {
                 onClick={() => handleChatItemClick(item)}
               >
                 <img
-                  src={item.eventData?.primeImageURL ? item.eventData?.primeImageURL : logo}
+                  src={
+                    item.eventData?.primeImageURL
+                      ? item.eventData?.primeImageURL
+                      : logo
+                  }
                   alt="chat-img"
                   width={"60px"}
                   height={"60px"}
                   style={{
-                    boxShadow: !item.eventData?.primeImageURL ? "0 0 10px rgba(0, 0, 0, 0.1)" : "",
+                    boxShadow: !item.eventData?.primeImageURL
+                      ? "0 0 10px rgba(0, 0, 0, 0.1)"
+                      : "",
                   }}
                   className="rounded"
                 />
@@ -150,12 +184,20 @@ export default function Community() {
                     {item.messages[item.messages.length - 1]?.message}
                   </p>
                 </div>
-                {item.unreadCount ? <span className="num">{item.unreadCount} </span> : ""}
+                {item.unreadCount ? (
+                  <span className="num">{item.unreadCount} </span>
+                ) : (
+                  ""
+                )}
                 <span className="time">
-                  {calculateTimeDifference(item.messages[item.messages.length - 1]?.timestamp)}
+                  {calculateTimeDifference(
+                    item.messages[item.messages.length - 1]?.timestamp
+                  )}
                 </span>
                 {item?.eventData?.isFinished && (
-                  <span className="text-danger event-finished">event finished</span>
+                  <span className="text-danger event-finished">
+                    event finished
+                  </span>
                 )}
               </div>
             ))}
@@ -183,8 +225,14 @@ export default function Community() {
                         // style={{ objectFit: "cover" }}
                       />
                     </div>
-                    <span>{i18n.language === "en" ? "Event Organizer" : "منظم الحدث"} </span>
-                    <span className="date">{convertTimestampToFormattedDate(msg.timestamp)}</span>
+                    <span>
+                      {i18n.language === "en"
+                        ? "Event Organizer"
+                        : "منظم الحدث"}{" "}
+                    </span>
+                    <span className="date">
+                      {convertTimestampToFormattedDate(msg.timestamp)}
+                    </span>
                   </div>
                   <div className="msg-text rounded p-2 m-2">
                     <p>{msg.message}</p>

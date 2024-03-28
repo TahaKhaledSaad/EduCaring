@@ -1,5 +1,4 @@
 import style from "./Verfication.module.css";
-import logo from "../../../assets/logo.jpg";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE } from "../../../Api";
@@ -85,14 +84,7 @@ export default function Verfication({ email }) {
 
   return (
     <div className={style.container}>
-      <div className={style.header}>
-        <img src={logo} alt="logo" />
-      </div>
       <div className={style.body}>
-        <h4 className="mt-5">Verification</h4>
-        <div className="mb-5">
-          We’ve sent you the verification code on <span className="text-info">{email}</span>
-        </div>
         <div className={style.form}>
           <input type="text" maxLength="1" inputMode="numeric" onChange={handleOnChange} />
           <input type="text" maxLength="1" inputMode="numeric" onChange={handleOnChange} />

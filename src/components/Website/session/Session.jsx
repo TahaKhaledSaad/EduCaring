@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import { useParams } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 export default function Session() {
   const cookie = new Cookie();
@@ -13,6 +14,8 @@ export default function Session() {
 
   const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = cookie.get("edu-caring");
@@ -31,7 +34,8 @@ export default function Session() {
         })
         .catch((error) => {
           console.error("Error fetching event details:", error);
-        });
+        })
+        .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [eventId, userId, i18n.language]);
 
@@ -39,7 +43,9 @@ export default function Session() {
   const [speakers, setSpeakers] = useState([]);
   const [resources, setResources] = useState([]);
 
-  const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
+  const selectedEventDay = eventDays?.find(
+    (day) => day.id === parseInt(eventDayId)
+  );
 
   // console.log(eventDays);
 
@@ -96,7 +102,11 @@ export default function Session() {
       }
 
       // Check if link exists and is not null
-      if (link) {
+      if (
+        link &&
+        link !== "null" &&
+        (link.startsWith("http://") || link.startsWith("https://"))
+      ) {
         links.push(link);
       }
     });
@@ -301,6 +311,30 @@ export default function Session() {
     }
   };
 
+  if (loading && !videoUrl && !files.length && !imgs.length && !links.length) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="p-4 d-flex gap-3 flex-column flex-md-row align-items-center align-items-md-start">
@@ -324,7 +358,10 @@ export default function Session() {
               className="position-absolute top-50 start-50 d-flex gap-3"
               style={{ transform: "translate(-50%,-50%)" }}
             >
-              <button onClick={handleBackward} className="bg-transparent border-0">
+              <button
+                onClick={handleBackward}
+                className="bg-transparent border-0"
+              >
                 <svg
                   width="33"
                   height="34"
@@ -340,7 +377,10 @@ export default function Session() {
                   </g>
                 </svg>
               </button>
-              <button onClick={handleTogglePlay} className="bg-transparent border-0">
+              <button
+                onClick={handleTogglePlay}
+                className="bg-transparent border-0"
+              >
                 {isPlaying ? (
                   <svg
                     width="66"
@@ -370,7 +410,10 @@ export default function Session() {
                   </svg>
                 )}
               </button>
-              <button onClick={handleForward} className="bg-transparent border-0">
+              <button
+                onClick={handleForward}
+                className="bg-transparent border-0"
+              >
                 <svg
                   width="34"
                   height="34"
@@ -413,7 +456,8 @@ export default function Session() {
               style={{
                 color: selectedOption === "files" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "files" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "files" ? "2px solid #3296D4" : "none",
               }}
             >
               Files
@@ -424,7 +468,8 @@ export default function Session() {
               style={{
                 color: selectedOption === "images" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "images" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "images" ? "2px solid #3296D4" : "none",
               }}
             >
               Images
@@ -435,7 +480,8 @@ export default function Session() {
               style={{
                 color: selectedOption === "links" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "links" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "links" ? "2px solid #3296D4" : "none",
               }}
             >
               Links
@@ -444,7 +490,10 @@ export default function Session() {
           <div className="my-2">
             {selectedOption === "files" &&
               files.map((file, index) => (
-                <li key={index} className="my-2 d-flex gap-2 align-items-center p-2 border-bottom">
+                <li
+                  key={index}
+                  className="my-2 d-flex gap-2 align-items-center p-2 border-bottom"
+                >
                   {getFileIcon(file)}
                   <a
                     href={file}
@@ -462,7 +511,11 @@ export default function Session() {
               <div className="row p-2 gap-3 my-2 justify-content-center">
                 {imgs.map((img, index) => (
                   <div key={index} className="col-5">
-                    <img src={img} alt={`Image ${index}`} className="w-100 rounded" />
+                    <img
+                      src={img}
+                      alt={`Image ${index}`}
+                      className="w-100 rounded"
+                    />
                   </div>
                 ))}
               </div>

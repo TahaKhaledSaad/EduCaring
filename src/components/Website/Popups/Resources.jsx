@@ -22,9 +22,11 @@ export default function Resources({
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
   const [speakerResourses, setSpeakerResourses] = useState([]);
+  const [link, setLink] = useState("");
+  const [flag, setFlag] = useState(false);
 
-  console.log(eventDaySpeakerId, sendId);
-  console.log(userId);
+  // console.log(eventDaySpeakerId, sendId);
+  // console.log(userId);
 
   // [1] Fetch Event Days
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function Resources({
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, userId, i18n.language]);
+  }, [eventId, userId, i18n.language, link]);
 
   // [13] Function to get resources of the speaker
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function Resources({
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         console.log(
           response.data.responseObject[0].eventDaySpeakerResorses.filter(
             (item) => item.speakerId === decodedToken.uid
@@ -68,10 +70,19 @@ export default function Resources({
           )
         );
       });
-  }, [eventDayId, userId, i18n.language, decodedToken.uid]);
+  }, [
+    eventDayId,
+    userId,
+    i18n.language,
+    decodedToken.uid,
+    eventDaySpeakerId,
+    flag,
+  ]);
 
   // [2] Selected Event Day
-  const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
+  const selectedEventDay = eventDays?.find(
+    (day) => day.id === parseInt(eventDayId)
+  );
 
   // [3] Speakers
   const [speakers, setSpeakers] = useState([]);
@@ -112,34 +123,70 @@ export default function Resources({
   const [links, setLinks] = useState([]);
 
   // [7] Update Files, Images, and Links
+
+  // filter resource url to Files, Images, and Links
+
   useEffect(() => {
     const files = [];
     const imgs = [];
     const links = [];
 
-    resources.forEach((resource) => {
-      const { resorsesURL, link } = resource;
+    if (addResourcesSpeaker) {
+      speakerResourses.forEach((speakerResourse) => {
+        const { resorsesURL, link } = speakerResourse;
 
-      // Check if resource is a file or an image
-      if (resorsesURL) {
-        const extension = resorsesURL.split(".").pop().toLowerCase();
-        if (extension.match(/(jpg|jpeg|png|gif)$/)) {
-          imgs.push(resorsesURL);
-        } else {
-          files.push(resorsesURL);
+        // Check if resource is a file or an image
+        if (resorsesURL) {
+          const extension = resorsesURL.split(".").pop().toLowerCase();
+          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+            imgs.push(resorsesURL);
+          } else {
+            files.push(resorsesURL);
+          }
         }
-      }
 
-      // Check if link exists and is not null
-      if (link) {
-        links.push(link);
-      }
-    });
+        // Check if link exists and is not null
+        if (
+          link &&
+          link !== "null" &&
+          (link.startsWith("http://") || link.startsWith("https://"))
+        ) {
+          links.push(link);
+        }
+      });
+    } else {
+      resources.forEach((resource) => {
+        const { resorsesURL, link } = resource;
+
+        // Check if resource is a file or an image
+        if (resorsesURL) {
+          const extension = resorsesURL.split(".").pop().toLowerCase();
+          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+            imgs.push(resorsesURL);
+          } else {
+            files.push(resorsesURL);
+          }
+        }
+
+        // Check if link exists and is not null
+        if (
+          link &&
+          link !== "null" &&
+          (link.startsWith("http://") || link.startsWith("https://"))
+        ) {
+          links.push(link);
+        }
+      });
+    }
 
     setFiles(files);
     setImgs(imgs);
     setLinks(links);
-  }, [resources]);
+  }, [resources, speakerResourses, addResourcesSpeaker]);
+
+  // console.log(files);
+  // console.log(imgs);
+  // console.log(links);
 
   // [8] Handle Option Change
   const [selectedOption, setSelectedOption] = useState("files");
@@ -317,6 +364,41 @@ export default function Resources({
   };
 
   // [12] Function to select files and send them to the server
+  const sendLinks = () => {
+    const object = {
+      Id: eventDaySpeakerId, // 57
+      EventDaySpeakerId: sendId, // 56
+      SpeakerId: decodedToken.uid, // a1db4239-e0bf-4f99-a63a-28f87f495122
+      Link: link, // constant
+      Title: null, // constant
+      ResoursesFile: null, // files
+    };
+
+    const formData = new FormData();
+
+    formData.append("Id", object.Id);
+    formData.append("EventDaySpeakerId", object.EventDaySpeakerId);
+    formData.append("SpeakerId", object.SpeakerId);
+    formData.append("Link", link);
+    formData.append("Title", null);
+    // formData.append("ResorsesFile", imgFormData);
+
+    axios
+      .post(`${BASE}/SpeakerResors/Multiple`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFlag(!flag);
+      })
+      .catch((error) => {
+        console.error("Error uploading files:", error);
+      });
+  };
+
+  // [12] Function to select files and send them to the server
   const sendFiles = (e) => {
     const files = e.target.files;
     const arrOfImgs = [];
@@ -336,8 +418,8 @@ export default function Resources({
     formData.append("Id", object.Id);
     formData.append("EventDaySpeakerId", object.EventDaySpeakerId);
     formData.append("SpeakerId", object.SpeakerId);
-    formData.append("Link", object.Link);
-    formData.append("Title", object.Title);
+    formData.append("Link", null);
+    formData.append("Title", null);
     // formData.append("ResorsesFile", imgFormData);
 
     console.log(object);
@@ -354,6 +436,7 @@ export default function Resources({
       })
       .then((response) => {
         console.log(response.data);
+        setFlag(!flag);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
@@ -403,7 +486,9 @@ export default function Resources({
       <div
         className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup ? "translate(200%,-50%)" : "translate(-50%, -50%)",
+          transform: showPopup
+            ? "translate(200%,-50%)"
+            : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000",
           height: "80vh",
@@ -416,7 +501,11 @@ export default function Resources({
           style={{ backgroundColor: "#F2F2F2" }}
         >
           <h3>Resources</h3>
-          <i className="fa-solid fa-x" style={{ cursor: "pointer" }} onClick={togglePopup}></i>
+          <i
+            className="fa-solid fa-x"
+            style={{ cursor: "pointer" }}
+            onClick={togglePopup}
+          ></i>
         </div>
 
         <div className="py-2 px-3 ">
@@ -427,7 +516,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "files" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "files" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "files" ? "2px solid #3296D4" : "none",
               }}
             >
               Files
@@ -438,7 +528,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "images" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "images" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "images" ? "2px solid #3296D4" : "none",
               }}
             >
               Images
@@ -449,7 +540,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "links" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "links" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "links" ? "2px solid #3296D4" : "none",
               }}
             >
               Links
@@ -458,32 +550,38 @@ export default function Resources({
 
           <div className="my-2 overflow-y-auto overflow-x-hidden">
             {/* Upload Resources */}
-            {addResourcesSpeaker && (selectedOption === "files" || selectedOption === "images") && (
-              <div className="input-group p-1">
-                <input
-                  type="file"
-                  className="form-control"
-                  id="PassportImage"
-                  hidden
-                  multiple
-                  onChange={sendFiles}
-                />
-                <label
-                  className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
-                  htmlFor="PassportImage"
-                >
-                  <img src={upload} alt="upload files" width="80px" />
-                  <div>
-                    <div className="text-center my-0">
-                      Drag and Drop image <p className="text-info d-inline">here</p>
+            {addResourcesSpeaker &&
+              (selectedOption === "files" || selectedOption === "images") && (
+                <div className="input-group p-1">
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="PassportImage"
+                    hidden
+                    multiple
+                    onChange={sendFiles}
+                  />
+                  <label
+                    className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
+                    htmlFor="PassportImage"
+                  >
+                    <img src={upload} alt="upload files" width="80px" />
+                    <div>
+                      <div className="text-center my-0">
+                        Drag and Drop image{" "}
+                        <p className="text-info d-inline">here</p>
+                      </div>
+                      <div className="text-center my-0">
+                        or{" "}
+                        <p className="text-info d-inline text-decoration-down">
+                          upload
+                        </p>{" "}
+                        image
+                      </div>
                     </div>
-                    <div className="text-center my-0">
-                      or <p className="text-info d-inline text-decoration-down">upload</p> image
-                    </div>
-                  </div>
-                </label>
-              </div>
-            )}
+                  </label>
+                </div>
+              )}
 
             {/* Add Links */}
             {addResourcesSpeaker && selectedOption === "links" && (
@@ -496,6 +594,8 @@ export default function Resources({
                     outline: "none",
                     width: "calc(100% - 150px)",
                   }}
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
                 />
                 <button
                   className="btn btn-success px-4 py-2"
@@ -505,6 +605,10 @@ export default function Resources({
                     outline: "none",
                     borderRadius: "10px",
                   }}
+                  onClick={() => {
+                    sendLinks();
+                    setLink("");
+                  }}
                 >
                   Add new Link
                 </button>
@@ -512,7 +616,7 @@ export default function Resources({
             )}
 
             {/* Send Button */}
-            {addResourcesSpeaker && (
+            {/* {addResourcesSpeaker && (
               <button
                 className="btn btn-success px-4 py-2 my-2 w-100"
                 style={{
@@ -524,8 +628,9 @@ export default function Resources({
               >
                 Send
               </button>
-            )}
+            )} */}
 
+            {/* User */}
             {selectedOption === "files" &&
               files.map((file, index) => (
                 <li
@@ -546,6 +651,7 @@ export default function Resources({
                 </li>
               ))}
 
+            {/* User */}
             {selectedOption === "images" && (
               <div className="row gap-2 my-2 justify-content-center">
                 {imgs.map((img, index) => (
@@ -560,6 +666,7 @@ export default function Resources({
               </div>
             )}
 
+            {/* User */}
             {selectedOption === "links" && // Links For All Users
               links.map((link, index) => (
                 <div
@@ -604,56 +711,6 @@ export default function Resources({
                       }}
                     >
                       {link}
-                    </a>
-                  </div>
-                </div>
-              ))}
-
-            {selectedOption === "links" && // Links For a Speaker
-              addResourcesSpeaker &&
-              speakerResourses.map((resource, index) => (
-                <div
-                  key={index}
-                  style={{ backgroundColor: "#27AE601A", cursor: "pointer" }}
-                  className="d-flex rounded my-2 overflow-hidden w-75"
-                >
-                  <div
-                    style={{ backgroundColor: "#27AE60" }}
-                    className="p-3 d-flex justify-content-cnter align-items-center"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_986_10122)">
-                        <path
-                          d="M9.65531 14.413L4.16816 14.413C3.5154 14.4014 2.89262 14.1369 2.43098 13.6753C1.96934 13.2136 1.70487 12.5909 1.69329 11.9381C1.69264 11.6129 1.75622 11.2908 1.88037 10.9903C2.00451 10.6897 2.18679 10.4166 2.41673 10.1867C2.64667 9.95674 2.91975 9.77446 3.22031 9.65032C3.52086 9.52617 3.84298 9.46259 4.16816 9.46323L9.65531 9.46323C9.92161 9.46323 10.177 9.35745 10.3653 9.16914C10.5536 8.98084 10.6594 8.72544 10.6594 8.45914C10.6594 8.19284 10.5536 7.93745 10.3653 7.74914C10.177 7.56084 9.92161 7.45505 9.65531 7.45505L4.16109 7.46212C3.00678 7.51102 1.91599 8.00397 1.11652 8.83803C0.31704 9.67209 -0.129305 10.7828 -0.129306 11.9381C-0.129306 13.0935 0.31704 14.2041 1.11652 15.0382C1.91599 15.8722 3.00678 16.3652 4.16109 16.4141L9.65531 16.4212C9.92161 16.4212 10.177 16.3154 10.3653 16.1271C10.5536 15.9388 10.6594 15.6834 10.6594 15.4171C10.6594 15.1508 10.5536 14.8954 10.3653 14.7071C10.177 14.5188 9.92161 14.413 9.65531 14.413ZM24.2641 11.9381C24.2604 10.7521 23.7877 9.6158 22.9491 8.77719C22.1105 7.93858 20.9741 7.46582 19.7881 7.46212L14.2939 7.45505C14.1621 7.45505 14.0315 7.48102 13.9097 7.53148C13.7879 7.58194 13.6772 7.6559 13.5839 7.74914C13.4907 7.84238 13.4167 7.95307 13.3663 8.07489C13.3158 8.19672 13.2898 8.32728 13.2898 8.45914C13.2898 8.591 13.3158 8.72157 13.3663 8.84339C13.4167 8.96521 13.4907 9.07591 13.5839 9.16914C13.6772 9.26238 13.7879 9.33634 13.9097 9.3868C14.0315 9.43726 14.1621 9.46323 14.2939 9.46323L19.7811 9.46324C20.4338 9.47482 21.0566 9.73929 21.5183 10.2009C21.9799 10.6626 22.2444 11.2854 22.256 11.9381C22.2566 12.2633 22.193 12.5854 22.0689 12.886C21.9447 13.1865 21.7625 13.4596 21.5325 13.6895C21.3026 13.9195 21.0295 14.1018 20.7289 14.2259C20.4284 14.35 20.1063 14.4136 19.7811 14.413L14.2939 14.413C14.1619 14.4124 14.0311 14.438 13.909 14.4883C13.787 14.5386 13.6761 14.6125 13.5827 14.7059C13.4894 14.7992 13.4154 14.9101 13.3652 15.0322C13.3149 15.1543 13.2893 15.2851 13.2898 15.4171C13.2893 15.5491 13.3149 15.6799 13.3652 15.802C13.4154 15.924 13.4894 16.0349 13.5827 16.1283C13.6761 16.2216 13.787 16.2956 13.909 16.3458C14.0311 16.3961 14.1619 16.4217 14.2939 16.4212L19.7881 16.4141C20.9741 16.4104 22.1105 15.9376 22.9491 15.099C23.7877 14.2604 24.2604 13.1241 24.2641 11.9381ZM7.49156 11.9381C7.4921 12.0697 7.51861 12.1999 7.56957 12.3213C7.62054 12.4426 7.69495 12.5527 7.78855 12.6452C7.88107 12.7388 7.99116 12.8132 8.1125 12.8642C8.23384 12.9152 8.36405 12.9417 8.49565 12.9422H15.4536C15.7199 12.9422 15.9753 12.8364 16.1636 12.6481C16.3519 12.4598 16.4577 12.2044 16.4577 11.9381C16.4577 11.6718 16.3519 11.4164 16.1636 11.2281C15.9753 11.0398 15.7199 10.934 15.4536 10.934L8.49565 10.934C8.36364 10.9335 8.23283 10.9591 8.11077 11.0093C7.9887 11.0596 7.87779 11.1336 7.78445 11.2269C7.6911 11.3202 7.61716 11.4312 7.56689 11.5532C7.51662 11.6753 7.49102 11.8061 7.49156 11.9381Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_986_10122">
-                          <rect width="24" height="24" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </div>
-
-                  <div className="p-2">
-                    <h5 className="m-0 fw-bold text-start">Link {index + 1}</h5>
-                    <a
-                      href={resource.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: "#747688",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {resource.link}
                     </a>
                   </div>
                 </div>

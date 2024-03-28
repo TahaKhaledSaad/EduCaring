@@ -26,6 +26,8 @@ import Logout from "../Popups/Logout";
 import { BASE } from "../../../Api";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { PulseLoader } from "react-spinners";
+
 export default function LandingPage() {
   const { i18n } = useTranslation();
   const cookie = new Cookie();
@@ -35,13 +37,27 @@ export default function LandingPage() {
   // console.log(decodedToken);
 
   let [role, setRole] = useState(false);
+  // landing data
+  const [landingData, setLandingData] = useState([]);
+  // get text
+  const [text, setText] = useState("");
+  //  sponsers
+  const [sponsers, setSponsers] = useState([]);
+  // About
+  const [about, setAbout] = useState([]);
+  // speakers
+  const [speakers, setSpeakers] = useState([]);
+  // reminder
+  const [reminder, setReminder] = useState([]);
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   function handleRoleFromChild(role) {
     setRole(role);
   }
   let settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -76,49 +92,27 @@ export default function LandingPage() {
     ],
   };
 
-  // get text
-
-  const [text, setText] = useState("");
   useEffect(() => {
     axios
-      .get(`${BASE}/LandingPage/GetLandingTextForApp`, {
+      .get(`${BASE}/LandingPage/GetLandingData`, {
         headers: {
+          UserId: decodedToken.uid,
           Language: i18n.language,
         },
       })
-      .then((response) => {
-        setText(response.data.responseObject);
+      .then((data) => {
+        setLandingData(data.data.responseObject);
+        setText(data.data.responseObject.texts);
+        setSponsers(data.data.responseObject.sponsers);
+        setSpeakers(data.data.responseObject.speakers);
+        setReminder(data.data.responseObject.event);
       })
-      .catch((error) => {
-        console.error("Error fetching text:", error);
-      });
-  }, [i18n.language]);
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
+  }, [i18n.language, decodedToken.uid]);
 
-  console.log(text);
+  console.log(landingData);
 
-  //  sponsers
-
-  const [sponsers, setSponsers] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${BASE}/LandingPage/GetSponsers`, {
-        headers: {
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        setSponsers(response.data.responseObject);
-      })
-      .catch((error) => {
-        console.error("Error fetching sponsers:", error);
-      });
-  }, [i18n.language]);
-
-  // console.log(sponsers);
-
-  // About
-
-  const [about, setAbout] = useState([]);
   useEffect(() => {
     axios
       .get(`${BASE}/MainData/GetAboutUs`, {
@@ -133,43 +127,6 @@ export default function LandingPage() {
         console.error("Error fetching about:", error);
       });
   }, [i18n.language]);
-  // console.log(about);
-
-  // speakers
-  const [speakers, setSpeakers] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${BASE}/LandingPage/GetLandingSpeakerForApp`, {
-        headers: {
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        setSpeakers(response.data.responseObject);
-      })
-      .catch((error) => {
-        console.error("Error fetching speakers:", error);
-      });
-  }, [i18n.language]);
-
-  console.log(speakers);
-
-  // reminder
-
-  const [reminder, setReminder] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${BASE}/Event/GetReminder`, {
-        headers: {
-          UserId: decodedToken.uid,
-          Language: i18n.language,
-        },
-      })
-      .then((data) => {
-        setReminder(data.data.responseObject);
-      })
-      .catch((err) => console.log(err));
-  }, [i18n.language, decodedToken.uid]);
 
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -220,6 +177,30 @@ export default function LandingPage() {
     return () => clearInterval(intervalId);
   }, [reminder]);
 
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="landing-page">
@@ -248,7 +229,7 @@ export default function LandingPage() {
             >
               <ul className="navbar-nav mx-auto m-2 mb-lg-0">
                 <li className="nav-item active">
-                  <NavLink className="nav-link" to="/home">
+                  <NavLink className="nav-link active" to="/home">
                     Home
                   </NavLink>
                 </li>
@@ -278,8 +259,9 @@ export default function LandingPage() {
                 <ul className="navbar-nav m-2 mb-lg-0">
                   <li className="nav-item">
                     <Link
-                      className="btn btn-info text-white m-2 order-lg-last order-first"
+                      className="btn  text-white m-2 order-lg-last order-first"
                       to="/login"
+                      style={{ backgroundColor: "#3296d4" }}
                     >
                       Login
                     </Link>
@@ -287,8 +269,9 @@ export default function LandingPage() {
 
                   <li className="nav-item">
                     <button
-                      className="btn btn-info text-white m-2"
+                      className="btn m-2 register-btn"
                       onClick={() => setRole(!role)}
+                      style={{ color: "#3296d4", borderColor: "#3296d4" }}
                     >
                       Register
                     </button>
@@ -313,7 +296,7 @@ export default function LandingPage() {
               <h1>
                 Welcome To <span>Edu Caring</span>
               </h1>
-              <span>{text.welcomeDescription}</span>
+              <span className="d-block">{text.welcomeDescription}</span>
               {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>
                   Register <i className="fas fa-chevron-right"></i>
@@ -608,7 +591,9 @@ export default function LandingPage() {
 
           <div className="text">
             <h2>Photos and Videos</h2>
-            <span>{text.photoAndVideoDescription}</span>
+            <span className="d-block w-75">
+              {text.photoAndVideoDescription}
+            </span>
             <div className="more">
               <Link to="#">view more</Link>
               <svg
