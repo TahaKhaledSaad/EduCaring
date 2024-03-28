@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { BASE } from "../../../Api";
 import { useParams } from "react-router-dom";
 import ExMark from "../../../assets/Exclamation_mark.png";
+import { PulseLoader } from "react-spinners";
 
 export default function SpeakerProfile() {
   const { eventId, eventDayId, speakerId } = useParams();
@@ -18,6 +19,8 @@ export default function SpeakerProfile() {
   const token = cookie.get("edu-caring");
 
   const decodedToken = jwtDecode(token);
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Get event details
   useEffect(() => {
@@ -35,7 +38,8 @@ export default function SpeakerProfile() {
       })
       .catch((error) => {
         console.error("Error fetching event details:", error);
-      });
+      })
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [eventId, decodedToken.uid]);
 
   // Event Day ID
@@ -118,6 +122,30 @@ export default function SpeakerProfile() {
       url.toLowerCase().startsWith("http" || "https")
     );
   };
+
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <>

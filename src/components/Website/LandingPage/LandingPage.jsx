@@ -26,6 +26,8 @@ import Logout from "../Popups/Logout";
 import { BASE } from "../../../Api";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { PulseLoader } from "react-spinners";
+
 export default function LandingPage() {
   const { i18n } = useTranslation();
   const cookie = new Cookie();
@@ -47,6 +49,8 @@ export default function LandingPage() {
   const [speakers, setSpeakers] = useState([]);
   // reminder
   const [reminder, setReminder] = useState([]);
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   function handleRoleFromChild(role) {
     setRole(role);
@@ -103,7 +107,8 @@ export default function LandingPage() {
         setSpeakers(data.data.responseObject.speakers);
         setReminder(data.data.responseObject.event);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
   console.log(landingData);
@@ -171,6 +176,30 @@ export default function LandingPage() {
 
     return () => clearInterval(intervalId);
   }, [reminder]);
+
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -562,7 +591,9 @@ export default function LandingPage() {
 
           <div className="text">
             <h2>Photos and Videos</h2>
-            <span className="d-block w-75">{text.photoAndVideoDescription}</span>
+            <span className="d-block w-75">
+              {text.photoAndVideoDescription}
+            </span>
             <div className="more">
               <Link to="#">view more</Link>
               <svg

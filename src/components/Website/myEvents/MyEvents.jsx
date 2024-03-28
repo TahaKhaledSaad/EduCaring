@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import "./MyEvents.css";
 import { BASE } from "../../../Api";
 import { Link } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 // Translation Work
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,8 @@ export default function MyEvents() {
 
   const { i18n } = useTranslation();
   const cookie = new Cookie();
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = cookie.get("edu-caring");
@@ -33,9 +36,10 @@ export default function MyEvents() {
         })
         .then((data) => {
           setUserEvents(data.data.responseObject);
-          console.log(data.data);
+          console.log(data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [i18n.language, userId]);
 
@@ -69,6 +73,30 @@ export default function MyEvents() {
     const year = date.getFullYear();
     return `${day < 10 ? "0" + day : day} ${month}, ${year}`;
   };
+
+  if (loading) {
+    // Render loading spinner while loading is true
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <>

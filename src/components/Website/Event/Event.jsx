@@ -12,6 +12,7 @@ import "./Event.css";
 import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
+import { PulseLoader } from "react-spinners";
 
 function EventDetails() {
   // Translation Work
@@ -50,9 +51,30 @@ function EventDetails() {
   }, [eventId, decodedToken.uid, i18n.language]);
 
   if (!eventDetails) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{
+          height: "100vh",
+          position: "realative",
+        }}
+      >
+        <PulseLoader
+          color="#3296d4"
+          size={50}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+    );
   }
+
   console.log(eventDetails);
+
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     const options = {
@@ -150,7 +172,7 @@ function EventDetails() {
                   <div
                     className="p-1 d-flex gap-2 align-items-center justify-content-center"
                     style={{
-                      width: "220px",
+                      width: "250px",
                       fontSize: "14px",
                       border: "1px solid #BDBDBD",
                       borderRadius: "20px",
@@ -160,6 +182,7 @@ function EventDetails() {
                       {eventDetails.eventDays[selectedDayIndex].noOfAttend
                         ? eventDetails.eventDays[selectedDayIndex].noOfAttend
                         : 0}{" "}
+                        
                       Attendees
                     </span>
                     <span
