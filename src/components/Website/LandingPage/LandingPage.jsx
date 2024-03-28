@@ -201,6 +201,24 @@ export default function LandingPage() {
     );
   }
 
+  // Scroll to the Speakers section
+  const scrollToSpeakers = (event) => {
+    event.preventDefault(); // Prevent the default link behavior
+    const speakersSection = document.getElementById("speakers");
+    speakersSection.scrollIntoView({ behavior: "smooth" }); // Scroll to the speakers section
+  };
+  // Scroll to the Photos section
+  const scrollToPhotos = (event) => {
+    event.preventDefault(); // Prevent the default link behavior
+    const speakersSection = document.getElementById("photosAndVideos");
+    speakersSection.scrollIntoView({ behavior: "smooth" }); // Scroll to the speakers section
+  };
+  // Scroll to the Contact section
+  const scrollToContact = (event) => {
+    event.preventDefault(); // Prevent the default link behavior
+    const speakersSection = document.getElementById("contact");
+    speakersSection.scrollIntoView({ behavior: "smooth" }); // Scroll to the speakers section
+  };
   return (
     <>
       <div className="landing-page">
@@ -239,17 +257,29 @@ export default function LandingPage() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#photos">
+                  <a
+                    className="nav-link"
+                    onClick={scrollToPhotos}
+                    style={{ cursor: "pointer" }}
+                  >
                     Photos and Videos
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#speakers">
+                  <a
+                    className="nav-link"
+                    onClick={scrollToSpeakers}
+                    style={{ cursor: "pointer" }}
+                  >
                     Speakers
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#contact">
+                  <a
+                    className="nav-link"
+                    onClick={scrollToContact}
+                    style={{ cursor: "pointer" }}
+                  >
                     Contact us
                   </a>
                 </li>
@@ -550,7 +580,7 @@ export default function LandingPage() {
         {/* End About Section */}
 
         {/* Start Photos and Videos */}
-        <div className="photos" id="photos">
+        <div className="photos" id="photosAndVideos">
           <svg
             className="shape"
             xmlns="http://www.w3.org/2000/svg"
