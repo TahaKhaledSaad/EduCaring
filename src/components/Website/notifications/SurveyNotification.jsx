@@ -148,7 +148,7 @@ export default function SurveyNotification({
           <div className="btns p-3 d-flex gap-5 justify-content-center send-close-container">
             <button
               className={`send-question-btn survey-rate-btn btn  flex-column d-flex justify-content-center
-           ${comment ? "" : "disabled bt-disabled-op"} `}
+           ${rating !== 0 ? "" : "disabled bt-disabled-op"} `}
               style={{ cursor: "pointer" }}
               onClick={handleSend}
             >

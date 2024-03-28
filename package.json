@@ -24,6 +24,7 @@
     "primereact": "^10.5.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
+    "react-circular-progressbar": "^2.1.0",
     "react-country-region-selector": "^3.6.1",
     "react-creditcard-validator": "^1.0.6",
     "react-doc-viewer": "^0.1.5",

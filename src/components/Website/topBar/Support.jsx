@@ -56,6 +56,7 @@ export default function Support() {
       })
       .then((response) => {
         if (response.data.isSuccess === true) {
+          console.log(response, response.data);
           toast.current.show({
             severity: "info",
             summary: t("MessageSent"),
@@ -64,9 +65,9 @@ export default function Support() {
           });
 
           setPopupVisible(false);
+          setSupportData({ title: "", content: "" });
         }
         // Clear the input fields
-        setSupportData({ title: "", content: "" });
       })
       .catch((error) => {
         console.error("Error sending support:", error);
@@ -76,6 +77,7 @@ export default function Support() {
   return (
     <>
       <div className="supp" ref={suppRef}>
+        <Toast ref={toast} />
         <div className="support" onClick={togglePopup}>
           <span>{t("Support")}</span>
           <i className="bi bi-signpost-2"></i>
