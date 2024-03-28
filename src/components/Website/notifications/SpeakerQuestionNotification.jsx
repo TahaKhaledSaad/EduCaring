@@ -119,7 +119,7 @@ const SpeakerQuestionNotification = ({
           <div className="form">
             <div className="questions-body">
               {showScore ? (
-                <ScoreContainer>
+                <ScoreContainer label={t("YourScore")}>
                   <ChangingProgressProvider values={[Math.round(score)]}>
                     {(score) => (
                       <CircularProgressbar
@@ -192,6 +192,10 @@ function ScoreContainer(props) {
         }}
         className=" mt-5 p-3 "
       >
+        <div style={{ width: "70%" }}>
+          <h3 className="h5 score text-success">{props.label}</h3>
+          <p>{props.description}</p>
+        </div>
         <div
           className=" circular-progressbar-answer"
           style={{ width: "30%", paddingRight: 30 }}
