@@ -25,8 +25,8 @@ export default function Resources({
   const [link, setLink] = useState("");
   const [flag, setFlag] = useState(false);
 
-  console.log(eventDaySpeakerId, sendId);
-  console.log(userId);
+  // console.log(eventDaySpeakerId, sendId);
+  // console.log(userId);
 
   // [1] Fetch Event Days
   useEffect(() => {
@@ -70,10 +70,19 @@ export default function Resources({
           )
         );
       });
-  }, [eventDayId, userId, i18n.language, decodedToken.uid, eventDaySpeakerId, flag]);
+  }, [
+    eventDayId,
+    userId,
+    i18n.language,
+    decodedToken.uid,
+    eventDaySpeakerId,
+    flag,
+  ]);
 
   // [2] Selected Event Day
-  const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
+  const selectedEventDay = eventDays?.find(
+    (day) => day.id === parseInt(eventDayId)
+  );
 
   // [3] Speakers
   const [speakers, setSpeakers] = useState([]);
@@ -114,34 +123,71 @@ export default function Resources({
   const [links, setLinks] = useState([]);
 
   // [7] Update Files, Images, and Links
+
+  // filter resource url to Files, Images, and Links
+
   useEffect(() => {
     const files = [];
     const imgs = [];
     const links = [];
 
-    resources.forEach((resource) => {
-      const { resorsesURL, link } = resource;
+    if (addResourcesSpeaker) {
+      speakerResourses.forEach((speakerResourse) => {
+        const { resorsesURL, link } = speakerResourse;
 
-      // Check if resource is a file or an image
-      if (resorsesURL) {
-        const extension = resorsesURL.split(".").pop().toLowerCase();
-        if (extension.match(/(jpg|jpeg|png|gif)$/)) {
-          imgs.push(resorsesURL);
-        } else {
-          files.push(resorsesURL);
+        // Check if resource is a file or an image
+        if (resorsesURL) {
+          const extension = resorsesURL.split(".").pop().toLowerCase();
+          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+            imgs.push(resorsesURL);
+          } else {
+            files.push(resorsesURL);
+          }
         }
-      }
 
-      // Check if link exists and is not null
-      if (link) {
-        links.push(link);
-      }
-    });
+        // Check if link exists and is not null
+        if (
+          link &&
+          link !== "null" &&
+          (link.startsWith("http://") || link.startsWith("https://"))
+        ) {
+          links.push(link);
+        }
+      });
+    } else {
+      resources.forEach((resource) => {
+        const { resorsesURL, link } = resource;
+
+        // Check if resource is a file or an image
+        if (resorsesURL) {
+          const extension = resorsesURL.split(".").pop().toLowerCase();
+          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+            imgs.push(resorsesURL);
+          } else {
+            files.push(resorsesURL);
+          }
+        }
+
+        // Check if link exists and is not null
+        if (
+          link &&
+          link !== "null" &&
+          (link.startsWith("http://") || link.startsWith("https://"))
+        ) {
+          links.push(link);
+        }
+      });
+    }
 
     setFiles(files);
     setImgs(imgs);
     setLinks(links);
-  }, [resources]);
+  }, [resources, speakerResourses, addResourcesSpeaker]);
+
+console.log(files);
+console.log(imgs);
+console.log(links);
+
 
   // [8] Handle Option Change
   const [selectedOption, setSelectedOption] = useState("files");
@@ -441,7 +487,9 @@ export default function Resources({
       <div
         className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup ? "translate(200%,-50%)" : "translate(-50%, -50%)",
+          transform: showPopup
+            ? "translate(200%,-50%)"
+            : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000",
           height: "80vh",
@@ -454,7 +502,11 @@ export default function Resources({
           style={{ backgroundColor: "#F2F2F2" }}
         >
           <h3>Resources</h3>
-          <i className="fa-solid fa-x" style={{ cursor: "pointer" }} onClick={togglePopup}></i>
+          <i
+            className="fa-solid fa-x"
+            style={{ cursor: "pointer" }}
+            onClick={togglePopup}
+          ></i>
         </div>
 
         <div className="py-2 px-3 ">
@@ -465,7 +517,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "files" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "files" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "files" ? "2px solid #3296D4" : "none",
               }}
             >
               Files
@@ -476,7 +529,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "images" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "images" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "images" ? "2px solid #3296D4" : "none",
               }}
             >
               Images
@@ -487,7 +541,8 @@ export default function Resources({
               style={{
                 color: selectedOption === "links" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom: selectedOption === "links" ? "2px solid #3296D4" : "none",
+                borderBottom:
+                  selectedOption === "links" ? "2px solid #3296D4" : "none",
               }}
             >
               Links
@@ -496,32 +551,38 @@ export default function Resources({
 
           <div className="my-2 overflow-y-auto overflow-x-hidden">
             {/* Upload Resources */}
-            {addResourcesSpeaker && (selectedOption === "files" || selectedOption === "images") && (
-              <div className="input-group p-1">
-                <input
-                  type="file"
-                  className="form-control"
-                  id="PassportImage"
-                  hidden
-                  multiple
-                  onChange={sendFiles}
-                />
-                <label
-                  className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
-                  htmlFor="PassportImage"
-                >
-                  <img src={upload} alt="upload files" width="80px" />
-                  <div>
-                    <div className="text-center my-0">
-                      Drag and Drop image <p className="text-info d-inline">here</p>
+            {addResourcesSpeaker &&
+              (selectedOption === "files" || selectedOption === "images") && (
+                <div className="input-group p-1">
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="PassportImage"
+                    hidden
+                    multiple
+                    onChange={sendFiles}
+                  />
+                  <label
+                    className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
+                    htmlFor="PassportImage"
+                  >
+                    <img src={upload} alt="upload files" width="80px" />
+                    <div>
+                      <div className="text-center my-0">
+                        Drag and Drop image{" "}
+                        <p className="text-info d-inline">here</p>
+                      </div>
+                      <div className="text-center my-0">
+                        or{" "}
+                        <p className="text-info d-inline text-decoration-down">
+                          upload
+                        </p>{" "}
+                        image
+                      </div>
                     </div>
-                    <div className="text-center my-0">
-                      or <p className="text-info d-inline text-decoration-down">upload</p> image
-                    </div>
-                  </div>
-                </label>
-              </div>
-            )}
+                  </label>
+                </div>
+              )}
 
             {/* Add Links */}
             {addResourcesSpeaker && selectedOption === "links" && (
@@ -605,9 +666,9 @@ export default function Resources({
                 ))}
               </div>
             )}
-
+                                                    {/* to delete */}
             {/* Speaker */}
-            {selectedOption === "images" && addResourcesSpeaker && (
+            {/* {selectedOption === "images" && addResourcesSpeaker && (
               <div className="row gap-2 my-2 justify-content-center">
                 {speakerResourses.map((resource, index) => (
                   <img
@@ -619,7 +680,7 @@ export default function Resources({
                   />
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* User */}
             {selectedOption === "links" && // Links For All Users
@@ -670,9 +731,9 @@ export default function Resources({
                   </div>
                 </div>
               ))}
-
+                                                                      {/* to delete */}
             {/* Speaker */}
-            {selectedOption === "links" && // Links For a Speaker
+            {/* {selectedOption === "links" && // Links For a Speaker
               addResourcesSpeaker &&
               speakerResourses.map((resource, index) => (
                 <div
@@ -720,7 +781,7 @@ export default function Resources({
                     </a>
                   </div>
                 </div>
-              ))}
+              ))} */}
           </div>
         </div>
       </div>

@@ -371,7 +371,7 @@ function EventDetails() {
                         eventDetails.eventDays[selectedDayIndex]
                           .iFramAddressLink
                       }
-                      allowfullscreen="true"
+                      allowFullScreen={true}
                       aria-hidden="false"
                       tabIndex="0"
                       loading="lazy"

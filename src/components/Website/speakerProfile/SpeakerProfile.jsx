@@ -105,7 +105,7 @@ export default function SpeakerProfile() {
   };
   const [showAlert, setShowAlert] = useState(false);
   const handleClick = () => {
-    if (speakerObj.speakerObj) {
+    if (speakerObj.displayCvURL) {
       downloadCV();
     } else {
       setShowAlert(true);
