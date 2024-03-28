@@ -39,19 +39,9 @@ export default function Role({ roleCase }) {
                 Attendance
               </h5>
             </div>
-            <div
-              className="role-item"
-              onClick={() => handleRoleItemClick("speaker")}
-            >
-              <img
-                src={selectedRole === "speaker" ? spkColored : spk}
-                alt="speaker"
-              />
-              <h5
-                style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}
-              >
-                Speaker
-              </h5>
+            <div className="role-item" onClick={() => handleRoleItemClick("speaker")}>
+              <img src={selectedRole === "speaker" ? spkColored : spk} alt="speaker" />
+              <h5 style={{ color: selectedRole === "speaker" ? "#3296D4" : "" }}>Speaker</h5>
             </div>
           </div>
           <div className="btns">
