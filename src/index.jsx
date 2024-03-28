@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./i18n.js";
 import App from "./App.jsx";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "@fortawesome/fontawesome-free/css/all.min.css";

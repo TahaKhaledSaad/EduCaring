@@ -10,6 +10,7 @@ export default function TopBar() {
   const [routeText, setRouteText] = useState("Home");
   const [iconsVisible, setIconsVisible] = useState(true);
   const eventId = location.pathname.split("/")[3];
+
   useEffect(() => {
     switch (location.pathname) {
       case "/home":
