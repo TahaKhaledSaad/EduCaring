@@ -22,11 +22,6 @@ export default function Profile() {
 
   const decodedToken = jwtDecode(token);
 
-  // [2] Handle Date Change
-  const handleDateChange = (e) => {
-    setDateOfBirth(e.target.value);
-  };
-
   // [3] Get User Data
   useEffect(() => {
     axios
@@ -135,7 +130,6 @@ export default function Profile() {
   const [showSelect, setShowSelect] = useState(true);
   const [showDateOfBirth, setShowDateOfBirth] = useState(true);
   const [showSelectSpecialization, setShowSelectSpecialization] = useState(true);
-
 
   console.log(user);
   return (
@@ -465,38 +459,54 @@ export default function Profile() {
               >
                 {isEditMode ? (
                   <>
-                    <select
-                      name="GenderId"
-                      className="p-0"
-                      style={{
-                        outline: "0",
-                        border: "0",
-                        width: "100%",
-                        height: "100%",
-                        color: "#000",
-                      }}
-                      defaultValue="1"
-                      onChange={
-                        (e) =>
+                    {!showSelectSpecialization && (
+                      <select
+                        name="GenderId"
+                        className="p-0"
+                        style={{
+                          outline: "0",
+                          border: "0",
+                          width: "100%",
+                          height: "100%",
+                          color: "#000",
+                        }}
+                        defaultValue="1"
+                        onChange={(e) => {
                           setUser({
                             ...user,
                             specializationCategory: {
                               id: parseInt(e.target.value),
                               name: e.target.options[e.target.selectedIndex].text,
                             },
-                          })
-                        // console.log(parseInt(e.target.value))
-                      }
-                    >
-                      <option disabled value="1">
-                        Select Category
-                      </option>
-                      {specializationCategories.map((specialization) => (
-                        <option key={specialization.id} value={specialization.id}>
-                          {specialization.name}
+                          });
+                          // console.log(parseInt(e.target.value))
+                          showSelectSpecialization
+                            ? setShowSelectSpecialization(false)
+                            : setShowSelectSpecialization(true);
+                        }}
+                      >
+                        <option disabled value="1">
+                          Select Category
                         </option>
-                      ))}
-                    </select>
+                        {specializationCategories.map((specialization) => (
+                          <option key={specialization.id} value={specialization.id}>
+                            {specialization.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    {showSelectSpecialization && (
+                      <span
+                        className="fs-5"
+                        onClick={() => {
+                          showSelectSpecialization
+                            ? setShowSelectSpecialization(false)
+                            : setShowSelectSpecialization(true);
+                        }}
+                      >
+                        {user && user.specializationCategory?.name}
+                      </span>
+                    )}
                   </>
                 ) : (
                   <span className="fs-5">{user && user.specializationCategory?.name}</span>

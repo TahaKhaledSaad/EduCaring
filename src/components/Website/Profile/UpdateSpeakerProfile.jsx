@@ -99,6 +99,10 @@ export default function Profile() {
 
     console.log(formData);
 
+    console.log("cv: ", cvFile);
+    console.log("passport: ", passportFile);
+    console.log("walaa: ", walaaFile);
+
     axios
       .put(`${BASE}/Auth/UpdateProfile`, formData)
       .then((data) => {
@@ -682,7 +686,10 @@ export default function Profile() {
                         type="button"
                         className="btn btn-danger btn-sm py-3 w-100 rounded-0"
                         style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => setShowCommingWalaaFile(false)}
+                        onClick={() => {
+                          setShowCommingWalaaFile(false);
+                          handleSaveClick();
+                        }}
                       >
                         <i className="fas fa-trash-alt fa-2xl"></i>
                       </button>
@@ -785,6 +792,7 @@ export default function Profile() {
                       style={{ position: "absolute", bottom: "0" }}
                       onClick={() => {
                         setShowCommingPassportFile(false);
+                        handleSaveClick();
                       }}
                     >
                       <i className="fas fa-trash-alt fa-2xl"></i>
@@ -877,7 +885,10 @@ export default function Profile() {
                         type="button"
                         className="btn btn-danger btn-sm py-3 w-100 rounded-0"
                         style={{ position: "absolute", bottom: "0" }}
-                        onClick={() => setShowCommingWalaaFile(false)}
+                        onClick={() => {
+                          setShowCommingCvFile(false);
+                          handleSaveClick();
+                        }}
                       >
                         <i className="fas fa-trash-alt fa-2xl"></i>
                       </button>

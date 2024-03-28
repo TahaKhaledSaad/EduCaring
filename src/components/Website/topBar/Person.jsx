@@ -43,14 +43,12 @@ export default function Person() {
     <>
       <Link
         to={`${
-          decodedToken.roles.includes("User")
-            ? "update-user-profile"
-            : "update-speaker-profile"
+          decodedToken.roles.includes("User") ? "update-user-profile" : "update-speaker-profile"
         }`}
       >
         <div className="person d-flex gap-3 align-items-center">
           {user.displayProfileImage && (
-            <img src={user.displayProfileImage} alt="person" />
+            <img src={user.displayProfileImage} alt="person" style={{ objectFit: "cover" }} />
           )}
           {!user.displayProfileImage && (
             <div
@@ -62,18 +60,13 @@ export default function Person() {
               }}
               className="d-flex justify-content-center align-items-center text-white fs-5"
             >
-              <span
-                className="text-dark fs-3 fw-bold"
-                style={{ userSelect: "none" }}
-              >
+              <span className="text-dark fs-3 fw-bold" style={{ userSelect: "none" }}>
                 {user.nameEn && user.nameEn.substring(0, 2).toUpperCase()}
               </span>
             </div>
           )}
           <div className="details mt-2">
-            <span className="name">
-              {i18n.language === "en" ? user.nameEn : user.nameAr}
-            </span>
+            <span className="name">{i18n.language === "en" ? user.nameEn : user.nameAr}</span>
             <p className="email">{user.email}</p>
           </div>
         </div>
