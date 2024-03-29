@@ -7,6 +7,7 @@ import "./profiles.css";
 import upload from "./../../../assets/image.png";
 import pdf from "./../../../assets/pdf.png";
 import Success from "../Popups/Success";
+import ResetPassword from "../Popups/ResetPassword";
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -82,10 +83,7 @@ export default function Profile() {
     formData.append("City", user.city);
     formData.append("Country", user.country);
     formData.append("Specialization", user.specialization);
-    formData.append(
-      "SpecializationCategoryId",
-      user.specializationCategoryId || ""
-    );
+    formData.append("SpecializationCategoryId", user.specializationCategoryId || "");
     formData.append("PassportNumber", user.passportNumber);
     formData.append("HealthAuthorityNumber", user.healthAuthorityNumber);
     formData.append("Bio", user.bio);
@@ -181,12 +179,8 @@ export default function Profile() {
     <>
       {user && (
         <div className="p-4">
-          {showSuccessPopup && (
-            <Success text="Profile Updated Successfully!" type="success" />
-          )}
-          {showErrorPopup && (
-            <Success text="Profile Updated Failed!" type="error" />
-          )}
+          {showSuccessPopup && <Success text="Profile Updated Successfully!" type="success" />}
+          {showErrorPopup && <Success text="Profile Updated Failed!" type="error" />}
 
           {/* Head */}
           <div
@@ -196,11 +190,7 @@ export default function Profile() {
             <div className="position-relative">
               {user.displayProfileImage ? (
                 <img
-                  src={
-                    profileFile
-                      ? URL.createObjectURL(profileFile)
-                      : user.displayProfileImage
-                  }
+                  src={profileFile ? URL.createObjectURL(profileFile) : user.displayProfileImage}
                   alt="personImg"
                   width={"120px"}
                   height={"120px"}
@@ -265,9 +255,7 @@ export default function Profile() {
                       className="border-0 mb-1"
                       style={{ outline: "0" }}
                       value={user.nameEn}
-                      onChange={(e) =>
-                        setUser({ ...user, nameEn: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, nameEn: e.target.value })}
                     />
                   </h3>
                   <p>
@@ -276,9 +264,7 @@ export default function Profile() {
                       className="border-0 mb-1 w-50"
                       style={{ outline: "0" }}
                       value={user.email}
-                      onChange={(e) =>
-                        setUser({ ...user, email: e.target.value })
-                      }
+                      onChange={(e) => setUser({ ...user, email: e.target.value })}
                     />
                   </p>
                 </div>
@@ -290,6 +276,8 @@ export default function Profile() {
               )}
             </div>
 
+            <ResetPassword />
+
             <div
               className="edit px-3 py-2 text-white rounded d-flex align-items-center"
               style={{ background: "#27AE60", cursor: "pointer" }}
@@ -297,9 +285,7 @@ export default function Profile() {
             >
               <i
                 className={
-                  isEditMode
-                    ? "fa-regular fa-check-square"
-                    : "fa-regular fa-pen-to-square"
+                  isEditMode ? "fa-regular fa-check-square" : "fa-regular fa-pen-to-square"
                 }
               ></i>
               <span className="ms-2">{isEditMode ? "Save" : "Edit"}</span>
@@ -321,9 +307,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.nameAr}
-                    onChange={(e) =>
-                      setUser({ ...user, nameAr: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, nameAr: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user.nameAr}</span>
@@ -350,9 +334,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user.phoneNumber}
-                    onChange={(e) =>
-                      setUser({ ...user, phoneNumber: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user.phoneNumber}</span>
@@ -371,9 +353,7 @@ export default function Profile() {
               <div className="info-item d-flex border rounded p-3 py-2 justify-content-between gap-3 overflow-hidden">
                 {/* Data of Birth */}
                 <div
-                  className={` p-2 d-flex flex-column ${
-                    isEditMode ? "edit-mode" : ""
-                  }`}
+                  className={` p-2 d-flex flex-column ${isEditMode ? "edit-mode" : ""}`}
                   style={{ borderRight: "1px solid #DCDCDC" }}
                 >
                   {isEditMode ? (
@@ -387,9 +367,7 @@ export default function Profile() {
                           onChange={(e) => {
                             setDateOfBirth(e.target.value);
                             setUser({ ...user, dateOfBirth: e.target.value });
-                            showDateOfBirth
-                              ? setShowDateOfBirth(false)
-                              : setShowDateOfBirth(true);
+                            showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
                           }}
                         />
                       )}
@@ -397,9 +375,7 @@ export default function Profile() {
                         <span
                           className="fs-5"
                           onClick={() => {
-                            showDateOfBirth
-                              ? setShowDateOfBirth(false)
-                              : setShowDateOfBirth(true);
+                            showDateOfBirth ? setShowDateOfBirth(false) : setShowDateOfBirth(true);
                           }}
                         >
                           {formattedDateOfBirth}
@@ -420,9 +396,7 @@ export default function Profile() {
                 </div>
                 {/* Gender Input */}
                 <div
-                  className={`p-2 d-flex flex-column flex-grow-1 ${
-                    isEditMode ? "edit-mode" : ""
-                  }`}
+                  className={`p-2 d-flex flex-column flex-grow-1 ${isEditMode ? "edit-mode" : ""}`}
                 >
                   {isEditMode ? (
                     <>
@@ -443,13 +417,10 @@ export default function Profile() {
                               ...user,
                               gender: {
                                 id: parseInt(e.target.value),
-                                name: e.target.options[e.target.selectedIndex]
-                                  .text,
+                                name: e.target.options[e.target.selectedIndex].text,
                               },
                             });
-                            showSelect
-                              ? setShowSelect(false)
-                              : setShowSelect(true);
+                            showSelect ? setShowSelect(false) : setShowSelect(true);
                           }}
                         >
                           <option disabled value="0">
@@ -468,9 +439,7 @@ export default function Profile() {
                           className="fs-5"
                           onClick={() => {
                             console.log("delete me!");
-                            showSelect
-                              ? setShowSelect(false)
-                              : setShowSelect(true);
+                            showSelect ? setShowSelect(false) : setShowSelect(true);
                           }}
                         >
                           {user && user.gender?.name}
@@ -535,9 +504,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.passportNumber}
-                    onChange={(e) =>
-                      setUser({ ...user, passportNumber: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, passportNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.passportNumber}</span>
@@ -564,9 +531,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.saudiAuthorityNumber}
-                    onChange={(e) =>
-                      setUser({ ...user, saudiAuthorityNumber: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, saudiAuthorityNumber: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.saudiAuthorityNumber}</span>
@@ -593,9 +558,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.currentWorkPlace}
-                    onChange={(e) =>
-                      setUser({ ...user, currentWorkPlace: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, currentWorkPlace: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.currentWorkPlace}</span>
@@ -622,9 +585,7 @@ export default function Profile() {
                     className="border-0 mb-1"
                     style={{ outline: "0" }}
                     value={user?.bankAccount}
-                    onChange={(e) =>
-                      setUser({ ...user, bankAccount: e.target.value })
-                    }
+                    onChange={(e) => setUser({ ...user, bankAccount: e.target.value })}
                   />
                 ) : (
                   <span className="fs-5">{user?.bankAccount}</span>
@@ -676,15 +637,11 @@ export default function Profile() {
               <div className="elem">
                 <div className="text-muted my-2">
                   <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                  upload Wlaa Card{" "}
-                  <div className="text-danger d-inline">(not required)</div>
+                  upload Wlaa Card <div className="text-danger d-inline">(not required)</div>
                 </div>
                 {/* Upload Label */}
                 {!showCommingWalaaFile && (
-                  <div
-                    className="input-group"
-                    style={{ display: walaaFile ? "none" : "block" }}
-                  >
+                  <div className="input-group" style={{ display: walaaFile ? "none" : "block" }}>
                     <input
                       type="file"
                       className="form-control"
@@ -698,15 +655,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -729,18 +681,11 @@ export default function Profile() {
                     <div className="d-flex justify-content-center gap-3 align-items-center px-3">
                       <img src={pdf} alt="Wlaa Card" width="80px" />
                       <div>
-                        <p className="p-0 m-0 my-1 fs-5">
-                          {user.displayWalaaCardURL.name}
-                        </p>
+                        <p className="p-0 m-0 my-1 fs-5">{user.displayWalaaCardURL.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {user.displayWalaaCardURL.size > 1024 * 1024
-                            ? `${(
-                                user.displayWalaaCardURL.size /
-                                (1024 * 1024)
-                              ).toFixed(2)} MB`
-                            : `${(user.displayWalaaCardURL.size / 1024).toFixed(
-                                2
-                              )} KB`}
+                            ? `${(user.displayWalaaCardURL.size / (1024 * 1024)).toFixed(2)} MB`
+                            : `${(user.displayWalaaCardURL.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
                       <button
@@ -778,9 +723,7 @@ export default function Profile() {
                         <p className="p-0 m-0 my-1 fs-5">{walaaFile.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {walaaFile.size > 1024 * 1024
-                            ? `${(walaaFile.size / (1024 * 1024)).toFixed(
-                                2
-                              )} MB`
+                            ? `${(walaaFile.size / (1024 * 1024)).toFixed(2)} MB`
                             : `${(walaaFile.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
@@ -814,9 +757,7 @@ export default function Profile() {
                       type="file"
                       className="form-control"
                       id="PassportImage"
-                      onChange={(e) =>
-                        handleUploadChange(e, "PassportImageFile")
-                      }
+                      onChange={(e) => handleUploadChange(e, "PassportImageFile")}
                       hidden
                     />
                     <label
@@ -825,15 +766,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -880,9 +816,7 @@ export default function Profile() {
                       display: passportFile ? "block" : "none",
                       width: "300px",
                       height: "230px",
-                      backgroundImage: `url(${URL.createObjectURL(
-                        passportFile
-                      )})`,
+                      backgroundImage: `url(${URL.createObjectURL(passportFile)})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
@@ -910,10 +844,7 @@ export default function Profile() {
                 </div>
                 {/* Upload Label */}
                 {!showCommingCvFile && (
-                  <div
-                    className="input-group"
-                    style={{ display: cvFile ? "none" : "block" }}
-                  >
+                  <div className="input-group" style={{ display: cvFile ? "none" : "block" }}>
                     <input
                       type="file"
                       className="form-control"
@@ -927,15 +858,10 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        Drag and Drop image <p className="text-info d-inline">here</p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
+                        or <p className="text-info d-inline text-decoration-down">upload</p> image
                       </div>
                     </label>
                   </div>
@@ -958,18 +884,11 @@ export default function Profile() {
                     <div className="d-flex justify-content-center gap-3 align-items-center px-3">
                       <img src={pdf} alt="Wlaa Card" width="80px" />
                       <div>
-                        <p className="p-0 m-0 my-1 fs-5">
-                          {user.displayCvURL.name}
-                        </p>
+                        <p className="p-0 m-0 my-1 fs-5">{user.displayCvURL.name}</p>
                         <p className="p-0 m-0 my-1 text-muted">
                           {user.displayCvURL.size > 1024 * 1024
-                            ? `${(
-                                user.displayCvURL.size /
-                                (1024 * 1024)
-                              ).toFixed(2)} MB`
-                            : `${(user.displayCvURL.size / 1024).toFixed(
-                                2
-                              )} KB`}
+                            ? `${(user.displayCvURL.size / (1024 * 1024)).toFixed(2)} MB`
+                            : `${(user.displayCvURL.size / 1024).toFixed(2)} KB`}
                         </p>
                       </div>
                       <button

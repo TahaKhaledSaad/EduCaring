@@ -13,7 +13,7 @@ Users Profiles:
 
 Links:
   - Figma: https://www.figma.com/file/FCCcJ8DKgj9dg2TkmZncOm/edu_caring?type=design&node-id=675-3254&mode=design&t=6EmmilG9oHax6uSU-0
-  - Postman: https://blue-star-85086.postman.co/workspace/Edu-Caring~e2c6b8b9-fdab-415b-8811-6cac8cab5548/collection/32462343-9aec5e81-499d-49d6-828a-2d25f6cdf4d6
+  - Postman: https://blue-star-85086.postman.co/workspace/Edu-Caring~e2c6b8b9-fdab-415b-8811-6cac8cab5548/collection
   - Dashboard: http://hossamelhadad-001-site14.ktempurl.com/#/dashboard/users
 
 

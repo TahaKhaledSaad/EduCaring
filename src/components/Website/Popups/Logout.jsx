@@ -33,7 +33,7 @@ export default function Logout() {
           style={{
             boxShadow: "0 0 100px rgba(0,0,0,0.2)",
             width: "360px",
-            transform: popupVisible ? "translate(-50%, -50%)" : "translate(200%, -50%)",
+            transform: popupVisible ? "translate(-50%, -50%)" : "translate(250%, -50%)",
             transition: "0.5s",
             left: "50%",
             zIndex: "1000",

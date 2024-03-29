@@ -88,7 +88,7 @@ export default function Gallary({ eventId, userId }) {
         className=" bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
           transform: popupVisible
-            ? "translate(200%,-50%)"
+            ? "translate(300%,-50%)"
             : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000000",
@@ -129,7 +129,7 @@ export default function Gallary({ eventId, userId }) {
           className="custom-popup bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
           style={{
             transform: showPopup
-              ? "translate(200%,-50%)"
+              ? "translate(300%,-50%)"
               : "translate(-50%, -50%)",
             transition: "0.5s",
             zIndex: "1000000",

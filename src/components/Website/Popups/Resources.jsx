@@ -499,7 +499,7 @@ export default function Resources({
       <div
         className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup ? "translate(200%,-50%)" : "translate(-50%, -50%)",
+          transform: showPopup ? "translate(300%, -50%)" : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000",
           height: "80vh",
