@@ -241,7 +241,7 @@ export default function Profile() {
               )}
             </div>
 
-            <ResetPassword />
+            <ResetPassword userID={decodedToken.uid} email={decodedToken.email} />
 
             <div
               className="edit px-3 py-2 text-white rounded d-flex align-items-center"

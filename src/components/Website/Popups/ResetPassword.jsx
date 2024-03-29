@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import style from "./../Auth/Login.module.css";
+import { BASE } from "../../../Api";
+import axios from "axios";
+import PropTypes from "prop-types";
 
-export default function ResetPassword() {
+export default function ResetPassword({ userID, email }) {
   const [popupVisible, setPopupVisible] = useState(false);
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPass, setConfirmNewPass] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [passesEquals, setPassesEquals] = useState(false);
-  const [showForgetErrors, setShowForgetErrors] = useState(false);
+  const [showErrors, setshowErrors] = useState(false);
 
   const handleTogglePopup = () => {
     setPopupVisible(!popupVisible);
@@ -21,17 +26,39 @@ export default function ResetPassword() {
     setPopupVisible(false);
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-
-  console.log(newPassword, confirmNewPass);
+  const [wrongCurrentPassword, setWrongCurrentPassword] = useState(false);
+  const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
 
   useEffect(() => {
     newPassword === confirmNewPass ? setPassesEquals(true) : setPassesEquals(false);
-    console.log(currentPassword);
-    setShowForgetErrors(true);
-  }, [newPassword, confirmNewPass, currentPassword]);
+  }, [newPassword, confirmNewPass]);
+
+  async function handleResetPassword() {
+    try {
+      const res = await axios.post(`${BASE}/auth/ChangePassword`, {
+        userID: userID,
+        email: email,
+        oldPassword: currentPassword,
+        newPassword: newPassword,
+      });
+      if (res.data.isSuccess) {
+        setUpdatedSuccessfully(true);
+        setTimeout(() => {
+          setUpdatedSuccessfully(false);
+          handleHidePopup();
+        }, 3000);
+      } else {
+        setWrongCurrentPassword(true);
+        setTimeout(() => {
+          setWrongCurrentPassword(false);
+        }, 3000);
+      }
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(currentPassword, newPassword);
+  }
 
   return (
     <>
@@ -68,7 +95,7 @@ export default function ResetPassword() {
             strokeLinejoin="round"
           />
         </svg>
-        <span style={{ fontSize: "13px" }}>Reset Password</span>
+        <span style={{ fontSize: "13px" }}>Change Password</span>
       </button>
 
       <div
@@ -97,20 +124,20 @@ export default function ResetPassword() {
             <div className={style.input} style={{ marginBottom: "0px" }}>
               <i className="fa-solid fa-lock"></i>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showCurrentPassword ? "text" : "password"}
                 placeholder="Current Password"
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <i
                 className={`fa-regular ${
-                  showPassword ? "fa-eye" : "fa-eye-slash"
+                  showCurrentPassword ? "fa-eye" : "fa-eye-slash"
                 } fa-flip-horizontal`}
-                onClick={togglePasswordVisibility}
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
               ></i>
             </div>
-            {showForgetErrors && (
+            {showErrors && (
               <p className="text-danger m-0 p-0">
-                {newPassword.length < 8 ? "Password must be at least 8 characters!" : ""}
+                {currentPassword.length < 6 ? "Wrong Password!" : ""}
               </p>
             )}
 
@@ -118,18 +145,18 @@ export default function ResetPassword() {
             <div className={style.input} style={{ marginBottom: "0px", marginTop: "15px" }}>
               <i className="fa-solid fa-lock"></i>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showNewPassword ? "text" : "password"}
                 placeholder="Enter New Password"
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <i
                 className={`fa-regular ${
-                  showPassword ? "fa-eye" : "fa-eye-slash"
+                  showNewPassword ? "fa-eye" : "fa-eye-slash"
                 } fa-flip-horizontal`}
-                onClick={togglePasswordVisibility}
+                onClick={() => setShowNewPassword(!showNewPassword)}
               ></i>
             </div>
-            {showForgetErrors && (
+            {showErrors && (
               <p className="text-danger m-0 p-0">
                 {newPassword.length < 8 ? "Password must be at least 8 characters!" : ""}
               </p>
@@ -139,18 +166,18 @@ export default function ResetPassword() {
             <div className={style.input} style={{ marginBottom: "0px", marginTop: "15px" }}>
               <i className="fa-solid fa-lock"></i>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 onChange={(e) => setConfirmNewPass(e.target.value)}
               />
               <i
                 className={`fa-regular ${
-                  showPassword ? "fa-eye" : "fa-eye-slash"
+                  showConfirmPassword ? "fa-eye" : "fa-eye-slash"
                 } fa-flip-horizontal`}
-                onClick={togglePasswordVisibility}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               ></i>
             </div>
-            {showForgetErrors && (
+            {showErrors && (
               <p className="text-danger m-0 p-0">{passesEquals ? "" : "Passwords do not match!"}</p>
             )}
           </section>
@@ -159,9 +186,22 @@ export default function ResetPassword() {
         <div className="d-flex justify-content-between mt-4 gap-3">
           <button
             className="btn flex-fill"
-            style={{ background: "#3296D4", color: "#fff", outline: "none", border: "none" }}
+            style={{
+              background: "#3296D4",
+              color: "#fff",
+              outline: "none",
+              border: "none",
+            }}
+            onClick={() => {
+              if (currentPassword.length >= 6 && newPassword.length >= 8 && passesEquals) {
+                handleResetPassword();
+                console.log("Done");
+              } else {
+                setshowErrors(true);
+              }
+            }}
           >
-            Reset
+            Change
           </button>
           <button
             className="btn flex-fill"
@@ -170,8 +210,47 @@ export default function ResetPassword() {
           >
             Cancel
           </button>
+
+          {wrongCurrentPassword && (
+            <div
+              className="alert alert-danger text-center px-3 py-2"
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 9999,
+                width: "300px",
+                boxShadow: "0 0 100px rgb(0,0,0)",
+              }}
+            >
+              May be you entered wrong password!
+            </div>
+          )}
+          {updatedSuccessfully && (
+            <div
+              className="alert alert-success text-center px-3 py-2"
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 9999,
+                width: "300px",
+                boxShadow: "0 0 100px rgb(0,0,0)",
+              }}
+            >
+              Password updated successfully!
+            </div>
+          )}
         </div>
       </div>
     </>
   );
 }
+ResetPassword.propTypes = {
+  userID: PropTypes.string.isRequired,
+};
+ResetPassword.propTypes = {
+  email: PropTypes.string.isRequired,
+};
