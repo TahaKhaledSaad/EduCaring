@@ -32,7 +32,7 @@ export default function Logout() {
           className="logout-popup p-4 rounded position-fixed text-center top-50 bg-white"
           style={{
             boxShadow: "0 0 100px rgba(0,0,0,0.2)",
-            width: "500px",
+            width: "360px",
             transform: popupVisible ? "translate(-50%, -50%)" : "translate(200%, -50%)",
             transition: "0.5s",
             left: "50%",

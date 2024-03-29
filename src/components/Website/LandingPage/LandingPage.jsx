@@ -62,6 +62,7 @@ export default function LandingPage() {
     slidesToShow: 4,
     slidesToScroll: 1,
     initialSlide: 0,
+
     nextArrow: <Arrow />,
     prevArrow: <Arrow />,
     responsive: [
@@ -802,7 +803,7 @@ export default function LandingPage() {
           ) : (
             <Slider {...settings}>
               {speakers.map((speaker, index) => (
-                <div className="speaker text-left" key={index}>
+                <div className="speaker text-center px-4" key={index}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="238"

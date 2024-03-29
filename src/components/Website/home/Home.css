@@ -13,6 +13,11 @@
   font-size: 20px;
   color: #565656;
 }
+@media screen and (max-width: 992px) {
+  .home-comp .statement {
+    font-size: 16px;
+  }
+}
 .home-comp .content .nums,
 .home-comp .content .text {
   display: flex;
@@ -26,6 +31,7 @@
   .home-comp .content .nums,
   .home-comp .content .text {
     margin: 10px auto;
+    width: auto;
   }
 }
 .home-comp .content .text {
@@ -38,6 +44,11 @@
   border-radius: 5px;
   font-size: 24px;
   margin: 0;
+}
+@media screen and (max-width: 992px) {
+  .home-comp .content .nums h4 {
+    font-size: 20px;
+  }
 }
 .home-comp .content .text p {
   color: #565656;
@@ -71,6 +82,11 @@
   color: #565656;
   font-size: 24px;
   margin-bottom: 10px;
+}
+@media (max-width: 992px) {
+  .home-comp .coming-events h3 {
+    font-size: 20px;
+  }
 }
 .home-comp .coming-events .event {
   display: block;
@@ -137,9 +153,6 @@
   padding: 10px;
 }
 @media (max-width: 992px) {
-  .home-comp .recommend {
-    text-align: center;
-  }
 }
 .home-comp .recommend h4 {
   color: #565656;
@@ -147,6 +160,9 @@
   margin-bottom: 10px;
 }
 @media (max-width: 992px) {
+  .home-comp .recommend h4 {
+    font-size: 20px;
+  }
   .home-comp .recommend .events {
     flex-direction: column;
     align-items: center;
