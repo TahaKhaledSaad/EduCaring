@@ -270,6 +270,7 @@ export default function Login() {
                     </div>
                   )}
                 </div>
+                
                 {showForgetErrors && (
                   <p className="text-danger m-0 p-0">
                     {otp.length == 6 ? "" : "Please enter the 6-digit code!"}

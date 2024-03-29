@@ -13,6 +13,9 @@ import Resources from "../Popups/Resources";
 import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
 import { PulseLoader } from "react-spinners";
+import { filesNumber, imgsNumber, linksNumber } from "./../Popups/Resources"; // Update the path accordingly
+
+// Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
 function EventDetails() {
   // Translation Work
@@ -49,7 +52,7 @@ function EventDetails() {
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, decodedToken.uid, i18n.language]);
+  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language]);
 
   if (!eventDetails) {
     return (
@@ -123,6 +126,7 @@ function EventDetails() {
       sendId = speaker.id;
     }
   });
+
   return (
     <>
       {!showCompeleteProccese && (
@@ -208,22 +212,26 @@ function EventDetails() {
                     </div>
                     {eventDetails.eventDays[selectedDayIndex].isPaid || addResourcesSpeaker ? (
                       <>
-                        <Resources
-                          eventId={eventId}
-                          eventDayId={eventDetails.eventDays[selectedDayIndex].id}
-                          userId={decodedToken.uid}
-                          addResourcesSpeaker={addResourcesSpeaker}
-                          eventDaySpeakerId={eventDaySpeakerId}
-                          sendId={sendId ? sendId : ""}
-                        />
-                        <button
-                          className="btn btn-outline-danger fw-bold"
-                          onClick={() => {
-                            setShowCompeleteProccese(true);
-                          }}
-                        >
-                          Compelete Proccese
-                        </button>
+                        {decodedToken.roles.includes("User") && (
+                          <Resources
+                            eventId={eventId}
+                            eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                            userId={decodedToken.uid}
+                            addResourcesSpeaker={addResourcesSpeaker}
+                            eventDaySpeakerId={eventDaySpeakerId}
+                            sendId={sendId ? sendId : ""}
+                          />
+                        )}
+                        {decodedToken.roles.includes("Speaker") && (
+                          <button
+                            className="btn btn-outline-danger fw-bold"
+                            onClick={() => {
+                              setShowCompeleteProccese(true);
+                            }}
+                          >
+                            Compelete Proccese
+                          </button>
+                        )}
                       </>
                     ) : (
                       ""
@@ -509,11 +517,12 @@ function EventDetails() {
 
       {showCompeleteProccese && (
         <div>
-          <span className="m-3 text-secondary bg-light p-1 px-2 rounded-4">
-            <i
-              className="fas fa-angle-left fa-lg"
-              onClick={() => setShowCompeleteProccese(false)}
-            ></i>
+          <span
+            className="m-3 text-secondary bg-light p-1 px-2 rounded-4"
+            style={{ cursor: "pointer" }}
+            onClick={() => setShowCompeleteProccese(false)}
+          >
+            <i className="fas fa-angle-left fa-lg"></i>
             <span className="fw-bold fs-5 mx-1">Back</span>
           </span>
 
@@ -621,21 +630,24 @@ function EventDetails() {
                 }}
               >
                 <p>
-                  Files <span style={{ color: "#747688", fontSize: "14px" }}>({})</span>
+                  Files <span style={{ color: "#747688", fontSize: "14px" }}>({filesNumber})</span>
                 </p>
                 <p>
-                  Links <span style={{ color: "#747688", fontSize: "14px" }}>({})</span>
+                  Links <span style={{ color: "#747688", fontSize: "14px" }}>({linksNumber})</span>
                 </p>
                 <p>
-                  Images <span style={{ color: "#747688", fontSize: "14px" }}>({})</span>
+                  Images <span style={{ color: "#747688", fontSize: "14px" }}>({imgsNumber})</span>
                 </p>
               </div>
-              <button
-                className="btn btn-success py-2  w-100"
-                style={{ background: "#27AE60", border: "none", outline: "none" }}
-              >
-                Edit
-              </button>
+
+              <Resources
+                eventId={eventId}
+                eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                userId={decodedToken.uid}
+                addResourcesSpeaker={addResourcesSpeaker}
+                eventDaySpeakerId={eventDaySpeakerId}
+                sendId={sendId ? sendId : ""}
+              />
             </div>
           </div>
         </div>

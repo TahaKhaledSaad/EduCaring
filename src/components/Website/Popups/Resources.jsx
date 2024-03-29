@@ -7,6 +7,10 @@ import upload from "./../../../assets/image.png";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 
+export let filesNumber = 0;
+export let imgsNumber = 0;
+export let linksNumber = 0;
+
 export default function Resources({
   eventId,
   eventDayId,
@@ -70,19 +74,10 @@ export default function Resources({
           )
         );
       });
-  }, [
-    eventDayId,
-    userId,
-    i18n.language,
-    decodedToken.uid,
-    eventDaySpeakerId,
-    flag,
-  ]);
+  }, [eventDayId, userId, i18n.language, decodedToken.uid, eventDaySpeakerId, flag]);
 
   // [2] Selected Event Day
-  const selectedEventDay = eventDays?.find(
-    (day) => day.id === parseInt(eventDayId)
-  );
+  const selectedEventDay = eventDays?.find((day) => day.id === parseInt(eventDayId));
 
   // [3] Speakers
   const [speakers, setSpeakers] = useState([]);
@@ -443,52 +438,68 @@ export default function Resources({
       });
   };
 
+  useEffect(() => {
+    filesNumber = files.length;
+    imgsNumber = imgs.length;
+    linksNumber = links.length;
+  }, [files, imgs, links]);
+
   return (
     <>
-      <div
-        className="p-1 text-center resources"
-        style={{
-          width: "100px",
-          fontSize: "14px",
-          border: "1px solid #BDBDBD",
-          borderRadius: "20px",
-          cursor: "pointer",
-        }}
-        onClick={togglePopup}
-      >
-        <p className="m-0">
-          Resources{" "}
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M16.5 8.25V12.75C16.5 15.75 15.75 16.5 12.75 16.5H5.25C2.25 16.5 1.5 15.75 1.5 12.75V5.25C1.5 2.25 2.25 1.5 5.25 1.5H6.375C7.5 1.5 7.7475 1.83 8.175 2.4L9.3 3.9C9.585 4.275 9.75 4.5 10.5 4.5H12.75C15.75 4.5 16.5 5.25 16.5 8.25Z"
-              stroke="#9DB2CE"
-              strokeWidth="1.125"
-              strokeMiterlimit="10"
-            />
-            <path
-              d="M6 1.5H12.75C14.25 1.5 15 2.25 15 3.75V4.785"
-              stroke="#9DB2CE"
-              strokeWidth="1.125"
-              strokeMiterlimit="10"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </p>
-      </div>
+      {decodedToken.roles.includes("User") && (
+        <div
+          className="p-1 text-center resources"
+          style={{
+            width: "100px",
+            fontSize: "14px",
+            border: "1px solid #BDBDBD",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+          onClick={togglePopup}
+        >
+          <p className="m-0">
+            Resources{" "}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16.5 8.25V12.75C16.5 15.75 15.75 16.5 12.75 16.5H5.25C2.25 16.5 1.5 15.75 1.5 12.75V5.25C1.5 2.25 2.25 1.5 5.25 1.5H6.375C7.5 1.5 7.7475 1.83 8.175 2.4L9.3 3.9C9.585 4.275 9.75 4.5 10.5 4.5H12.75C15.75 4.5 16.5 5.25 16.5 8.25Z"
+                stroke="#9DB2CE"
+                strokeWidth="1.125"
+                strokeMiterlimit="10"
+              />
+              <path
+                d="M6 1.5H12.75C14.25 1.5 15 2.25 15 3.75V4.785"
+                stroke="#9DB2CE"
+                strokeWidth="1.125"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </p>
+        </div>
+      )}
+
+      {decodedToken.roles.includes("Speaker") && (
+        <button
+          className="btn btn-success py-2  w-100"
+          style={{ background: "#27AE60", border: "none", outline: "none" }}
+          onClick={togglePopup}
+        >
+          Edit
+        </button>
+      )}
 
       <div
         className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup
-            ? "translate(200%,-50%)"
-            : "translate(-50%, -50%)",
+          transform: showPopup ? "translate(200%,-50%)" : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000",
           height: "80vh",
@@ -501,11 +512,7 @@ export default function Resources({
           style={{ backgroundColor: "#F2F2F2" }}
         >
           <h3>Resources</h3>
-          <i
-            className="fa-solid fa-x"
-            style={{ cursor: "pointer" }}
-            onClick={togglePopup}
-          ></i>
+          <i className="fa-solid fa-x" style={{ cursor: "pointer" }} onClick={togglePopup}></i>
         </div>
 
         <div className="py-2 px-3 ">
@@ -516,8 +523,7 @@ export default function Resources({
               style={{
                 color: selectedOption === "files" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom:
-                  selectedOption === "files" ? "2px solid #3296D4" : "none",
+                borderBottom: selectedOption === "files" ? "2px solid #3296D4" : "none",
               }}
             >
               Files
@@ -528,8 +534,7 @@ export default function Resources({
               style={{
                 color: selectedOption === "images" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom:
-                  selectedOption === "images" ? "2px solid #3296D4" : "none",
+                borderBottom: selectedOption === "images" ? "2px solid #3296D4" : "none",
               }}
             >
               Images
@@ -540,8 +545,7 @@ export default function Resources({
               style={{
                 color: selectedOption === "links" ? "#3296D4" : "#A5A5A5",
                 border: 0,
-                borderBottom:
-                  selectedOption === "links" ? "2px solid #3296D4" : "none",
+                borderBottom: selectedOption === "links" ? "2px solid #3296D4" : "none",
               }}
             >
               Links
@@ -550,38 +554,32 @@ export default function Resources({
 
           <div className="my-2 overflow-y-auto overflow-x-hidden">
             {/* Upload Resources */}
-            {addResourcesSpeaker &&
-              (selectedOption === "files" || selectedOption === "images") && (
-                <div className="input-group p-1">
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="PassportImage"
-                    hidden
-                    multiple
-                    onChange={sendFiles}
-                  />
-                  <label
-                    className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
-                    htmlFor="PassportImage"
-                  >
-                    <img src={upload} alt="upload files" width="80px" />
-                    <div>
-                      <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
-                      </div>
-                      <div className="text-center my-0">
-                        or{" "}
-                        <p className="text-info d-inline text-decoration-down">
-                          upload
-                        </p>{" "}
-                        image
-                      </div>
+            {addResourcesSpeaker && (selectedOption === "files" || selectedOption === "images") && (
+              <div className="input-group p-1">
+                <input
+                  type="file"
+                  className="form-control"
+                  id="PassportImage"
+                  hidden
+                  multiple
+                  onChange={sendFiles}
+                />
+                <label
+                  className="input-group-box d-flex align-items-center justify-content-center border text-muted py-3 rounded  w-100"
+                  htmlFor="PassportImage"
+                >
+                  <img src={upload} alt="upload files" width="80px" />
+                  <div>
+                    <div className="text-center my-0">
+                      Drag and Drop image <p className="text-info d-inline">here</p>
                     </div>
-                  </label>
-                </div>
-              )}
+                    <div className="text-center my-0">
+                      or <p className="text-info d-inline text-decoration-down">upload</p> image
+                    </div>
+                  </div>
+                </label>
+              </div>
+            )}
 
             {/* Add Links */}
             {addResourcesSpeaker && selectedOption === "links" && (
