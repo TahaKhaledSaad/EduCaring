@@ -718,7 +718,7 @@ export default function LandingPage() {
         {/* End Contact US */}
 
         {/* Start Speaker */}
-        <div className="speakers" id="speakers">
+        <div className="landingSpeakers" id="speakers">
           <h2>Our speakers</h2>
 
           <div className="arrow">
