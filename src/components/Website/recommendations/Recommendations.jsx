@@ -11,28 +11,27 @@ import { PulseLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 
 export default function Recommendations() {
-  const [userId, setUserId] = useState(null);
   const [recommendEvents, setRecommendEvents] = useState([]);
   const [selectedType, setSelectedType] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [decodedToken, setDecodedToken] = useState({}); // Define decodedToken using useState
 
   const { i18n } = useTranslation();
   const cookie = new Cookie();
-
 
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = cookie.get("edu-caring");
     const decodedToken = token ? jwtDecode(token) : {};
-    setUserId(decodedToken.uid);
+    setDecodedToken(decodedToken); // Set decodedToken using useState
 
     if (decodedToken.uid) {
       axios
         .get(`${BASE}/Event/GetAllForApp`, {
           headers: {
-            UserId: userId,
+            UserId: decodedToken.uid,
             Language: i18n.language,
           },
           params: {
@@ -42,11 +41,12 @@ export default function Recommendations() {
         })
         .then((data) => {
           setRecommendEvents(data.data.responseObject?.events);
+          console.log(data);
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
-  }, [i18n.language, userId]);
+  }, [i18n.language, decodedToken.uid]); // Add 'cookie' to the dependency array
 
   console.log(recommendEvents);
   useEffect(() => {
@@ -102,7 +102,6 @@ export default function Recommendations() {
     const year = date.getFullYear();
     return `${day < 10 ? "0" + day : day} ${month}, ${year}`;
   };
-
 
   if (loading) {
     // Render loading spinner while loading is true

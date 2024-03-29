@@ -1,4 +1,13 @@
+.speakers {
+  width: 25% !important;
+}
 @media screen and (max-width: 992px) {
+  .event-info {
+    width: 95% !important;
+  }
+  .event-info .details {
+    width: 90% !important;
+  }
   .session-item {
     justify-content: center;
   }
@@ -9,7 +18,14 @@
     text-align: center !important;
     font-size: 15px !important;
   }
-  .speakers p{
+  .speakers p {
     font-size: 14px;
+  }
+  .speakers {
+    width: 75% !important;
+  }
+  .location .google-map {
+    width: 100% !important;
+    height: 200px;
   }
 }
