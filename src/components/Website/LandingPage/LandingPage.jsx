@@ -70,7 +70,7 @@ export default function LandingPage() {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 2,
-          infinite: true,
+          infinite: false,
           dots: true,
         },
       },

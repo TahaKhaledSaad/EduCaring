@@ -182,7 +182,6 @@ function EventDetails() {
                       {eventDetails.eventDays[selectedDayIndex].noOfAttend
                         ? eventDetails.eventDays[selectedDayIndex].noOfAttend
                         : 0}{" "}
-                        
                       Attendees
                     </span>
                     <span
@@ -373,7 +372,18 @@ function EventDetails() {
                 <div className="location py-2">
                   <h3>{i18n.language === "en" ? "Location" : "الموقع"}</h3>
                   <p style={{ fontSize: "14px", color: "#747688" }}>
-                    {eventDetails.eventDays[selectedDayIndex].address}
+                    {eventDetails.eventDays[selectedDayIndex].address}{" "}
+                    <a
+                      href={
+                        eventDetails.eventDays[selectedDayIndex].addressGPSLink
+                      }
+                      target="blank"
+                    >
+                      <i
+                        className="fa-solid fa-location-arrow text-primary fs-5"
+                        style={{ cursor: "pointer" }}
+                      ></i>
+                    </a>
                   </p>
 
                   <div

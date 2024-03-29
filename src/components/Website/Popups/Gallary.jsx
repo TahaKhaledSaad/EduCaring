@@ -6,7 +6,26 @@ import { useTranslation } from "react-i18next";
 
 export default function Gallary({ eventId, userId }) {
   const [eventImages, setEventImages] = useState([]);
+  const [showPopup, setShowPopup] = useState(true);
   const { i18n } = useTranslation();
+
+  // Add Modal to image
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(true);
+
+  const openPopup = (image) => {
+    setSelectedImage(image);
+    setPopupVisible(true);
+    setShowPopup(false);
+  };
+
+  const closePopup = () => {
+    setSelectedImage(null);
+    setPopupVisible(false);
+    setShowPopup(true);
+  };
+
   useEffect(() => {
     axios
       .get(`${BASE}/Event/GetForApp/${eventId}`, {
@@ -23,10 +42,8 @@ export default function Gallary({ eventId, userId }) {
       });
   }, [eventId, userId, i18n.language]);
 
-
-  const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {
-    setShowPopup(!showPopup);
+    setPopupVisible(!popupVisible);
   };
   return (
     <>
@@ -70,7 +87,7 @@ export default function Gallary({ eventId, userId }) {
       <div
         className=" bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
-          transform: showPopup
+          transform: popupVisible
             ? "translate(200%,-50%)"
             : "translate(-50%, -50%)",
           transition: "0.5s",
@@ -102,10 +119,49 @@ export default function Gallary({ eventId, userId }) {
               style={{ objectFit: "cover", boxShadow: "0px 0px 10px #666" }}
               height={"210px"}
               width={"248px"}
+              onClick={() => openPopup(image)}
             />
           ))}
         </div>
       </div>
+      {popupVisible && (
+        <div
+          className="custom-popup bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
+          style={{
+            transform: showPopup
+              ? "translate(200%,-50%)"
+              : "translate(-50%, -50%)",
+            transition: "0.5s",
+            zIndex: "1000000",
+            height: "60vh",
+            scrollbarWidth: "none",
+            boxShadow: "0px 0px 30px #666",
+            width: "60%",
+          }}
+        >
+          <div className="popup-content">
+            <div
+              className="d-flex justify-content-between align-items-center py-2 px-3"
+              style={{ backgroundColor: "#F2F2F2" }}
+            >
+              <h3>Zoomed Image</h3>
+              <i
+                className="fa-solid fa-x"
+                style={{ cursor: "pointer" }}
+                onClick={closePopup}
+              ></i>
+            </div>
+            {selectedImage && (
+              <img
+                src={selectedImage.displayImageURL}
+                alt="image"
+                className="rounded-3 d-block"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

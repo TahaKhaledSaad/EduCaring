@@ -179,7 +179,9 @@ export default function Community() {
                   className="rounded"
                 />
                 <div className="text">
-                  <h6>{item.eventData ? item.eventData?.name : "Admin"}</h6>
+                   <h6> {item.eventData?.name.split(" ").slice(0, 3).join(" ")}{" "}
+                          {item.eventData?.name.split(" ").length > 3 ? "..." : ""}</h6>
+                  {/* <h6>{item.eventData ? item.eventData?.name : "Admin"}</h6> */}
                   <p className="text-muted fs-11">
                     {item.messages[item.messages.length - 1]?.message}
                   </p>

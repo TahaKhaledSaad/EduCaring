@@ -34,7 +34,7 @@ function SideBar() {
     <>
       <div className="d-flex flex-column justify-content-between p-2 sideBar shadow-sm">
         <Link
-          to="/home"
+          to="/"
           className=""
           onClick={() => handleSetActiveLink("home")}
         >
