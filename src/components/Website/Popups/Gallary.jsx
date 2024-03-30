@@ -1,14 +1,8 @@
-import { useState, useEffect } from "react";
-import { BASE } from "../../../Api";
-import axios from "axios";
+import { useState } from "react";
 import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
 
-export default function Gallary({ eventId, userId }) {
-  const [eventImages, setEventImages] = useState([]);
+export default function Gallary({ eventImages }) {
   const [showPopup, setShowPopup] = useState(true);
-  const { i18n } = useTranslation();
-
   // Add Modal to image
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -25,22 +19,6 @@ export default function Gallary({ eventId, userId }) {
     setPopupVisible(false);
     setShowPopup(true);
   };
-
-  useEffect(() => {
-    axios
-      .get(`${BASE}/Event/GetForApp/${eventId}`, {
-        headers: {
-          UserId: userId,
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        setEventImages(response.data.responseObject.eventImages);
-      })
-      .catch((error) => {
-        console.error("Error fetching event details:", error);
-      });
-  }, [eventId, userId, i18n.language]);
 
   const togglePopup = () => {
     setPopupVisible(!popupVisible);
@@ -110,7 +88,7 @@ export default function Gallary({ eventId, userId }) {
           ></i>
         </div>
         <div className="d-flex flex-wrap gap-3 justify-content-center align-items-center my-2 p-2">
-          {eventImages.map((image) => (
+          {eventImages?.map((image) => (
             <img
               key={image.id}
               src={image.displayImageURL}
@@ -166,11 +144,5 @@ export default function Gallary({ eventId, userId }) {
   );
 }
 Gallary.propTypes = {
-  eventDayId: PropTypes.string.isRequired,
-};
-Gallary.propTypes = {
-  eventId: PropTypes.string.isRequired,
-};
-Gallary.propTypes = {
-  userId: PropTypes.string.isRequired,
+  eventImages: PropTypes.object.isRequired,
 };

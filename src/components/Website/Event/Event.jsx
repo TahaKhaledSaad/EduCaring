@@ -96,14 +96,18 @@ function EventDetails() {
     return { formattedDate, formattedTime };
   };
   const { startDay, endDay } = eventDetails;
-  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(startDay);
-  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(endDay);
+  const { formattedDate: startDate, formattedTime: startTime } =
+    formatDateTime(startDay);
+  const { formattedDate: endDate, formattedTime: endTime } =
+    formatDateTime(endDay);
 
   const uniqueSpeakers = {};
 
   const isValidImageUrl = (url) => {
     return (
-      url && !url.toLowerCase().endsWith("/null") && url.toLowerCase().startsWith("http" || "https")
+      url &&
+      !url.toLowerCase().endsWith("/null") &&
+      url.toLowerCase().startsWith("http" || "https")
     );
   };
 
@@ -153,7 +157,8 @@ function EventDetails() {
                 }`}
                 style={{
                   fontSize: "20px",
-                  backgroundColor: selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
+                  backgroundColor:
+                    selectedDayIndex === index ? "#3296D4" : "#F2F2F2",
                   color: selectedDayIndex === index ? "white" : "black",
                   cursor: "pointer",
                 }}
@@ -192,7 +197,12 @@ function EventDetails() {
                           color: "#6B0AB9",
                         }}
                       >
-                        ({eventDetails.eventDays[selectedDayIndex].numberOfReviews} reviews)
+                        (
+                        {
+                          eventDetails.eventDays[selectedDayIndex]
+                            .numberOfReviews
+                        }{" "}
+                        reviews)
                       </span>
                       <span className="m-0 fw-bold d-flex align-items-center gap-1">
                         <svg
@@ -207,15 +217,20 @@ function EventDetails() {
                             fill="#F7CB15"
                           />
                         </svg>
-                        {eventDetails.eventDays[selectedDayIndex].reviewRate.toFixed(1)}
+                        {eventDetails.eventDays[
+                          selectedDayIndex
+                        ].reviewRate.toFixed(1)}
                       </span>
                     </div>
-                    {eventDetails.eventDays[selectedDayIndex].isPaid || addResourcesSpeaker ? (
+                    {eventDetails.eventDays[selectedDayIndex].isPaid ||
+                    addResourcesSpeaker ? (
                       <>
                         {decodedToken.roles.includes("User") && (
                           <Resources
-                            eventId={eventId}
-                            eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                            eventDays={eventDetails.eventDays}
+                            eventDayId={
+                              eventDetails.eventDays[selectedDayIndex].id
+                            }
                             userId={decodedToken.uid}
                             addResourcesSpeaker={addResourcesSpeaker}
                             eventDaySpeakerId={eventDaySpeakerId}
@@ -238,9 +253,7 @@ function EventDetails() {
                     )}
                     {eventDetails.eventDays[selectedDayIndex].isPaid ? (
                       <Gallary
-                        eventId={eventId}
-                        eventDayId={eventDetails.eventDays[selectedDayIndex].id}
-                        userId={decodedToken.uid}
+                      eventImages={eventDetails.eventImages}
                       ></Gallary>
                     ) : (
                       ""
@@ -250,13 +263,15 @@ function EventDetails() {
                       <QrCode
                         eventId={eventId}
                         eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                        QR={eventDetails.eventDays[selectedDayIndex].qrCode}
                         userId={decodedToken.uid}
                       ></QrCode>
                     ) : (
                       ""
                     )}
 
-                    {!eventDetails.eventDays[selectedDayIndex].isPaid && !addResourcesSpeaker ? (
+                    {!eventDetails.eventDays[selectedDayIndex].isPaid &&
+                    !addResourcesSpeaker ? (
                       <Link
                         to={`/home/payment/${eventId}`}
                         className="p-1 border text-white text-center"
@@ -268,7 +283,8 @@ function EventDetails() {
                         }}
                       >
                         <span className="mx-1">
-                          Buy ticket {eventDetails.eventDays[selectedDayIndex].price} SAR
+                          Buy ticket{" "}
+                          {eventDetails.eventDays[selectedDayIndex].price} SAR
                         </span>
                         <svg
                           width="18"
@@ -305,7 +321,10 @@ function EventDetails() {
                     )}
                   </div>
 
-                  <div className="general my-3" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                  <div
+                    className="general my-3"
+                    style={{ borderBottom: "1px solid #DCDCDC" }}
+                  >
                     <h2>{eventDetails.eventDays[selectedDayIndex].name}</h2>
                     <div className="date my-3 d-flex gap-2 align-items-center">
                       <svg
@@ -315,7 +334,13 @@ function EventDetails() {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <rect width="48" height="48" rx="8" fill="#3296D4" fillOpacity="0.1" />
+                        <rect
+                          width="48"
+                          height="48"
+                          rx="8"
+                          fill="#3296D4"
+                          fillOpacity="0.1"
+                        />
                         <path
                           d="M28.75 15.56V14C28.75 13.59 28.41 13.25 28 13.25C27.59 13.25 27.25 13.59 27.25 14V15.5H20.75V14C20.75 13.59 20.41 13.25 20 13.25C19.59 13.25 19.25 13.59 19.25 14V15.56C16.55 15.81 15.24 17.42 15.04 19.81C15.02 20.1 15.26 20.34 15.54 20.34H32.46C32.75 20.34 32.99 20.09 32.96 19.81C32.76 17.42 31.45 15.81 28.75 15.56Z"
                           fill="#3296D4"
@@ -342,7 +367,10 @@ function EventDetails() {
                     </div>
                   </div>
 
-                  <div className="desc py-2" style={{ borderBottom: "1px solid #DCDCDC" }}>
+                  <div
+                    className="desc py-2"
+                    style={{ borderBottom: "1px solid #DCDCDC" }}
+                  >
                     <h3>{i18n.language === "en" ? "Description" : "الوصف"} </h3>
                     <span
                       style={{
@@ -351,7 +379,9 @@ function EventDetails() {
                         margin: "10px 0",
                       }}
                     >
-                      {showFullDescription ? description : words.slice(0, 40).join(" ")}
+                      {showFullDescription
+                        ? description
+                        : words.slice(0, 40).join(" ")}
                     </span>
                     {words.length > 40 && (
                       <button
@@ -383,7 +413,10 @@ function EventDetails() {
                           height: "100%",
                           borderRadius: "10px",
                         }}
-                        src={eventDetails.eventDays[selectedDayIndex].iFramAddressLink}
+                        src={
+                          eventDetails.eventDays[selectedDayIndex]
+                            .iFramAddressLink
+                        }
                         allowFullScreen={true}
                         aria-hidden="false"
                         tabIndex="0"
@@ -416,7 +449,9 @@ function EventDetails() {
                                 {s.speaker.displayProfileImage ? (
                                   <img
                                     src={
-                                      isValidImageUrl(s.speaker.displayProfileImage)
+                                      isValidImageUrl(
+                                        s.speaker.displayProfileImage
+                                      )
                                         ? s.speaker.displayProfileImage
                                         : ExMark
                                     }
@@ -443,7 +478,9 @@ function EventDetails() {
                                     </span>
                                   </div>
                                 )}
-                                <p className="text-dark text-center">{s.speaker.name}</p>
+                                <p className="text-dark text-center">
+                                  {s.speaker.name}
+                                </p>
                               </Link>
                             );
                           }
@@ -572,15 +609,21 @@ function EventDetails() {
                 }}
               >
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Attendance :</span> 06,07,08 March, 2023
+                  <span style={{ color: "#27AE60" }}>Attendance :</span>{" "}
+                  06,07,08 March, 2023
                 </p>
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Departure :</span> 13,17,18 March, 2023
+                  <span style={{ color: "#27AE60" }}>Departure :</span> 13,17,18
+                  March, 2023
                 </p>
               </div>
               <button
                 className="btn btn-success py-2  w-100"
-                style={{ background: "#27AE60", border: "none", outline: "none" }}
+                style={{
+                  background: "#27AE60",
+                  border: "none",
+                  outline: "none",
+                }}
               >
                 Edit
               </button>
@@ -630,13 +673,22 @@ function EventDetails() {
                 }}
               >
                 <p>
-                  Files <span style={{ color: "#747688", fontSize: "14px" }}>({filesNumber})</span>
+                  Files{" "}
+                  <span style={{ color: "#747688", fontSize: "14px" }}>
+                    ({filesNumber})
+                  </span>
                 </p>
                 <p>
-                  Links <span style={{ color: "#747688", fontSize: "14px" }}>({linksNumber})</span>
+                  Links{" "}
+                  <span style={{ color: "#747688", fontSize: "14px" }}>
+                    ({linksNumber})
+                  </span>
                 </p>
                 <p>
-                  Images <span style={{ color: "#747688", fontSize: "14px" }}>({imgsNumber})</span>
+                  Images{" "}
+                  <span style={{ color: "#747688", fontSize: "14px" }}>
+                    ({imgsNumber})
+                  </span>
                 </p>
               </div>
 

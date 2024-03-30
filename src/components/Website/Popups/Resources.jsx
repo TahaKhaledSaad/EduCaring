@@ -12,7 +12,7 @@ export let imgsNumber = 0;
 export let linksNumber = 0;
 
 export default function Resources({
-  eventId,
+  eventDays,
   eventDayId,
   userId,
   addResourcesSpeaker,
@@ -20,7 +20,6 @@ export default function Resources({
   sendId,
 }) {
   // [0] State Variables
-  const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
@@ -32,54 +31,40 @@ export default function Resources({
   // console.log(eventDaySpeakerId, sendId);
   // console.log(userId);
 
-  // [1] Fetch Event Days
-  useEffect(() => {
-    axios
-      .get(`${BASE}/Event/GetForApp/${eventId}`, {
-        headers: {
-          UserId: userId,
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        setEventDays(response.data.responseObject?.eventDays);
-      })
-      .catch((error) => {
-        console.error("Error fetching event details:", error);
-      });
-  }, [eventId, userId, i18n.language, link]);
-
   // [13] Function to get resources of the speaker
   useEffect(() => {
-    axios
-      .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
-        params: {
-          eventDayId: eventDaySpeakerId,
-        },
-        headers: {
-          UserId: userId,
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        console.log(
-          response.data.responseObject[0].eventDaySpeakerResorses.filter(
-            (item) => item.speakerId === decodedToken.uid
-          )
-        );
-        setSpeakerResourses(
-          response.data.responseObject[0].eventDaySpeakerResorses.filter(
-            (item) => item.speakerId === decodedToken.uid
-          )
-        );
-      });
+    if (addResourcesSpeaker) {
+      axios
+        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
+          params: {
+            eventDayId: eventDaySpeakerId,
+          },
+          headers: {
+            UserId: userId,
+            Language: i18n.language,
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          console.log(
+            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+              (item) => item.speakerId === decodedToken.uid
+            )
+          );
+          setSpeakerResourses(
+            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+              (item) => item.speakerId === decodedToken.uid
+            )
+          );
+        });
+    }
   }, [
     eventDayId,
     userId,
     i18n.language,
     decodedToken.uid,
     eventDaySpeakerId,
+    addResourcesSpeaker,
     flag,
   ]);
 
@@ -87,7 +72,7 @@ export default function Resources({
   const selectedEventDay = eventDays?.find(
     (day) => day.id === parseInt(eventDayId)
   );
-
+  // console.log(selectedEventDay);
   // [3] Speakers
   const [speakers, setSpeakers] = useState([]);
   const [resources, setResources] = useState([]);
@@ -100,6 +85,8 @@ export default function Resources({
       setSpeakers([]);
     }
   }, [eventDays, eventDayId, selectedEventDay]);
+
+  // console.log(speakers);
 
   // [5] Update Resources
   useEffect(() => {
@@ -637,21 +624,6 @@ export default function Resources({
               </div>
             )}
 
-            {/* Send Button */}
-            {/* {addResourcesSpeaker && (
-              <button
-                className="btn btn-success px-4 py-2 my-2 w-100"
-                style={{
-                  backgroundColor: "#27AE60",
-                  border: "none",
-                  outline: "none",
-                  borderRadius: "10px",
-                }}
-              >
-                Send
-              </button>
-            )} */}
-
             {/* User */}
             {selectedOption === "files" &&
               files.map((file, index) => (
@@ -760,4 +732,7 @@ Resources.propTypes = {
 };
 Resources.propTypes = {
   sendId: PropTypes.number.isRequired,
+};
+Resources.propTypes = {
+  eventDays: PropTypes.object.isRequired,
 };

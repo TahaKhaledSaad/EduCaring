@@ -1,34 +1,7 @@
-import { useState, useEffect } from "react";
-import { BASE } from "../../../Api";
-import axios from "axios";
+import { useState } from "react";
 import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
 
-export default function QrCode({ eventId, userId, eventDayId }) {
-  const [eventDays, setEventDays] = useState([]);
-  const { i18n } = useTranslation();
-  useEffect(() => {
-    axios
-      .get(`${BASE}/Event/GetForApp/${eventId}`, {
-        headers: {
-          UserId: userId,
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        setEventDays(response.data.responseObject?.eventDays);
-      })
-      .catch((error) => {
-        console.error("Error fetching event details:", error);
-      });
-  }, [eventId, userId, i18n.language]);
-
-  // console.log(eventDays);
-
-  const selectedEventDay = eventDays?.find(
-    (day) => day.id === parseInt(eventDayId)
-  );
-
+export default function QrCode({ QR }) {
   const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -88,7 +61,7 @@ export default function QrCode({ eventId, userId, eventDayId }) {
         </div>
         <div className="d-flex justify-content-center align-items-center">
           <img
-            src={selectedEventDay?.qrCode}
+            src={QR}
             alt="qr code"
             style={{ width: "200px", height: "200px" }}
           />
@@ -125,7 +98,7 @@ export default function QrCode({ eventId, userId, eventDayId }) {
               </head>
                 <body>
                 <div class="code">
-                <img src=${selectedEventDay?.qrCode} alt="qr code" style="width: 200px; height: 200px;"/>
+                <img src=${QR} alt="qr code" style="width: 200px; height: 200px;"/>
                 </div>
                 <p>verified by @EduCaring</p>
                 </body>
@@ -156,11 +129,5 @@ export default function QrCode({ eventId, userId, eventDayId }) {
   );
 }
 QrCode.propTypes = {
-  eventDayId: PropTypes.string.isRequired,
-};
-QrCode.propTypes = {
-  eventId: PropTypes.string.isRequired,
-};
-QrCode.propTypes = {
-  userId: PropTypes.string.isRequired,
+  QR: PropTypes.string.isRequired,
 };
