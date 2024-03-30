@@ -169,7 +169,7 @@ export default function Login() {
                 </div>
 
                 <div
-                  className="text-muted m-0"
+                  className="text-muted forgetPassword"
                   style={{
                     textDecoration: "underline",
                     textAlign: "right",
@@ -196,7 +196,7 @@ export default function Login() {
 
                 <button className="my-4">Sign In</button>
                 <p className="m-0 p-0 my-3 fs-6">
-                  I have an Account? &nbsp;
+                Don’t have an account? &nbsp;
                   <Link onClick={() => setRole(!role)} className="fw-bold">
                     Sign Up
                   </Link>
