@@ -323,23 +323,25 @@ export default function LandingPage() {
           <div className="ellips2"></div>
           <div className="ellips3"></div>
           <div className="landing">
-            <div className="text">
+           <div className="p-3 mx-3 d-flex flex-column justify-content-around align-items-center align-items-md-start gap-3">
+           <div className="text">
               <h1>
                 Welcome To <span>Edu Caring</span>
               </h1>
-              <span className="d-block">{text.welcomeDescription}</span>
-              {!decodedToken.uid && (
+              <span className="d-block">{text.welcomeDescription} {text.welcomeDescription} </span>
+             
+            </div>
+            {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>
                   Register <i className="fas fa-chevron-right"></i>
                 </a>
               )}
-            </div>
-
+           </div>
             <div className="images">
               <div>
                 <img
                   src={landing1}
-                  className="landing1"
+                  className="landin g1"
                   width="200px"
                   height="397px"
                   alt="landing1"
