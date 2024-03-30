@@ -35,28 +35,28 @@ export default function Resources({
   useEffect(() => {
     if (addResourcesSpeaker) {
       axios
-        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
-          params: {
-            eventDayId: eventDaySpeakerId,
-          },
-          headers: {
-            UserId: userId,
-            Language: i18n.language,
-          },
-        })
-        .then((response) => {
-          // console.log(response);
-          console.log(
-            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-              (item) => item.speakerId === decodedToken.uid
-            )
-          );
-          setSpeakerResourses(
-            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-              (item) => item.speakerId === decodedToken.uid
-            )
-          );
-        });
+      .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
+        params: {
+          eventDayId: eventDaySpeakerId,
+        },
+        headers: {
+          UserId: userId,
+          Language: i18n.language,
+        },
+      })
+      .then((response) => {
+        // console.log(response);
+        console.log(
+          response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+            (item) => item.speakerId === decodedToken.uid
+          )
+        );
+        setSpeakerResourses(
+          response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+            (item) => item.speakerId === decodedToken.uid
+          )
+        );
+      });
     }
   }, [
     eventDayId,

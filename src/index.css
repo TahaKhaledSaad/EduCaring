@@ -87,7 +87,7 @@ i {
 
 @media screen and (max-width: 991px) {
   .topbar {
-    width: 100%;
+    width: calc(100% - 60px) !important
   }
   .sideBar {
     height: calc(100vh);
@@ -915,4 +915,7 @@ i {
     margin-left: 10px;
     color: #007bff;
   }
+}
+tr{
+  border-color: transparent;
 }

@@ -14,7 +14,7 @@
   .session-item h4 {
     display: none;
   }
-  h5 {
+  .event-comp h5 {
     text-align: center !important;
     font-size: 15px !important;
   }

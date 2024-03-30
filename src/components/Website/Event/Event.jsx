@@ -14,6 +14,7 @@ import Gallary from "./../Popups/Gallary";
 import QrCode from "./../Popups/QrCode";
 import { PulseLoader } from "react-spinners";
 import { filesNumber, imgsNumber, linksNumber } from "./../Popups/Resources"; // Update the path accordingly
+import SpeakerTicket from "../Popups/SpeakerTicket";
 
 // Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
@@ -130,6 +131,43 @@ function EventDetails() {
       sendId = speaker.id;
     }
   });
+
+  // Date on the box of ticket
+
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // Check if dateString is undefined or null
+
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    const formattedDate = `${day < 10 ? "0" + day : day} ${month.slice(
+      0,
+      3
+    )}, ${year}`;
+
+    return formattedDate;
+  };
+
+  // Test the function with your date string
+  const inputDateString = eventDetails?.startDay;
+  const formattedDateString = formatDate(inputDateString);
 
   return (
     <>
@@ -252,9 +290,7 @@ function EventDetails() {
                       ""
                     )}
                     {eventDetails.eventDays[selectedDayIndex].isPaid ? (
-                      <Gallary
-                      eventImages={eventDetails.eventImages}
-                      ></Gallary>
+                      <Gallary eventImages={eventDetails.eventImages}></Gallary>
                     ) : (
                       ""
                     )}
@@ -564,15 +600,75 @@ function EventDetails() {
           </span>
 
           <div
+            className="d-flex p-1 rounded gap-2 align-items-center mx-3
+              my-4 col-11 col-md-6 col-lg-5 "
+            style={{ boxShadow: "0 0 12px rgba(0, 0, 0, 0.1)" }}
+          >
+            <img
+              src={eventDetails?.displayPrimeImageURL}
+              alt="eventImg"
+              width={"90px"}
+              height={"90px"}
+              className="rounded"
+            />
+            <div className="flex-grow-1 ">
+              <h5 style={{ fontWeight: "900" }}>
+                {eventDetails.name.split(" ").slice(0, 5).join(" ")}{" "}
+                {eventDetails.name.split(" ").length > 3 ? "..." : ""}
+              </h5>
+              <p className="m-0">
+                <span className="px-1">
+                  <svg
+                    width="14"
+                    height="15"
+                    viewBox="0 0 14 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9.77089 2.57666V1.66666C9.77089 1.42749 9.57255 1.22916 9.33339 1.22916C9.09422 1.22916 8.89589 1.42749 8.89589 1.66666V2.54166H5.10422V1.66666C5.10422 1.42749 4.90589 1.22916 4.66672 1.22916C4.42755 1.22916 4.22922 1.42749 4.22922 1.66666V2.57666C2.65422 2.72249 1.89005 3.66166 1.77339 5.05582C1.76172 5.22499 1.90172 5.36499 2.06505 5.36499H11.9351C12.1042 5.36499 12.2442 5.21916 12.2267 5.05582C12.1101 3.66166 11.3459 2.72249 9.77089 2.57666Z"
+                      fill="#565656"
+                    />
+                    <path
+                      d="M11.6667 6.23999H2.33333C2.0125 6.23999 1.75 6.50249 1.75 6.82332V10.4167C1.75 12.1667 2.625 13.3333 4.66667 13.3333H9.33333C11.375 13.3333 12.25 12.1667 12.25 10.4167V6.82332C12.25 6.50249 11.9875 6.23999 11.6667 6.23999ZM5.3725 11.1225C5.31417 11.175 5.25 11.2158 5.18 11.245C5.11 11.2742 5.03417 11.2917 4.95833 11.2917C4.8825 11.2917 4.80667 11.2742 4.73667 11.245C4.66667 11.2158 4.6025 11.175 4.54417 11.1225C4.43917 11.0117 4.375 10.86 4.375 10.7083C4.375 10.5567 4.43917 10.405 4.54417 10.2942C4.6025 10.2417 4.66667 10.2008 4.73667 10.1717C4.87667 10.1133 5.04 10.1133 5.18 10.1717C5.25 10.2008 5.31417 10.2417 5.3725 10.2942C5.4775 10.405 5.54167 10.5567 5.54167 10.7083C5.54167 10.86 5.4775 11.0117 5.3725 11.1225ZM5.495 8.88832C5.46583 8.95832 5.425 9.02249 5.3725 9.08082C5.31417 9.13332 5.25 9.17416 5.18 9.20332C5.11 9.23249 5.03417 9.24999 4.95833 9.24999C4.8825 9.24999 4.80667 9.23249 4.73667 9.20332C4.66667 9.17416 4.6025 9.13332 4.54417 9.08082C4.49167 9.02249 4.45083 8.95832 4.42167 8.88832C4.3925 8.81832 4.375 8.74249 4.375 8.66666C4.375 8.59082 4.3925 8.51499 4.42167 8.44499C4.45083 8.37499 4.49167 8.31082 4.54417 8.25249C4.6025 8.19999 4.66667 8.15916 4.73667 8.12999C4.87667 8.07166 5.04 8.07166 5.18 8.12999C5.25 8.15916 5.31417 8.19999 5.3725 8.25249C5.425 8.31082 5.46583 8.37499 5.495 8.44499C5.52417 8.51499 5.54167 8.59082 5.54167 8.66666C5.54167 8.74249 5.52417 8.81832 5.495 8.88832ZM7.41417 9.08082C7.35583 9.13332 7.29167 9.17416 7.22167 9.20332C7.15167 9.23249 7.07583 9.24999 7 9.24999C6.92417 9.24999 6.84833 9.23249 6.77833 9.20332C6.70833 9.17416 6.64417 9.13332 6.58583 9.08082C6.48083 8.96999 6.41667 8.81832 6.41667 8.66666C6.41667 8.51499 6.48083 8.36332 6.58583 8.25249C6.64417 8.19999 6.70833 8.15916 6.77833 8.12999C6.91833 8.06582 7.08167 8.06582 7.22167 8.12999C7.29167 8.15916 7.35583 8.19999 7.41417 8.25249C7.51917 8.36332 7.58333 8.51499 7.58333 8.66666C7.58333 8.81832 7.51917 8.96999 7.41417 9.08082Z"
+                      fill="#565656"
+                    />
+                  </svg>
+                </span>
+                {formattedDateString}
+              </p>
+              <p>
+                <span className="px-1">
+                  <svg
+                    width="14"
+                    height="15"
+                    viewBox="0 0 14 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12.0284 5.42918C11.4159 2.73418 9.06506 1.52084 7.00006 1.52084C7.00006 1.52084 7.00006 1.52084 6.99422 1.52084C4.93506 1.52084 2.57839 2.72834 1.96589 5.42334C1.28339 8.43334 3.12672 10.9825 4.79506 12.5867C5.41339 13.1817 6.20672 13.4792 7.00006 13.4792C7.79339 13.4792 8.58672 13.1817 9.19922 12.5867C10.8676 10.9825 12.7109 8.43918 12.0284 5.42918ZM7.00006 8.35168C5.98506 8.35168 5.16256 7.52918 5.16256 6.51418C5.16256 5.49918 5.98506 4.67668 7.00006 4.67668C8.01506 4.67668 8.83756 5.49918 8.83756 6.51418C8.83756 7.52918 8.01506 8.35168 7.00006 8.35168Z"
+                      fill="#565656"
+                    />
+                  </svg>
+                </span>
+                {eventDetails?.eventDays[selectedDayIndex]?.address
+                  ? eventDetails?.eventDays[selectedDayIndex]?.address
+                  : eventDetails?.eventDays[0]?.address}
+              </p>
+            </div>
+          </div>
+
+          <div
             className="d-flex justify-content-around align-items-center p-3 gap-3 flex-wrap"
-            style={{ height: "75vh" }}
+
           >
             {/* Box */}
             <div
+            className="col-11 col-md-6 col-lg-4"
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                minWidth: "350px",
                 height: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",
@@ -617,23 +713,14 @@ function EventDetails() {
                   March, 2023
                 </p>
               </div>
-              <button
-                className="btn btn-success py-2  w-100"
-                style={{
-                  background: "#27AE60",
-                  border: "none",
-                  outline: "none",
-                }}
-              >
-                Edit
-              </button>
+              <SpeakerTicket></SpeakerTicket>
             </div>
             {/* Box */}
             <div
+            className="col-11 col-md-6 col-lg-4"
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                minWidth: "350px",
                 height: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",

@@ -194,7 +194,11 @@ export default function Home() {
             }
 
             <div className="coming-events">
-              <h3 className="fw-bold mb-4">Upcoming Events</h3>
+              <h3 className="fw-bold mb-4">
+                {decodedToken.roles.includes("Speaker")
+                  ? "My Events"
+                  : "Upcoming Events"}{" "}
+              </h3>
 
               {events?.length === 0 ? (
                 <div className="d-flex justify-content-center align-items-center flex-column gap-3">
@@ -428,65 +432,71 @@ export default function Home() {
                 </div>
               )}
             </div>
-
-            <div className="recommend mb-3">
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center px-3 my-3">
-                <h4 className="fw-bold mb-4">Recommendations for you</h4>
-                <Link
-                  to="recommendations"
-                  style={{ fontSize: "14px", color: "#3296D4", alignSelf:"end" }}
-                >
-                  See All
-                </Link>
-              </div>
-              <div className="events d-flex gap-4 px-3 flex-wrap justify-content-start align-items-center">
-                {recommendEvents.slice(0, 3).map((event) => (
+            {!decodedToken.roles.includes("Speaker") && (
+              <div className="recommend mb-3">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center px-3 my-3">
+                  <h4 className="fw-bold mb-4">Recommendations for you</h4>
                   <Link
-                    key={event.id}
-                    className="event"
-                    to={`event/${event.id}`}
+                    to="recommendations"
+                    style={{
+                      fontSize: "14px",
+                      color: "#3296D4",
+                      alignSelf: "end",
+                    }}
                   >
-                    <img src={event.displayPrimeImageURL} alt="event-Img" />
-
-                    <div className="info">
-                      <h6>
-                        {i18n.language === "en"
-                          ? event.nameEn.split(" ").slice(0, 3).join(" ") +
-                            (event.nameEn.split(" ").length > 3 ? "..." : "")
-                          : event.nameAr.split(" ").slice(0, 3).join(" ") +
-                            (event.nameAr.split(" ").length > 3 ? "..." : "")}
-                      </h6>
-                      <p>
-                        <i className="fa-solid fa-calendar-days"></i>
-                        05 Mars, 2023
-                      </p>
-                      <p>
-                        <i className="bi bi-geo-alt-fill"></i>
-                        {event.eventDays[0].address
-                          .split(" ")
-                          .slice(0, 2)
-                          .join(" ") +
-                          (event.eventDays[0].address.split(" ").length > 3
-                            ? "..."
-                            : "")}
-                      </p>
-                      <div className="btns my-2">
-                        {event.isOnline && (
-                          <span className="online">
-                            {i18n.language === "en" ? "Online" : "بث مباشر"}
-                          </span>
-                        )}
-                        {event.isOffline && (
-                          <span className="offline">
-                            {i18n.language === "en" ? "Offline" : "مكان محدد"}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                    See All
                   </Link>
-                ))}
+                </div>
+
+                <div className="events d-flex gap-4 px-3 flex-wrap justify-content-start align-items-center">
+                  {recommendEvents.slice(0, 3).map((event) => (
+                    <Link
+                      key={event.id}
+                      className="event"
+                      to={`event/${event.id}`}
+                    >
+                      <img src={event.displayPrimeImageURL} alt="event-Img" />
+
+                      <div className="info">
+                        <h6>
+                          {i18n.language === "en"
+                            ? event.nameEn.split(" ").slice(0, 3).join(" ") +
+                              (event.nameEn.split(" ").length > 3 ? "..." : "")
+                            : event.nameAr.split(" ").slice(0, 3).join(" ") +
+                              (event.nameAr.split(" ").length > 3 ? "..." : "")}
+                        </h6>
+                        <p>
+                          <i className="fa-solid fa-calendar-days"></i>
+                          05 Mars, 2023
+                        </p>
+                        <p>
+                          <i className="bi bi-geo-alt-fill"></i>
+                          {event.eventDays[0].address
+                            .split(" ")
+                            .slice(0, 2)
+                            .join(" ") +
+                            (event.eventDays[0].address.split(" ").length > 3
+                              ? "..."
+                              : "")}
+                        </p>
+                        <div className="btns my-2">
+                          {event.isOnline && (
+                            <span className="online">
+                              {i18n.language === "en" ? "Online" : "بث مباشر"}
+                            </span>
+                          )}
+                          {event.isOffline && (
+                            <span className="offline">
+                              {i18n.language === "en" ? "Offline" : "مكان محدد"}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
         <Outlet />
