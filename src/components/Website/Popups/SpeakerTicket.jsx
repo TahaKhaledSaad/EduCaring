@@ -66,7 +66,11 @@ export default function SpeakerTicket() {
     days.forEach((day, index) => {
       cells.push(day);
       if ((index + 1) % 7 === 0 || index === days.length - 1) {
-        rows.push(<tr key={index / 7}>{cells}</tr>);
+        rows.push(
+          <tr key={index / 7} onClick={dayFunc} style={{cursor: 'pointer', margin:'5px'}}>
+            {cells}
+          </tr>
+        );
         cells = [];
       }
     });
@@ -84,10 +88,59 @@ export default function SpeakerTicket() {
 
   // state for the radio buttons
   const [selectedOption, setSelectedOption] = useState("Attendance");
+  const selectedDate = [];
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
+
+  const selectedDay = [];
+  // Print Day
+  const dayFunc = (e) => {
+    console.log(e.target.innerText);
+    if (selectedDay.length === 0) {
+      selectedDay.push(e.target.innerText);
+      selectedDate.push(
+        `${e.target.innerText}/${date.getMonth() + 1}/${date.getFullYear()}`
+      );
+    } else {
+      for (let i = 0; i < selectedDay.length; i++) {
+        if (!selectedDay.includes(e.target.innerText)) {
+          selectedDay.push(e.target.innerText);
+          selectedDate.push(
+            `${e.target.innerText}/${date.getMonth() + 1}/${date.getFullYear()}`
+          );
+        }
+      }
+    }
+    console.log(selectedDay);
+    console.log(selectedDate);
+  };
+
+
+  const s = [
+    "11/3/2024",
+    "13/3/2024"
+]
+,v=[
+  "20/3/2024"
+]
+
+const formattedDates = s.map(dateString => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    // Months in JavaScript Date object are zero-based, so subtract 1 from the month
+    const date = new Date(year, month - 1, day);
+    // Format the date into "YYYY-MM-DDTHH:MM:SS" format
+    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+    return formattedDate;
+});
+
+console.log(formattedDates);
+
+  
+
+  
+
 
   return (
     <>

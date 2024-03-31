@@ -78,7 +78,7 @@ function EventDetails() {
     );
   }
 
-  console.log(eventDetails);
+  // console.log(eventDetails);
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
