@@ -1,6 +1,50 @@
-.container {
-  margin: 30px 50px;
+@media (min-width: 375px) {
+  .container {
+    margin: 30px 50px;
+  }
+  .form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin: auto;
+    margin-bottom: 30px;
+  }
+  button[type="submit"] {
+    width: 320px;
+    border: none;
+    padding: 10px 5px;
+    border-radius: 10px;
+    background-color: #3296d4;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 20px;
+  }
 }
+
+@media (max-width: 375px) {
+  .container {
+    margin: 30px 10px;
+  }
+  .form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 0fr));
+    gap: 30px;
+    margin: auto;
+    margin-bottom: 30px;
+  }
+  button[type="submit"] {
+    width: 270px;
+    border: none;
+    padding: 10px 5px;
+    border-radius: 10px;
+    background-color: #3296d4;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 20px;
+  }
+}
+
+
 .container .header {
   display: flex;
   justify-content: space-between;
@@ -51,13 +95,7 @@
   }
 }
 
-.form {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  margin: auto;
-  margin-bottom: 30px;
-}
+
 
 .form .input {
   height: 60px;
@@ -134,16 +172,7 @@ textarea {
   color: #dcdcdc;
   cursor: pointer;
 }
-button[type="submit"] {
-  width: 320px;
-  border: none;
-  padding: 10px 5px;
-  border-radius: 10px;
-  background-color: #3296d4;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 20px;
-}
+
 
 textarea {
   width: 100%;
