@@ -1,25 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BASE } from "../../../Api";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 
-export default function SpeakerTicket() {
-  const { i18n } = useTranslation();
+export default function SpeakerTicket({ sendId }) {
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
+  const [cityTO, setCityTO] = useState("");
+  const [cityFrom, setCityFrom] = useState("");
+  const [confirm, setConfirm] = useState(false);
 
   // Show popup
 
   const [showPopup, setShowPopup] = useState(true);
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
 
-  //   build the popup for the speaker to book tickets (calender)
+  //   build the popup for the speaker to book tickets (calendar)
 
   const [date, setDate] = useState(new Date());
 
@@ -57,7 +55,21 @@ export default function SpeakerTicket() {
     }
 
     for (let day = 1; day <= totalDays; day++) {
-      days.push(<td key={day}>{day}</td>);
+      days.push(
+        <td
+          key={day}
+          style={{
+            cursor: "pointer",
+            textAlign: "center",
+
+            padding: 0,
+            margin: "5px",
+            lineHeight: "30px",
+          }}
+        >
+          {day}
+        </td>
+      );
     }
 
     const rows = [];
@@ -67,7 +79,7 @@ export default function SpeakerTicket() {
       cells.push(day);
       if ((index + 1) % 7 === 0 || index === days.length - 1) {
         rows.push(
-          <tr key={index / 7} onClick={dayFunc} style={{cursor: 'pointer', margin:'5px'}}>
+          <tr key={index / 7} onClick={dayFunc}>
             {cells}
           </tr>
         );
@@ -96,52 +108,103 @@ export default function SpeakerTicket() {
 
   const selectedDay = [];
   // Print Day
-  const dayFunc = (e) => {
-    console.log(e.target.innerText);
-    if (selectedDay.length === 0) {
-      selectedDay.push(e.target.innerText);
+  const [formattedDates, setFormattedDates] = useState([]); // ["2022-01-01T00:00:00", "2022-01-02T00:00:00"
+  let dayFunc;
+
+  dayFunc = (e) => {
+    const selectedDayText = e.target.innerText;
+    const selectedIndex = selectedDay.indexOf(selectedDayText);
+
+    if (selectedIndex === -1) {
+      // If the selected day is not already in the array, add it
+      e.target.classList.add("selectedtr");
+      selectedDay.push(selectedDayText);
       selectedDate.push(
-        `${e.target.innerText}/${date.getMonth() + 1}/${date.getFullYear()}`
+        `${selectedDayText}/${date.getMonth() + 1}/${date.getFullYear()}`
       );
     } else {
-      for (let i = 0; i < selectedDay.length; i++) {
-        if (!selectedDay.includes(e.target.innerText)) {
-          selectedDay.push(e.target.innerText);
-          selectedDate.push(
-            `${e.target.innerText}/${date.getMonth() + 1}/${date.getFullYear()}`
+      // If the selected day is already in the array, remove it
+      e.target.classList.remove("selectedtr");
+      selectedDay.splice(selectedIndex, 1);
+      selectedDate.splice(selectedIndex, 1);
+    }
+
+    selectedDate.map((dateString) => {
+      const [day, month, year] = dateString.split("/").map(Number);
+      // Months in JavaScript Date object are zero-based, so subtract 1 from the month
+      const date = new Date(year, month - 1, day);
+      // Format the date into "YYYY-MM-DDTHH:MM:SS" format
+      const formattedDate = date.toISOString().slice(0, 19).replace(" ", "T");
+      setFormattedDates((prev) => [...prev, formattedDate]);
+    });
+
+    console.log(formattedDates);
+  };
+
+  console.log(formattedDates);
+
+  const handleConfirm = async () => {
+    if (formattedDates.length >= 3 && cityTO && cityFrom) {
+      setConfirm(true);
+      setCityTO(""); // Clear input value
+      setCityFrom(""); // Clear input value
+      setFormattedDates([]); // Clear formattedDates array
+      // Remove added styles
+      const selectedElements = document.querySelectorAll(".selectedtr");
+      selectedElements.forEach((element) => {
+        element.classList.remove("selectedtr");
+      });
+
+      const sendedArray = formattedDates.map((date) => {
+        return {
+          id: 0,
+          eventDaySpeakerId: sendId,
+          speakerId: decodedToken.uid,
+          dayMod: "Am",
+          departureDay: selectedOption === "Departure" ? date : null,
+          attendDay: selectedOption === "Attendance" ? date : null,
+          cityDepartureFrom: selectedOption === "Departure" ? cityFrom : null,
+          cityDepartureTo: selectedOption === "Departure" ? cityTO : null,
+          cityAttendFrom: selectedOption === "Attendance" ? cityFrom : null,
+          cityAttendTo: selectedOption === "Attendance" ? cityTO : null,
+        };
+      });
+
+      if (
+        (selectedOption === "Departure" && formattedDates.length >= 3) ||
+        (selectedOption === "Attendance" && formattedDates.length >= 3)
+      ) {
+        try {
+          const response = await axios.put(
+            selectedOption === "Departure"
+              ? `${BASE}/SpeakerDeparture`
+              : `${BASE}/SpeakerAttend`,
+            sendedArray
           );
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setConfirm(false); // Set confirm back to false after request is sent
         }
       }
     }
-    console.log(selectedDay);
-    console.log(selectedDate);
+    setShowPopup(!showPopup);
   };
 
-
-  const s = [
-    "11/3/2024",
-    "13/3/2024"
-]
-,v=[
-  "20/3/2024"
-]
-
-const formattedDates = s.map(dateString => {
-    const [day, month, year] = dateString.split('/').map(Number);
-    // Months in JavaScript Date object are zero-based, so subtract 1 from the month
-    const date = new Date(year, month - 1, day);
-    // Format the date into "YYYY-MM-DDTHH:MM:SS" format
-    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
-    return formattedDate;
-});
-
-console.log(formattedDates);
-
-  
-
-  
-
-
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+    if (!showPopup) {
+      setCityTO(""); // Clear input value
+      setCityFrom(""); // Clear input value
+      setFormattedDates([]); // Clear formattedDates array
+      // Remove added styles
+      const selectedElements = document.querySelectorAll(".selectedtr");
+      selectedElements.forEach((element) => {
+        element.classList.remove("selectedtr");
+      });
+    }
+  };
   return (
     <>
       <button
@@ -153,7 +216,7 @@ console.log(formattedDates);
       </button>
 
       <div
-        className=" w-50 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
+        className=" w-75 bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
         style={{
           transform: showPopup
             ? "translate(300%, -50%)"
@@ -177,51 +240,73 @@ console.log(formattedDates);
           ></i>
         </div>
 
-        <div className="popup-body d-flex justify-content-between align-items-center p-2 px-4 h-75">
-          <div className="d-flex flex-column align-items-center w-50">
-            <div
-              className="border rounded p-2 my-2"
-              style={{
-                width: "140px",
-                color: selectedOption === "Attendance" ? "#27AE60" : "",
-                backgroundColor:
-                  selectedOption === "Attendance" ? "#27AE601A" : "",
-                borderColor: selectedOption === "Attendance" ? "#27AE60" : "",
-              }}
-            >
-              <label htmlFor="attendance">
+        <div className="popup-body d-flex flex-column flex-md-row justify-content-between align-items-center p-2 px-4 my-3">
+          <div className="w-50">
+            <div className="d-flex gap-2 flex-column">
+              <div className="w-50">
+                <p className="m-0">city to</p>
                 <input
-                  type="radio"
-                  hidden
-                  value="Attendance"
-                  checked={selectedOption === "Attendance"}
-                  onChange={handleOptionChange}
-                  id="attendance"
+                  type="text"
+                  className="border rounded p-2"
+                  value={cityTO}
+                  onChange={(e) => setCityTO(e.target.value)}
                 />
-                <i className="fa-regular fa-circle-check px-2"></i> Attendance
-              </label>
+              </div>
+              <div className="w-50">
+                <p className="m-0">city from </p>
+                <input
+                  type="text"
+                  className="border rounded p-2"
+                  value={cityFrom}
+                  onChange={(e) => setCityFrom(e.target.value)}
+                />
+              </div>
             </div>
-            <div
-              className="border rounded p-2 my-2"
-              style={{
-                width: "140px",
-                color: selectedOption === "Departure" ? "#27AE60" : "",
-                backgroundColor:
-                  selectedOption === "Departure" ? "#27AE601A" : "",
-                borderColor: selectedOption === "Departure" ? "#27AE60" : "",
-              }}
-            >
-              <label htmlFor="departure">
-                <input
-                  type="radio"
-                  hidden
-                  value="Departure"
-                  checked={selectedOption === "Departure"}
-                  onChange={handleOptionChange}
-                  id="departure"
-                />
-                <i className="fa-regular fa-circle-check px-2"></i> Departure
-              </label>
+            <div className="d-flex gap-2 align-items-center my-2">
+              <div
+                className="border rounded p-2 my-2"
+                style={{
+                  width: "140px",
+                  color: selectedOption === "Attendance" ? "#27AE60" : "",
+                  backgroundColor:
+                    selectedOption === "Attendance" ? "#27AE601A" : "",
+                  borderColor: selectedOption === "Attendance" ? "#27AE60" : "",
+                }}
+              >
+                <label htmlFor="attendance">
+                  <input
+                    type="radio"
+                    hidden
+                    value="Attendance"
+                    checked={selectedOption === "Attendance"}
+                    onChange={handleOptionChange}
+                    id="attendance"
+                  />
+                  <i className="fa-regular fa-circle-check px-2"></i> Attendance
+                </label>
+              </div>
+              <div
+                className="border rounded p-2 my-2"
+                style={{
+                  width: "140px",
+                  color: selectedOption === "Departure" ? "#27AE60" : "",
+                  backgroundColor:
+                    selectedOption === "Departure" ? "#27AE601A" : "",
+                  borderColor: selectedOption === "Departure" ? "#27AE60" : "",
+                }}
+              >
+                <label htmlFor="departure">
+                  <input
+                    type="radio"
+                    hidden
+                    value="Departure"
+                    checked={selectedOption === "Departure"}
+                    onChange={handleOptionChange}
+                    id="departure"
+                  />
+                  <i className="fa-regular fa-circle-check px-2"></i> Departure
+                </label>
+              </div>
             </div>
           </div>
 
@@ -243,7 +328,9 @@ console.log(formattedDates);
               <thead>
                 <tr style={{ borderStyle: "none" }}>
                   {daysOfWeek.map((day) => (
-                    <th key={day}>{day}</th>
+                    <th key={day} style={{ margin: "5px" }}>
+                      {day}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -252,16 +339,16 @@ console.log(formattedDates);
           </div>
         </div>
 
-        <div className="d-flex justify-content-between align-items-center p-2 px-4 gap-3">
+        <div className="d-flex justify-content-between align-items-center p-2 px-4 gap-3 my-2">
           <button
             className="w-50 border-0 rounded text-white py-2"
             style={{
-              backgroundColor: "#DCDCDC",
+              backgroundColor:
+                formattedDates.length >= 3 && cityTO && cityFrom
+                  ? "#3296D4"
+                  : "#DCDCDC",
             }}
-            // Add onFocus event handler to change background color when focused
-            onFocus={(e) => (e.target.style.backgroundColor = "#3296D4")}
-            // Add onBlur event handler to revert background color when focus is lost
-            onBlur={(e) => (e.target.style.backgroundColor = "#DCDCDC")}
+            onClick={handleConfirm}
           >
             Confirm
           </button>
@@ -279,3 +366,6 @@ console.log(formattedDates);
     </>
   );
 }
+SpeakerTicket.propTypes = {
+  sendId: PropTypes.number.isRequired,
+};
