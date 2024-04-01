@@ -35,28 +35,28 @@ export default function Resources({
   useEffect(() => {
     if (addResourcesSpeaker) {
       axios
-      .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
-        params: {
-          eventDayId: eventDaySpeakerId,
-        },
-        headers: {
-          UserId: userId,
-          Language: i18n.language,
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        console.log(
-          response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-            (item) => item.speakerId === decodedToken.uid
-          )
-        );
-        setSpeakerResourses(
-          response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-            (item) => item.speakerId === decodedToken.uid
-          )
-        );
-      });
+        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
+          params: {
+            eventDayId: eventDaySpeakerId,
+          },
+          headers: {
+            UserId: userId,
+            Language: i18n.language,
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          console.log(
+            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+              (item) => item.speakerId === decodedToken.uid
+            )
+          );
+          setSpeakerResourses(
+            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+              (item) => item.speakerId === decodedToken.uid
+            )
+          );
+        });
     }
   }, [
     eventDayId,
@@ -137,11 +137,7 @@ export default function Resources({
         }
 
         // Check if link exists and is not null
-        if (
-          link &&
-          link !== "null" &&
-          (link.startsWith("http://") || link.startsWith("https://"))
-        ) {
+        if (link && link !== "null") {
           links.push(link);
         }
       });
@@ -160,11 +156,7 @@ export default function Resources({
         }
 
         // Check if link exists and is not null
-        if (
-          link &&
-          link !== "null" &&
-          (link.startsWith("http://") || link.startsWith("https://"))
-        ) {
+        if (link && link !== "null") {
           links.push(link);
         }
       });
@@ -387,6 +379,7 @@ export default function Resources({
       .catch((error) => {
         console.error("Error uploading files:", error);
       });
+    setFlag(!flag);
   };
 
   // [12] Function to select files and send them to the server
@@ -439,6 +432,26 @@ export default function Resources({
     imgsNumber = imgs.length;
     linksNumber = links.length;
   }, [files, imgs, links]);
+
+  function deleteResource(url) {
+    console.log(url);
+    speakerResourses.forEach((speakerResourse) => {
+      if (
+        (speakerResourse.resorsesURL === url &&
+          speakerResourse.link === null) ||
+        (speakerResourse.link === url && speakerResourse.resorsesURL === null)
+      ) {
+        axios
+          .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
+          .then((response) => {
+            console.log(response);
+            setFlag(!flag);
+          });
+      }
+    });
+  }
+
+  console.log(links);
 
   return (
     <>
@@ -629,9 +642,8 @@ export default function Resources({
               files.map((file, index) => (
                 <li
                   key={index}
-                  className="my-2 d-flex gap-2 align-items-center p-2 border-bottom w-75"
+                  className="my-2 d-flex gap-2 align-items-center justify-content-between p-2 border-bottom w-75"
                 >
-                  {getFileIcon(file)}
                   <a
                     href={file}
                     className="text-dark fw-bold"
@@ -639,23 +651,44 @@ export default function Resources({
                     target="blank"
                     rel="noopener noreferrer"
                   >
-                    {" "}
-                    file {index + 1}
+                    {getFileIcon(file)} file {index + 1}
                   </a>
+                  {addResourcesSpeaker && (
+                    <i
+                      className="fas fa-trash-alt text-danger justify-self-end"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => deleteResource(file, "file")}
+                    ></i>
+                  )}
                 </li>
               ))}
 
             {/* User */}
             {selectedOption === "images" && (
-              <div className="row gap-2 my-2 justify-content-center">
+              <div className="row gap-2 my-2 justify-content-center flex-wrap">
                 {imgs.map((img, index) => (
-                  <img
+                  <div
                     key={index}
-                    src={img}
-                    alt={`Image ${index}`}
-                    className="rounded col-3"
-                    style={{ objectFit: "cover" }}
-                  />
+                    className={`col-3 p-0 text-center rounded ${
+                      addResourcesSpeaker ? "bg-danger" : ""
+                    }`}
+                  >
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`Image ${index}`}
+                      className="rounded w-100"
+                      height={80}
+                      style={{ objectFit: "cover" }}
+                    />
+                    {addResourcesSpeaker && (
+                      <i
+                        className="fas fa-trash-alt text-white"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteResource(img)}
+                      ></i>
+                    )}
+                  </div>
                 ))}
               </div>
             )}
@@ -666,7 +699,7 @@ export default function Resources({
                 <div
                   key={index}
                   style={{ backgroundColor: "#27AE601A" }}
-                  className="d-flex rounded my-2 overflow-hidden w-75"
+                  className="d-flex align-items-center rounded my-2 overflow-hidden w-75"
                 >
                   <div
                     style={{ backgroundColor: "#27AE60" }}
@@ -693,7 +726,7 @@ export default function Resources({
                     </svg>
                   </div>
 
-                  <div className="p-2">
+                  <div className="p-2 flex-grow-1">
                     <h5 className="m-0 fw-bold text-start">Link {index + 1}</h5>
                     <a
                       href={link}
@@ -707,6 +740,13 @@ export default function Resources({
                       {link}
                     </a>
                   </div>
+                  {addResourcesSpeaker && (
+                    <i
+                      className="fas fa-trash-alt text-danger fs-5 p-3"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => deleteResource(link)}
+                    ></i>
+                  )}
                 </div>
               ))}
           </div>
