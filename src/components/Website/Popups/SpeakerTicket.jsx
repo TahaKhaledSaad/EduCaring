@@ -12,6 +12,10 @@ export default function SpeakerTicket({ sendId }) {
   const [cityTO, setCityTO] = useState("");
   const [cityFrom, setCityFrom] = useState("");
   const [confirm, setConfirm] = useState(false);
+  const [modAmColor, setModAmColor] = useState(false);
+  const [modPmColor, setModPmColor] = useState(false);
+
+  console.log(confirm);
 
   // Show popup
 
@@ -120,7 +124,9 @@ export default function SpeakerTicket({ sendId }) {
       e.target.classList.add("selectedtr");
       selectedDay.push(selectedDayText);
       selectedDate.push(
-        `${selectedDayText}/${date.getMonth() + 1}/${date.getFullYear()}`
+        `${parseInt(selectedDayText) + 1}/${
+          date.getMonth() + 1
+        }/${date.getFullYear()}`
       );
     } else {
       // If the selected day is already in the array, remove it
@@ -156,6 +162,23 @@ export default function SpeakerTicket({ sendId }) {
       });
 
       const sendedArray = formattedDates.map((date) => {
+        const city = {
+          cityAttendFrom: selectedOption === "Attendance" ? cityFrom : null,
+          cityAttendTo: selectedOption === "Attendance" ? cityTO : null,
+        };
+
+        const sendedCity = selectedOption === "Attendance" ? city : {};
+
+        console.log({
+          id: 0,
+          eventDaySpeakerId: sendId,
+          speakerId: decodedToken.uid,
+          dayMod: "Am",
+          departureDay: selectedOption === "Departure" ? date : null,
+          attendDay: selectedOption === "Attendance" ? date : null,
+          ...sendedCity,
+        });
+        
         return {
           id: 0,
           eventDaySpeakerId: sendId,
@@ -163,10 +186,7 @@ export default function SpeakerTicket({ sendId }) {
           dayMod: "Am",
           departureDay: selectedOption === "Departure" ? date : null,
           attendDay: selectedOption === "Attendance" ? date : null,
-          cityDepartureFrom: selectedOption === "Departure" ? cityFrom : null,
-          cityDepartureTo: selectedOption === "Departure" ? cityTO : null,
-          cityAttendFrom: selectedOption === "Attendance" ? cityFrom : null,
-          cityAttendTo: selectedOption === "Attendance" ? cityTO : null,
+          ...sendedCity,
         };
       });
 
@@ -181,7 +201,7 @@ export default function SpeakerTicket({ sendId }) {
               : `${BASE}/SpeakerAttend`,
             sendedArray
           );
-          console.log(response.data);
+          console.log(response);
         } catch (error) {
           console.error(error);
         } finally {
@@ -337,6 +357,54 @@ export default function SpeakerTicket({ sendId }) {
               <tbody>{renderCalendar()}</tbody>
             </table>
           </div>
+        </div>
+
+        <div className="d-flex gap-3 flex-wrap">
+          {formattedDates.map((date, index) => (
+            <div
+              key={index}
+              className="m-2 rounded"
+              style={{ width: "100px", background: "#f2f2f2" }}
+            >
+              <div className="d-flex pt-2 justify-content-around flex-column align-items-center">
+                <span className="fw-bold fs-4">{new Date(date).getDate()}</span>
+                <span>
+                  {new Date(date).toLocaleString("default", {
+                    month: "long",
+                  })}
+                </span>
+              </div>
+              <hr className="p-0 my-2" />
+              <div className="d-flex justify-content-around pb-2">
+                <span
+                  onClick={() => {
+                    setModAmColor(true);
+                    setModPmColor(false);
+                  }}
+                  style={{
+                    background: modAmColor ? "gray" : "",
+                    color: modAmColor ? "#fff" : "",
+                  }}
+                  className="p-1 fw-bold rounded"
+                >
+                  AM
+                </span>
+                <span
+                  onClick={() => {
+                    setModAmColor(false);
+                    setModPmColor(true);
+                  }}
+                  style={{
+                    background: modPmColor ? "gray" : "",
+                    color: modPmColor ? "#fff" : "",
+                  }}
+                  className="p-1 rounded fw-bold"
+                >
+                  PM
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="d-flex justify-content-between align-items-center p-2 px-4 gap-3 my-2">
