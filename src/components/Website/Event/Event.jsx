@@ -713,7 +713,10 @@ function EventDetails() {
                   March, 2023
                 </p>
               </div>
-              <SpeakerTicket></SpeakerTicket>
+              <SpeakerTicket
+              eventDaySpeakerId={eventDaySpeakerId}
+              sendId={sendId ? sendId : ""}
+              ></SpeakerTicket>
             </div>
             {/* Box */}
             <div
