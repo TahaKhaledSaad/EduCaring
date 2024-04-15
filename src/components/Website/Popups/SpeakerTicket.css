@@ -1,0 +1,103 @@
+.speakerTicket-popup .p-float-label label {
+  font-size: 16px;
+}
+
+.speakerTicket-popup {
+  transition: 0.5s;
+  max-height: 550px;
+  scrollbar-width: none;
+  box-shadow: 0px 0px 10px #666;
+  z-index: 100440;
+  width: 70%;
+}
+.speakerTicket-popup .p-datepicker {
+  border: none;
+}
+.speakerTicket-popup .p-selectbutton .p-button.p-highlight {
+  background-color: rgba(39, 174, 96, 0.1);
+  border-color: rgba(39, 174, 96, 0.1);
+  color: rgba(39, 174, 96, 1);
+}
+.speakerTicket-popup .p-datepicker-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: rgba(107, 122, 133, 1);
+}
+.speakerTicket-popup .p-datepicker table td.p-datepicker-today > span {
+  background-color: #d1d5db5d;
+  font-weight: 500;
+}
+.speakerTicket-popup .p-button:focus {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(39, 174, 95, 0.4),
+    0 1px 2px 0 rgb(0, 0, 0);
+}
+.p-datepicker .p-datepicker-header {
+  border: none;
+  margin-bottom: 5px;
+}
+.custom-calendar .p-datepicker table th > span {
+  color: black;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custom-calendar td > span {
+  border-radius: 0%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/* To move the arrows to the end */
+.custom-calendar .p-datepicker-prev,
+.custom-calendar .p-datepicker-next {
+  order: 1;
+  font-size: calc(1.3rem + 0.6vw);
+}
+.custom-calendar .p-datepicker-prev {
+  margin-left: auto;
+}
+.custom-calendar .p-datepicker-month,
+.custom-calendar .p-datepicker-year {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: center;
+  margin: 0 0.5rem;
+  color: rgba(107, 122, 133, 1);
+}
+
+.p-datepicker .p-monthpicker-month,
+.p-datepicker .p-yearpicker-year,
+.p-datepicker .p-datepicker-decade {
+  line-height: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+}
+
+@media screen and (max-width: 960px) {
+  .speakerTicket-popup {
+    width: 100%;
+  }
+  .speakerTicket-popup .speakerTicket-data,
+  .speakerTicket-popup .calendar,
+  .speakerTicket-popup .speakerTicket-inputTexts {
+    width: 90% !important;
+  }
+  .speakerTicket-popup .speakerTicket-inputTexts input {
+    width: 100% !important;
+  }
+}
+
+div.p-toast {
+  z-index: 100000 !important;
+}

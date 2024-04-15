@@ -43,5 +43,14 @@
   "YourRateHasBeenSubmittedSuccessfully": "تم تقديم التقييم بنجاح",
   "RateSent": "تم ارسال التقييم",
   "MessageSent": "تم ارسال الرسالة",
-  "MessageSentSuccessfullyWeWillContactYou": "تم بنجاح سيتم التواصل معك"
+  "MessageSentSuccessfullyWeWillContactYou": "تم بنجاح سيتم التواصل معك",
+  "BookingDatesSent": "تم ارسال تواريخ الحجز",
+  "BookingDatesMessageSent": "تم ارسال رسالة تواريخ الحجز بنجاح",
+  "Attendance": "الحضور",
+  "Departure": "المغادرة",
+  "BookingTicket": "حجز التذكرة",
+  "Confirm": "تأكيد",
+  "Remove": "ازالة",
+  "CityTo": "الى مدينة",
+  "CityFrom": "من مدينة"
 }

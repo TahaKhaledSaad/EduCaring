@@ -40,5 +40,14 @@
   "YourRateHasBeenSubmittedSuccessfully": "Your Rate Has Been Submitted Successfully",
   "RateSent": "Rate Sent",
   "MessageSent": "Message Sent",
-  "MessageSentSuccessfullyWeWillContactYou": "Sent Successfully We Will Contact You"
+  "MessageSentSuccessfullyWeWillContactYou": "Sent Successfully We Will Contact You",
+  "BookingDatesSent": "Booking Dates has been sent",
+  "BookingDatesMessageSent": "Booking Dates Message has been sent successfully",
+  "Attendance": "Attendance",
+  "Departure": "Departure",
+  "BookingTicket": "Booking Ticket",
+  "Confirm": "Confirm",
+  "Remove": "Remove",
+  "CityTo": "City to",
+  "CityFrom": "City from"
 }

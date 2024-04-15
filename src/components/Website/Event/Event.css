@@ -29,3 +29,37 @@
     height: 200px;
   }
 }
+
+.event-questions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  overflow-x: auto;
+  width: 330px;
+  height: 68px;
+  margin-bottom: 20px;
+  .event-question-child {
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 10px;
+    gap: 5px;
+    width: 50px;
+    height: 68px;
+
+    /* white */
+    background: #ffffff;
+    border-radius: 7.51053px;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}

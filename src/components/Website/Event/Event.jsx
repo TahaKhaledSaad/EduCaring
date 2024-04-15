@@ -36,7 +36,7 @@ function EventDetails() {
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
-  const description = eventDetails?.eventDays[selectedDayIndex].description;
+  const description = eventDetails?.eventDays[selectedDayIndex]?.description;
   const words = description?.split(" ");
 
   useEffect(() => {
@@ -223,8 +223,8 @@ function EventDetails() {
                       }}
                     >
                       <span>
-                        {eventDetails.eventDays[selectedDayIndex].noOfAttend
-                          ? eventDetails.eventDays[selectedDayIndex].noOfAttend
+                        {eventDetails.eventDays[selectedDayIndex]?.noOfAttend
+                          ? eventDetails.eventDays[selectedDayIndex]?.noOfAttend
                           : 0}{" "}
                         Attendees
                       </span>
@@ -238,7 +238,7 @@ function EventDetails() {
                         (
                         {
                           eventDetails.eventDays[selectedDayIndex]
-                            .numberOfReviews
+                            ?.numberOfReviews
                         }{" "}
                         reviews)
                       </span>
@@ -659,13 +659,10 @@ function EventDetails() {
             </div>
           </div>
 
-          <div
-            className="d-flex justify-content-around align-items-center p-3 gap-3 flex-wrap"
-
-          >
+          <div className="d-flex justify-content-around align-items-center p-3 gap-3 flex-wrap">
             {/* Box */}
             <div
-            className="col-11 col-md-6 col-lg-4"
+              className="col-11 col-md-6 col-lg-4 col-xl-3"
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
@@ -714,13 +711,16 @@ function EventDetails() {
                 </p>
               </div>
               <SpeakerTicket
-              eventDaySpeakerId={eventDaySpeakerId}
-              sendId={sendId ? sendId : ""}
+                eventDaySpeakerId={sendId ? sendId : ""}
+                eventId={eventId}
+                eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                userId={decodedToken.uid}
+                addResourcesSpeaker={addResourcesSpeaker}
               ></SpeakerTicket>
             </div>
             {/* Box */}
             <div
-            className="col-11 col-md-6 col-lg-4"
+              className="col-11 col-md-6 col-lg-4 col-xl-3"
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
@@ -790,6 +790,44 @@ function EventDetails() {
                 eventDaySpeakerId={eventDaySpeakerId}
                 sendId={sendId ? sendId : ""}
               />
+            </div>
+            <div
+              className="col-11 col-md-6 col-lg-4 col-xl-3"
+              style={{
+                backgroundColor: "#eaf7f0",
+                border: "1px solid #dcdcdc",
+                height: "160px",
+                borderRadius: "12px",
+                padding: "15px 10px",
+              }}
+            >
+              <div className="d-flex align-items-center justify-content-between gap-1 event-questions">
+                <div className="event-question-child">
+                  <p>sat</p>
+                  <p>06/11</p>
+                </div>
+                <div className="event-question-child">
+                  <p>sat</p>
+                  <p>06/11</p>
+                </div>
+                <div className="event-question-child">
+                  <p>sat</p>
+                  <p>06/11</p>
+                </div>
+                <div className="event-question-child">
+                  <p>sat</p>
+                  <p>06/11</p>
+                </div>
+              </div>
+
+              {/* <Resources
+                eventId={eventId}
+                eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                userId={decodedToken.uid}
+                addResourcesSpeaker={addResourcesSpeaker}
+                eventDaySpeakerId={eventDaySpeakerId}
+                sendId={sendId ? sendId : ""}
+              /> */}
             </div>
           </div>
         </div>
