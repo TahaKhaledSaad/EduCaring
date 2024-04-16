@@ -304,12 +304,12 @@ export default function SpeakerReg() {
 
                 {/* input */}
                 <div>
-                  <div className={style.input}>
-                    <i className="fa-regular fa-calendar-days"></i>
+                  <div className={`${style.input} d-flex align-items-center p-0`}>
+                    {/* <i className="fa-regular fa-calendar-days"></i> */}
                     <input
                       type="date"
                       id="date"
-                      className="text-muted"
+                      className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                       name="DateOfBirth"
                       onChange={handleChange}
                     />
