@@ -27,6 +27,7 @@ export default function AttendanceReg() {
     GenderId: 1,
     ProfileImage: null,
     ProfileImageFile: null,
+    HealthAuthorityNumber: "", // الرقم الصحي
     DateOfBirth: "",
     Password: "",
     ConfirmPassword: "",
@@ -50,7 +51,9 @@ export default function AttendanceReg() {
 
   // [3] Confirm Password Visibility
   const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
+    setShowConfirmPassword(
+      (prevShowConfirmPassword) => !prevShowConfirmPassword
+    );
   };
 
   // [4] Handle Country Change
@@ -174,7 +177,9 @@ export default function AttendanceReg() {
                 style={{
                   width: "150px",
                   height: "150px",
-                  backgroundImage: `url(${URL.createObjectURL(userData.ProfileImageFile)})`,
+                  backgroundImage: `url(${URL.createObjectURL(
+                    userData.ProfileImageFile
+                  )})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -212,7 +217,9 @@ export default function AttendanceReg() {
                   />
                 </div>
                 {showError && userData.NameAr.length < 3 && (
-                  <span className="m-0 my-0 text-danger">Name Should be More 3 characters</span>
+                  <span className="m-0 my-0 text-danger">
+                    Name Should be More 3 characters
+                  </span>
                 )}
               </div>
 
@@ -228,7 +235,9 @@ export default function AttendanceReg() {
                   />
                 </div>
                 {showError && userData.NameEn.length < 3 && (
-                  <span className="m-0 my-0 text-danger">Name Should be More 3 characters</span>
+                  <span className="m-0 my-0 text-danger">
+                    Name Should be More 3 characters
+                  </span>
                 )}
               </div>
 
@@ -236,12 +245,19 @@ export default function AttendanceReg() {
               <div>
                 <div className={style.input}>
                   <i className="fa-regular fa-envelope"></i>
-                  <input type="email" placeholder="email" name="Email" onChange={handleChange} />
+                  <input
+                    type="email"
+                    placeholder="email"
+                    name="Email"
+                    onChange={handleChange}
+                  />
                 </div>
                 {showError && !userData.Email.includes("@") && (
                   <span className="m-0 my-0 text-danger">Invalid Email</span>
                 )}
-                {errorMessage !== "" && <p className="m-0 my-0 text-danger">{errorMessage}</p>}
+                {errorMessage !== "" && (
+                  <p className="m-0 my-0 text-danger">{errorMessage}</p>
+                )}
               </div>
 
               {/* input */}
@@ -255,7 +271,9 @@ export default function AttendanceReg() {
                   name="PhoneNumber"
                 />
                 {showError && userData.PhoneNumber.length < 10 && (
-                  <span className="m-0 my-0 text-danger">Invalid Phone Number</span>
+                  <span className="m-0 my-0 text-danger">
+                    Invalid Phone Number
+                  </span>
                 )}
               </div>
 
@@ -278,10 +296,10 @@ export default function AttendanceReg() {
 
               {/* input */}
               <div>
-                <div className={style.input}>
+                <div className={`${style.input} d-flex align-items-center p-0`}>
                   <select
                     name="GenderId"
-                    className="p-0 px-2 text-muted"
+                    className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                     onChange={handleChange}
                     defaultValue="0"
                   >
@@ -291,9 +309,70 @@ export default function AttendanceReg() {
                     {genders.map((gender, index) => (
                       <option
                         key={index}
-                        value={gender.name === "Male" ? 1 : gender.name === "Female" ? 2 : 3}
+                        value={
+                          gender.name === "Male"
+                            ? 1
+                            : gender.name === "Female"
+                            ? 2
+                            : 3
+                        }
                       >
                         {gender.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* input */}
+              <div className={`${style.input} d-flex align-items-center gap-2`}>
+                <svg
+                  className="m-0 p-0"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.96973 22H14.9697C19.9697 22 21.9697 20 21.9697 15V9C21.9697 4 19.9697 2 14.9697 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z"
+                    stroke="#C8C8C8"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M1.96973 12.7L7.96973 12.68C8.71973 12.68 9.55973 13.25 9.83973 13.95L10.9797 16.83C11.2397 17.48 11.6497 17.48 11.9097 16.83L14.1997 11.02C14.4197 10.46 14.8297 10.44 15.1097 10.97L16.1497 12.94C16.4597 13.53 17.2597 14.01 17.9197 14.01H21.9797"
+                    stroke="#C8C8C8"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <input
+                  className="m-0 p-0"
+                  type="text"
+                  placeholder="health authority number"
+                  name="HealthAuthorityNumber"
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* input */}
+              <div>
+                <div className={`${style.input} d-flex align-items-center p-0`}>
+                  <select
+                    name="SpecializationCategoryId"
+                    className="p-0 px-2 text-muted w-100 h-100 rounded-3"
+                    onChange={handleChange}
+                    defaultValue="1"
+                  >
+                    <option value="1" disabled>
+                      Select Specialization Category
+                    </option>
+                    {specializationCategories.map((category, index) => (
+                      <option value={category.id} key={index}>
+                        {category.name}
                       </option>
                     ))}
                   </select>
@@ -315,47 +394,27 @@ export default function AttendanceReg() {
 
               {/* input */}
               <div>
-                <div className={style.input}>
-                  <select
-                    name="SpecializationCategoryId"
-                    className="p-0 px-2 text-muted"
-                    onChange={handleChange}
-                    defaultValue="1"
-                  >
-                    <option value="1" disabled>
-                      Select Specialization Category
-                    </option>
-                    {specializationCategories.map((category, index) => (
-                      <option value={category.id} key={index}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* input */}
-              <div>
-                <div className={style.input}>
-                  <i className="fas fa-regular fa-globe"></i>
+                <div className={`${style.input} d-flex align-items-center p-0`}>
                   <CountryDropdown
                     value={country}
                     onChange={(val) => {
                       selectCountry(val);
                       setUserData({ ...userData, Country: val });
                     }}
-                    className="text-muted"
+                    className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                   />
                 </div>
                 {showError && userData.Country.length < 3 && (
-                  <span className="m-0 my-0 text-danger">Please Select The Country</span>
+                  <span className="m-0 my-0 text-danger">
+                    Please Select The Country
+                  </span>
                 )}
               </div>
 
               {/* input */}
               <div>
-                <div className={style.input}>
-                  <i className="fa-solid fa-tree-city fa-flip-horizontal"></i>
+                <div className={`${style.input} d-flex align-items-center p-0`}>
+                  
                   <RegionDropdown
                     country={country}
                     value={region}
@@ -363,11 +422,13 @@ export default function AttendanceReg() {
                       selectRegion(val);
                       setUserData({ ...userData, City: val });
                     }}
-                    className="text-muted"
+                    className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                   />
                 </div>
                 {showError && userData.City.length < 3 && (
-                  <span className="m-0 my-0 text-danger">Please Select The City</span>
+                  <span className="m-0 my-0 text-danger">
+                    Please Select The City
+                  </span>
                 )}
               </div>
 
@@ -412,14 +473,19 @@ export default function AttendanceReg() {
                     onClick={toggleConfirmPasswordVisibility}
                   ></i>
                 </div>
-                {showError && userData.Password !== userData.ConfirmPassword && (
-                  <span className="m-0 my-0 text-danger">Password not Match</span>
-                )}
+                {showError &&
+                  userData.Password !== userData.ConfirmPassword && (
+                    <span className="m-0 my-0 text-danger">
+                      Password not Match
+                    </span>
+                  )}
               </div>
             </div>
 
             {errorMessage !== "" && (
-              <p className="alert alert-danger text-center py-2">{errorMessage}</p>
+              <p className="alert alert-danger text-center py-2">
+                {errorMessage}
+              </p>
             )}
 
             <button
