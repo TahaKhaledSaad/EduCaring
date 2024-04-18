@@ -15,19 +15,32 @@ import { useTranslation } from "react-i18next";
 
 export default function SpeakerTicket({
   eventDaySpeakerId,
-  addResourcesSpeaker,
-  eventDayId,
   userId,
+  departureDatesBE,
+  departureDates,
+  datesBE,
+  dates,
+  setDates,
+  setDepartureDates,
+  setGetSpeakerDetails,
+  cityTO,
+  setCityTO,
+  cityFrom,
+  setCityFrom,
+  cityTOOld,
+  cityFromOld,
+  cityTODepature,
+  setCityTODepature,
+  cityFromDepature,
+  setCityFromDepature,
+  cityTOOldDepature,
+  cityFromOldDepature,
 }) {
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
-  const [cityTO, setCityTO] = useState("");
-  const [cityFrom, setCityFrom] = useState("");
-  const [confirm, setConfirm] = useState(false);
 
-  const [departureDates, setDepartureDates] = useState([]);
-  const [departureDatesBE, setDepartureDatesBE] = useState([]);
+  const [confirm, setConfirm] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Attendance");
   const [showAttendanceCalendar, setShowAttendanceCalendar] = useState(true);
 
@@ -48,9 +61,6 @@ export default function SpeakerTicket({
   const [showPopup, setShowPopup] = useState(true);
 
   //   build the popup for the speaker to book tickets (calendar)
-
-  const [dates, setDates] = useState([]);
-  const [datesBE, setDatesBE] = useState([]);
 
   const monthsOfYear = [
     "Jan",
@@ -85,49 +95,15 @@ export default function SpeakerTicket({
 
   console.log(formattedDates);
 
-  useEffect(() => {
-    if (addResourcesSpeaker) {
-      axios
-        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
-          params: {
-            eventDayId,
-          },
-          headers: {
-            UserId: userId,
-          },
-        })
-        .then((response) => {
-          const speakerDepartures =
-            response.data.responseObject[0]?.eventDaySpeakerDepartures
-              .filter((item) => item.speakerId === decodedToken.uid)
-              .map((item) => ({
-                ...item,
-                departureDay: new Date(item.departureDay).toDateString(),
-              }));
-          const speakerAttends =
-            response.data.responseObject[0]?.eventDaySpeakerAttends
-              .filter((item) => item.speakerId === decodedToken.uid)
-              .map((item) => ({
-                ...item,
-                attendDay: new Date(item.attendDay).toDateString(),
-              }));
-          setDepartureDates(speakerDepartures);
-          setDepartureDatesBE(speakerDepartures);
-          setDates(speakerAttends);
-          setDatesBE(speakerAttends);
-        });
-    }
-  }, [
-    eventDayId,
-    userId,
-    decodedToken.uid,
-    eventDaySpeakerId,
-    addResourcesSpeaker,
-    showPopup,
-  ]);
-
   const handleConfirm = async () => {
-    if (dates.length <= 3 && departureDates.length <= 3 && cityTO && cityFrom) {
+    if (
+      dates.length <= 3 &&
+      departureDates.length <= 3 &&
+      cityTO &&
+      cityFrom &&
+      cityFromDepature &&
+      cityTODepature
+    ) {
       // Separate formattedDates based on selected option
       try {
         // Send request for attendance
@@ -212,8 +188,8 @@ export default function SpeakerTicket({
               departureDay: formattedDate,
               attendDay: null,
               dayMod: oldDate.dayMod,
-              cityDepartureFrom: cityFrom,
-              cityDepartureTo: cityTO,
+              cityDepartureFrom: cityFromDepature,
+              cityDepartureTo: cityTODepature,
               eventDaySpeakerId,
               speakerId: userId,
             };
@@ -228,8 +204,8 @@ export default function SpeakerTicket({
               departureDay: formattedDate,
               attendDay: null,
               dayMod: date.dayMod,
-              cityDepartureFrom: cityFrom,
-              cityDepartureTo: cityTO,
+              cityDepartureFrom: cityFromDepature,
+              cityDepartureTo: cityTODepature,
               eventDaySpeakerId,
               speakerId: userId,
             };
@@ -244,8 +220,8 @@ export default function SpeakerTicket({
               departureDay: formattedDate,
               attendDay: null,
               dayMod: date.dayMod,
-              cityDepartureFrom: cityFrom,
-              cityDepartureTo: cityTO,
+              cityDepartureFrom: cityFromDepature,
+              cityDepartureTo: cityTODepature,
               eventDaySpeakerId,
               speakerId: userId,
             };
@@ -282,21 +258,27 @@ export default function SpeakerTicket({
     }
     setShowPopup(!showPopup);
     setCityTO(""); // Clear input value
+    setCityTODepature(""); // Clear input value
     setCityFrom(""); // Clear input value
+    setCityFromDepature(""); // Clear input value
+
     setDates([]); // Clear dates array
     setDepartureDates([]); // Clear departureDates array
     setSelectedOption("Attendance");
     setShowAttendanceCalendar(true);
+    setGetSpeakerDetails((prev) => prev + 1);
   };
   const togglePopup = () => {
     setShowPopup(!showPopup);
     if (!showPopup) {
-      setCityTO(""); // Clear input value
-      setCityFrom(""); // Clear input value
+      setCityTO(cityTOOld); // Clear input value
+      setCityFrom(cityFromOld); // Clear input value
+      setCityTODepature(cityTOOldDepature); // Clear input value
+      setCityFromDepature(cityFromOldDepature); // Clear input value
       setFormattedDates([]); // Clear formattedDates array
       // Remove added styles
-      setDates([]);
-      setDepartureDates([]);
+      setDates(datesBE);
+      setDepartureDates(departureDatesBE);
       // setShowAttendanceCalendar(true);
       setSelectedOption("Attendance");
       setShowAttendanceCalendar(true);
@@ -451,14 +433,20 @@ export default function SpeakerTicket({
               >
                 <InputText
                   id="cityTo"
-                  value={cityTO}
+                  value={
+                    selectedOption === "Attendance" ? cityTO : cityTODepature
+                  }
                   style={{
                     fontSize: "1.25rem",
                     padding: "0.45rem 0.9375rem",
                     marginTop: "10px",
                     width: "100%",
                   }}
-                  onChange={(e) => setCityTO(e.target.value)}
+                  onChange={(e) => {
+                    return selectedOption === "Attendance"
+                      ? setCityTO(e.target.value)
+                      : setCityTODepature(e.target.value);
+                  }}
                 />
                 <label
                   style={{
@@ -475,14 +463,22 @@ export default function SpeakerTicket({
               >
                 <InputText
                   id="cityFrom"
-                  value={cityFrom}
+                  value={
+                    selectedOption === "Attendance"
+                      ? cityFrom
+                      : cityFromDepature
+                  }
                   style={{
                     fontSize: "1.25rem",
                     padding: "0.45rem 0.9375rem",
                     marginTop: "10px",
                     width: "100%",
                   }}
-                  onChange={(e) => setCityFrom(e.target.value)}
+                  onChange={(e) =>
+                    selectedOption === "Attendance"
+                      ? setCityFrom(e.target.value)
+                      : setCityFromDepature(e.target.value)
+                  }
                 />
                 <label
                   style={{
@@ -712,7 +708,9 @@ export default function SpeakerTicket({
               dates.length === 0 ||
               departureDates.length === 0 ||
               !cityTO ||
-              !cityFrom
+              !cityFrom ||
+              !cityTODepature ||
+              !cityFromDepature
             }
             style={{
               backgroundColor: "#3296D4",
@@ -735,6 +733,3 @@ export default function SpeakerTicket({
     </>
   );
 }
-SpeakerTicket.propTypes = {
-  sendId: PropTypes.number.isRequired,
-};
