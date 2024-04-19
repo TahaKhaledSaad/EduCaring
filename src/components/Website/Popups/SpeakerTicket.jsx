@@ -523,6 +523,7 @@ export default function SpeakerTicket({
                   });
                   setDates(newDates);
                 }}
+                disabled={dates?.length >= 3}
                 style={{ width: "100%" }}
                 dateTemplate={dateTemplate}
                 selectionMode="multiple"
@@ -553,6 +554,7 @@ export default function SpeakerTicket({
                 }}
                 style={{ width: "100%" }}
                 dateTemplate={depatureDateTemplate}
+                disabled={departureDates?.length >= 3}
                 selectionMode="multiple"
                 className="custom-calendar"
                 readOnlyInput
