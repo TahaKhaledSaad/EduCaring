@@ -43,7 +43,6 @@ export default function Session() {
   }, [eventId, userId, i18n.language]);
 
   const [videoUrl, setVideoUrl] = useState("");
-  const [speakers, setSpeakers] = useState([]);
   const [resources, setResources] = useState([]);
 
   const selectedEventDay = eventDays?.find(
@@ -57,7 +56,6 @@ export default function Session() {
   useEffect(() => {
     if (selectedEventDay && userId) {
       setVideoUrl(selectedEventDay.displayLinkUploadedVideo);
-      setSpeakers(selectedEventDay.eventDaySpeakers);
     } else {
       setVideoUrl(""); // Set video URL to empty string if no matching event day is found
     }
