@@ -12,6 +12,7 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Toast } from "primereact/toast";
 import { useTranslation } from "react-i18next";
+import { Steps } from "primereact/steps";
 
 export default function SpeakerTicket({
   eventDaySpeakerId,
@@ -54,7 +55,14 @@ export default function SpeakerTicket({
     setShowAttendanceCalendar(newSelectedOption === "Attendance");
   };
 
-  console.log(confirm);
+  const ticketsItems = [
+    {
+      label: t("Attendance"),
+    },
+    {
+      label: t("Departure"),
+    },
+  ];
 
   // Show popup
 
@@ -430,40 +438,17 @@ export default function SpeakerTicket({
             onClick={togglePopup}
           ></i>
         </div>
-
+        <dv className="d-flex justify-content-center">
+          <Steps
+            model={ticketsItems}
+            activeIndex={showAttendanceCalendar ? 0 : 1}
+            readOnly
+            style={{ width: "50%", marginTop: "10px" }}
+          />
+        </dv>
         <div className="popup-body d-flex flex-column flex-md-row justify-content-between align-items-center p-2 px-4 my-3">
           <div className="w-50 speakerTicket-data">
             <div className="d-flex gap-4 flex-column">
-              <FloatLabel
-                className="w-50 speakerTicket-inputTexts"
-                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
-              >
-                <InputText
-                  id="cityTo"
-                  value={
-                    selectedOption === "Attendance" ? cityTO : cityTODepature
-                  }
-                  style={{
-                    fontSize: "1.25rem",
-                    padding: "0.45rem 0.9375rem",
-                    marginTop: "10px",
-                    width: "100%",
-                  }}
-                  onChange={(e) => {
-                    return selectedOption === "Attendance"
-                      ? setCityTO(e.target.value)
-                      : setCityTODepature(e.target.value);
-                  }}
-                />
-                <label
-                  style={{
-                    right: i18n.language === "ar" ? "0" : "auto",
-                  }}
-                  htmlFor="cityTo"
-                >
-                  {t("CityTo")}
-                </label>
-              </FloatLabel>
               <FloatLabel
                 style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
                 className="w-50 speakerTicket-inputTexts"
@@ -494,6 +479,36 @@ export default function SpeakerTicket({
                   htmlFor="cityFrom"
                 >
                   {t("CityFrom")}
+                </label>
+              </FloatLabel>
+              <FloatLabel
+                className="w-50 speakerTicket-inputTexts"
+                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+              >
+                <InputText
+                  id="cityTo"
+                  value={
+                    selectedOption === "Attendance" ? cityTO : cityTODepature
+                  }
+                  style={{
+                    fontSize: "1.25rem",
+                    padding: "0.45rem 0.9375rem",
+                    marginTop: "10px",
+                    width: "100%",
+                  }}
+                  onChange={(e) => {
+                    return selectedOption === "Attendance"
+                      ? setCityTO(e.target.value)
+                      : setCityTODepature(e.target.value);
+                  }}
+                />
+                <label
+                  style={{
+                    right: i18n.language === "ar" ? "0" : "auto",
+                  }}
+                  htmlFor="cityTo"
+                >
+                  {t("CityTo")}
                 </label>
               </FloatLabel>
             </div>
@@ -538,7 +553,7 @@ export default function SpeakerTicket({
                 )}
                 onChange={(e) => {
                   const newDates = e.value.map((date) => {
-                    const existingDate = departureDates.find(
+                    const existingDate = departureDates?.find(
                       (dateObj) => dateObj.departureDay === date.toDateString()
                     );
 

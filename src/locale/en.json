@@ -65,5 +65,7 @@
   "QuestionAdded": " Question Added",
   "QuestionAddedSuccessfully": "You Added Question Successfully",
   "QuestionDeleted": "Question Deleted",
-  "QuestionDeletedSuccessfully": "You Deleted Question Successfully"
+  "QuestionDeletedSuccessfully": "You Deleted Question Successfully",
+  "QuestionsEn": "Questions in English",
+  "QuestionsAr": "Questions in Arabic"
 }
