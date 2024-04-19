@@ -11,6 +11,8 @@ export default function Session() {
   const cookie = new Cookie();
   const [userId, setUserId] = useState(null);
   const { eventId, eventDayId } = useParams();
+  const token = cookie.get("edu-caring");
+  const decodedToken = token ? jwtDecode(token) : {};
 
   const [eventDays, setEventDays] = useState([]);
   const { i18n } = useTranslation();
@@ -27,6 +29,7 @@ export default function Session() {
           headers: {
             UserId: userId,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
@@ -40,7 +43,6 @@ export default function Session() {
   }, [eventId, userId, i18n.language]);
 
   const [videoUrl, setVideoUrl] = useState("");
-  const [speakers, setSpeakers] = useState([]);
   const [resources, setResources] = useState([]);
 
   const selectedEventDay = eventDays?.find(
@@ -54,30 +56,28 @@ export default function Session() {
   useEffect(() => {
     if (selectedEventDay && userId) {
       setVideoUrl(selectedEventDay.displayLinkUploadedVideo);
-      setSpeakers(selectedEventDay.eventDaySpeakers);
     } else {
       setVideoUrl(""); // Set video URL to empty string if no matching event day is found
     }
   }, [eventDays, eventDayId, selectedEventDay]);
 
   useEffect(() => {
-    // Create a set to store unique resources
-    const uniqueResources = new Set();
-
-    speakers.forEach((speaker) => {
-      // Iterate through each resource of the current speaker
-      speaker.eventDaySpeakerResorses.forEach((resource) => {
-        // Check if the resource already exists in the set
-        if (!uniqueResources.has(resource)) {
-          // If it doesn't exist, add it to the set
-          uniqueResources.add(resource);
-        }
+    axios
+      .get(`${BASE}/Event/GetEventResoresesForUser`, {
+        params: {
+          eventDayId: eventDayId,
+        },
+        headers: {
+          UserId: userId,
+          Language: i18n.language,
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        // console.log(response);
+        setResources(response.data.responseObject);
       });
-    });
-
-    // Convert the set back to an array and update the state
-    setResources(Array.from(uniqueResources));
-  }, [speakers]);
+  }, [eventDayId, userId, i18n.language, decodedToken.uid, token]);
 
   const [files, setFiles] = useState([]);
   const [imgs, setImgs] = useState([]);
@@ -88,27 +88,25 @@ export default function Session() {
     const imgs = [];
     const links = [];
 
-    resources.forEach((resource) => {
-      const { resorsesURL, link } = resource;
+    resources?.forEach((eventDaySpeakerResorses) => {
+      eventDaySpeakerResorses.eventDaySpeakerResorses?.forEach((resource) => {
+        const { resorsesURL, link } = resource;
 
-      // Check if resource is a file or an image
-      if (resorsesURL) {
-        const extension = resorsesURL.split(".").pop().toLowerCase();
-        if (extension.match(/(jpg|jpeg|png|gif)$/)) {
-          imgs.push(resorsesURL);
-        } else {
-          files.push(resorsesURL);
+        // Check if resource is a file or an image
+        if (resorsesURL) {
+          const extension = resorsesURL.split(".").pop().toLowerCase();
+          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+            imgs.push(resorsesURL);
+          } else {
+            files.push(resorsesURL);
+          }
         }
-      }
 
-      // Check if link exists and is not null
-      if (
-        link &&
-        link !== "null" &&
-        (link.startsWith("http://") || link.startsWith("https://"))
-      ) {
-        links.push(link);
-      }
+        // Check if link exists and is not null
+        if (link && link !== "null") {
+          links.push(link);
+        }
+      });
     });
 
     setFiles(files);

@@ -32,6 +32,7 @@ export default function MyEvents() {
           headers: {
             UserId: decodedToken.uid,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((data) => {

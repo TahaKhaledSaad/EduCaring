@@ -99,6 +99,7 @@ export default function LandingPage() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -119,6 +120,7 @@ export default function LandingPage() {
       .get(`${BASE}/MainData/GetAboutUs`, {
         headers: {
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -328,7 +330,7 @@ export default function LandingPage() {
                 <h1>
                   Welcome To <span>Edu Caring</span>
                 </h1>
-                <span className="d-block">git  {text.welcomeDescription} </span>
+                <span className="d-block">  {text.welcomeDescription} </span>
               </div>
               {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>

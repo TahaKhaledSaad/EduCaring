@@ -53,6 +53,7 @@ export default function Notification() {
       .get(`${BASE}/${GET_NOTIFICATIONS}`, {
         headers: {
           UserId: decodedToken.uid,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(handleNotificationTypesResponse)
@@ -128,6 +129,7 @@ export default function Notification() {
           headers: {
             UserId: decodedToken.uid,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {

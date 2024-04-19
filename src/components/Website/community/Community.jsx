@@ -32,6 +32,7 @@ export default function Community() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -50,6 +51,7 @@ export default function Community() {
           headers: {
             UserId: decodedToken.uid,
             EventId: selectedChat.eventId,
+            Authorization: `Bearer ${token}`,
           },
           params: { eventDayId: selectedChat?.eventId },
         })

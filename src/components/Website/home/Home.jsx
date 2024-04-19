@@ -35,6 +35,7 @@ export default function Home() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
         params: {
           limite: 100,
@@ -74,6 +75,7 @@ export default function Home() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {

@@ -31,6 +31,7 @@ export default function SpeakerProfile() {
         },
         headers: {
           UserId: decodedToken.uid,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
