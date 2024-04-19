@@ -94,6 +94,7 @@ export default function SpeakerTicket({
           },
           headers: {
             UserId: userId,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {

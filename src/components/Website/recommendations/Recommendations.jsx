@@ -33,6 +33,7 @@ export default function Recommendations() {
           headers: {
             UserId: decodedToken.uid,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
           params: {
             limite: 1000,

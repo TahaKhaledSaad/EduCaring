@@ -30,6 +30,7 @@ export default function Person() {
           headers: {
             "Content-Type": "application/json",
             Accept: "text/plain",
+            Authorization: `Bearer ${token}`,
           },
         }
       )

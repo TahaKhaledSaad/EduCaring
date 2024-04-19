@@ -40,6 +40,7 @@ export default function Payment() {
           headers: {
             UserId: decodedToken.uid,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {

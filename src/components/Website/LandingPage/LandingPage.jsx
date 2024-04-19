@@ -99,6 +99,7 @@ export default function LandingPage() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -119,6 +120,7 @@ export default function LandingPage() {
       .get(`${BASE}/MainData/GetAboutUs`, {
         headers: {
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {

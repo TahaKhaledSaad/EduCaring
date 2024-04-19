@@ -45,6 +45,7 @@ function EventDetails() {
         headers: {
           UserId: decodedToken.uid,
           Language: i18n.language,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -78,7 +79,6 @@ function EventDetails() {
     );
   }
 
-  console.log(eventDetails);
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);

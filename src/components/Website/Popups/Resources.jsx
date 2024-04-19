@@ -12,7 +12,6 @@ export let imgsNumber = 0;
 export let linksNumber = 0;
 
 export default function Resources({
-  eventDays,
   eventDayId,
   userId,
   addResourcesSpeaker,
@@ -27,6 +26,7 @@ export default function Resources({
   const [speakerResourses, setSpeakerResourses] = useState([]);
   const [link, setLink] = useState("");
   const [flag, setFlag] = useState(false);
+  const [resources, setResources] = useState([]);
 
   // console.log(eventDaySpeakerId, sendId);
   // console.log(userId);
@@ -42,6 +42,7 @@ export default function Resources({
           headers: {
             UserId: userId,
             Language: i18n.language,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
@@ -68,45 +69,37 @@ export default function Resources({
     flag,
   ]);
 
-  // [2] Selected Event Day
-  const selectedEventDay = eventDays?.find(
-    (day) => day.id === parseInt(eventDayId)
-  );
-  // console.log(selectedEventDay);
-  // [3] Speakers
-  const [speakers, setSpeakers] = useState([]);
-  const [resources, setResources] = useState([]);
-
-  // [4] Update Speakers
+  // [13] Function to get resources of the user
   useEffect(() => {
-    if (selectedEventDay) {
-      setSpeakers(selectedEventDay.eventDaySpeakers);
-    } else {
-      setSpeakers([]);
+    if (!addResourcesSpeaker) {
+      axios
+        .get(`${BASE}/Event/GetEventResoresesForUser`, {
+          params: {
+            eventDayId: eventDayId,
+          },
+          headers: {
+            UserId: userId,
+            Language: i18n.language,
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          setResources(response.data.responseObject);
+        });
     }
-  }, [eventDays, eventDayId, selectedEventDay]);
+  }, [
+    eventDayId,
+    userId,
+    i18n.language,
+    decodedToken.uid,
+    eventDaySpeakerId,
+    addResourcesSpeaker,
+    flag,
+    token,
+  ]);
 
-  // console.log(speakers);
-
-  // [5] Update Resources
-  useEffect(() => {
-    // Create a set to store unique resources
-    const uniqueResources = new Set();
-
-    speakers.forEach((speaker) => {
-      // Iterate through each resource of the current speaker
-      speaker.eventDaySpeakerResorses.forEach((resource) => {
-        // Check if the resource already exists in the set
-        if (!uniqueResources.has(resource)) {
-          // If it doesn't exist, add it to the set
-          uniqueResources.add(resource);
-        }
-      });
-    });
-
-    // Convert the set back to an array and update the state
-    setResources(Array.from(uniqueResources));
-  }, [speakers]);
+  // console.log(resources);
 
   // [6] File Icon
   const [files, setFiles] = useState([]);
@@ -142,23 +135,25 @@ export default function Resources({
         }
       });
     } else {
-      resources.forEach((resource) => {
-        const { resorsesURL, link } = resource;
+      resources.forEach((eventDaySpeakerResorses) => {
+        eventDaySpeakerResorses.eventDaySpeakerResorses?.forEach((resource) => {
+          const { resorsesURL, link } = resource;
 
-        // Check if resource is a file or an image
-        if (resorsesURL) {
-          const extension = resorsesURL.split(".").pop().toLowerCase();
-          if (extension.match(/(jpg|jpeg|png|gif)$/)) {
-            imgs.push(resorsesURL);
-          } else {
-            files.push(resorsesURL);
+          // Check if resource is a file or an image
+          if (resorsesURL) {
+            const extension = resorsesURL.split(".").pop().toLowerCase();
+            if (extension.match(/(jpg|jpeg|png|gif)$/)) {
+              imgs.push(resorsesURL);
+            } else {
+              files.push(resorsesURL);
+            }
           }
-        }
 
-        // Check if link exists and is not null
-        if (link && link !== "null") {
-          links.push(link);
-        }
+          // Check if link exists and is not null
+          if (link && link !== "null") {
+            links.push(link);
+          }
+        });
       });
     }
 
@@ -451,7 +446,7 @@ export default function Resources({
     });
   }
 
-  console.log(links);
+  // console.log(links);
 
   return (
     <>
@@ -512,7 +507,7 @@ export default function Resources({
             ? "translate(300%, -50%)"
             : "translate(-50%, -50%)",
           transition: "0.5s",
-          zIndex: "1000",
+          zIndex: "10000",
           height: "80vh",
           scrollbarWidth: "none",
           boxShadow: "0px 0px 30px #666",

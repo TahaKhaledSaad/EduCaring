@@ -44,6 +44,7 @@ export default function Profile() {
           headers: {
             "Content-Type": "application/json",
             Accept: "text/plain",
+            Authorization: `Bearer ${token}`,
           },
         }
       )
