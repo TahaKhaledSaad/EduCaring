@@ -15,6 +15,7 @@ import QrCode from "./../Popups/QrCode";
 import { PulseLoader } from "react-spinners";
 import { filesNumber, imgsNumber, linksNumber } from "./../Popups/Resources"; // Update the path accordingly
 import SpeakerTicket from "../Popups/SpeakerTicket";
+import SpeakerQuestions from "../Popups/SpeakerQuestions";
 
 // Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
@@ -29,7 +30,21 @@ function EventDetails() {
   const { eventId } = useParams();
   const [eventDetails, setEventDetails] = useState(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0); // State to track the selected day index
+  const [getSpeakerDetails, setGetSpeakerDetails] = useState(0);
+  const [speakerQuestions, setSpeakerQuestions] = useState([]);
+  const [speakerAttends, setSpeakerAttends] = useState([]);
+  const [speakerNewAttends, setSpeakerNewAttends] = useState([]);
+  const [speakerDepartures, setSpeakerDepartures] = useState([]);
+  const [speakerNewDepartures, setSpeakerNewDepartures] = useState([]);
+  const [cityTO, setCityTO] = useState("");
+  const [cityFrom, setCityFrom] = useState("");
+  const [cityTOOld, setCityTOOld] = useState("");
+  const [cityFromOld, setCityFromOld] = useState("");
 
+  const [cityTODepature, setCityTODepature] = useState("");
+  const [cityFromDepature, setCityFromDepature] = useState("");
+  const [cityTOOldDepature, setCityTOOldDepature] = useState("");
+  const [cityFromOldDepature, setCityFromOldDepature] = useState("");
   const decodedToken = token ? jwtDecode(token) : {};
 
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -56,6 +71,78 @@ function EventDetails() {
       });
   }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language]);
 
+  useEffect(() => {
+    if (eventDetails) {
+      axios
+        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
+          params: {
+            eventDayId: eventDetails.eventDays[selectedDayIndex]?.id,
+          },
+          headers: {
+            UserId: decodedToken.uid,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.responseObject);
+          const speakerDepartures =
+            response.data.responseObject[0]?.eventDaySpeakerDepartures
+              .filter((item) => item.speakerId === decodedToken.uid)
+              .map((item) => ({
+                ...item,
+                departureDay: new Date(item.departureDay).toDateString(),
+              }));
+          const speakerAttends =
+            response.data.responseObject[0]?.eventDaySpeakerAttends
+              .filter((item) => item.speakerId === decodedToken.uid)
+              .map((item) => ({
+                ...item,
+                attendDay: new Date(item.attendDay).toDateString(),
+              }));
+          setSpeakerQuestions(
+            response.data.responseObject[0]?.SpeakerQuestions
+          );
+          setSpeakerNewAttends(speakerAttends);
+          setSpeakerNewDepartures(speakerDepartures);
+          setSpeakerAttends(speakerAttends);
+          setSpeakerDepartures(speakerDepartures);
+          setSpeakerQuestions(
+            response.data.responseObject[0]?.speakerQuestions
+          );
+          setCityTO(
+            response.data.responseObject[0].eventDaySpeakerAttends[0]
+              .cityAttendTo
+          );
+          setCityFrom(
+            response.data.responseObject[0].eventDaySpeakerAttends[0]
+              .cityAttendFrom
+          );
+          setCityTOOld(
+            response.data.responseObject[0].eventDaySpeakerAttends[0]
+              .cityAttendTo
+          );
+          setCityFromOld(
+            response.data.responseObject[0].eventDaySpeakerAttends[0]
+              .cityAttendFrom
+          );
+          setCityTODepature(
+            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+              .cityDepartureTo
+          );
+          setCityFromDepature(
+            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+              .cityDepartureFrom
+          );
+          setCityTOOldDepature(
+            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+              .cityDepartureTo
+          );
+          setCityFromOldDepature(
+            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+              .cityDepartureFrom
+          );
+        });
+    }
+  }, [decodedToken.uid, eventDetails, selectedDayIndex, getSpeakerDetails]);
   if (!eventDetails) {
     return (
       <div
@@ -103,7 +190,13 @@ function EventDetails() {
     formatDateTime(endDay);
 
   const uniqueSpeakers = {};
-
+  if (
+    !eventDetails ||
+    !eventDetails.eventDays ||
+    !eventDetails.eventDays[selectedDayIndex]
+  ) {
+    return null; // or return a loading indicator, error message, etc.
+  }
   const isValidImageUrl = (url) => {
     return (
       url &&
@@ -169,6 +262,34 @@ function EventDetails() {
   const inputDateString = eventDetails?.startDay;
   const formattedDateString = formatDate(inputDateString);
 
+  const currentDate = new Date(
+    eventDetails.eventDays[selectedDayIndex].eventStartDay
+  );
+  const previousDate = new Date(currentDate);
+  previousDate.setDate(currentDate.getDate() - 1); // Get previous day
+  const nextDate = new Date(currentDate);
+  nextDate.setDate(currentDate.getDate() + 1); // Get next day
+  const nextTwoDates = new Date(currentDate);
+  nextTwoDates.setDate(currentDate.getDate() + 2); // Get next day
+  function renderDate(date) {
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const month = padZero(date.getMonth() + 1);
+    const day = padZero(date.getDate());
+    return (
+      <>
+        <p>{dayOfWeek}</p>
+        <p>
+          {month}/{day}
+        </p>
+      </>
+    );
+  }
+
+  // Function to pad single digit numbers with zero
+  function padZero(num) {
+    return num < 10 ? "0" + num : num;
+  }
   return (
     <>
       {!showCompeleteProccese && (
@@ -257,10 +378,10 @@ function EventDetails() {
                         </svg>
                         {eventDetails.eventDays[
                           selectedDayIndex
-                        ].reviewRate.toFixed(1)}
+                        ]?.reviewRate.toFixed(1)}
                       </span>
                     </div>
-                    {eventDetails.eventDays[selectedDayIndex].isPaid ||
+                    {eventDetails.eventDays[selectedDayIndex]?.isPaid ||
                     addResourcesSpeaker ? (
                       <>
                         {decodedToken.roles.includes("User") && (
@@ -289,13 +410,13 @@ function EventDetails() {
                     ) : (
                       ""
                     )}
-                    {eventDetails.eventDays[selectedDayIndex].isPaid ? (
+                    {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
                       <Gallary eventImages={eventDetails.eventImages}></Gallary>
                     ) : (
                       ""
                     )}
 
-                    {eventDetails.eventDays[selectedDayIndex].isPaid ? (
+                    {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
                       <QrCode
                         eventId={eventId}
                         eventDayId={eventDetails.eventDays[selectedDayIndex].id}
@@ -306,7 +427,7 @@ function EventDetails() {
                       ""
                     )}
 
-                    {!eventDetails.eventDays[selectedDayIndex].isPaid &&
+                    {!eventDetails.eventDays[selectedDayIndex]?.isPaid &&
                     !addResourcesSpeaker ? (
                       <Link
                         to={`/home/payment/${eventId}`}
@@ -320,7 +441,7 @@ function EventDetails() {
                       >
                         <span className="mx-1">
                           Buy ticket{" "}
-                          {eventDetails.eventDays[selectedDayIndex].price} SAR
+                          {eventDetails.eventDays[selectedDayIndex]?.price} SAR
                         </span>
                         <svg
                           width="18"
@@ -361,7 +482,7 @@ function EventDetails() {
                     className="general my-3"
                     style={{ borderBottom: "1px solid #DCDCDC" }}
                   >
-                    <h2>{eventDetails.eventDays[selectedDayIndex].name}</h2>
+                    <h2>{eventDetails.eventDays[selectedDayIndex]?.name}</h2>
                     <div className="date my-3 d-flex gap-2 align-items-center">
                       <svg
                         width="48"
@@ -417,9 +538,9 @@ function EventDetails() {
                     >
                       {showFullDescription
                         ? description
-                        : words.slice(0, 40).join(" ")}
+                        : words?.slice(0, 40).join(" ")}
                     </span>
-                    {words.length > 40 && (
+                    {words?.length > 40 && (
                       <button
                         className="border-0 bg-transparent text-primary px-2"
                         onClick={toggleDescription}
@@ -432,7 +553,7 @@ function EventDetails() {
                   <div className="location py-2">
                     <h3>{i18n.language === "en" ? "Location" : "الموقع"}</h3>
                     <p style={{ fontSize: "14px", color: "#747688" }}>
-                      {eventDetails.eventDays[selectedDayIndex].address}
+                      {eventDetails.eventDays[selectedDayIndex]?.address}
                     </p>
 
                     <div
@@ -451,7 +572,7 @@ function EventDetails() {
                         }}
                         src={
                           eventDetails.eventDays[selectedDayIndex]
-                            .iFramAddressLink
+                            ?.iFramAddressLink
                         }
                         allowFullScreen={true}
                         aria-hidden="false"
@@ -527,7 +648,7 @@ function EventDetails() {
                   </div>
                   {/* /////////////////////////////////////////// */}
 
-                  {eventDetails.eventDays[selectedDayIndex].isPaid ? (
+                  {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
                     <div
                       style={{
                         borderTop: "1px solid #DCDCDC",
@@ -540,7 +661,7 @@ function EventDetails() {
                       <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
                         <Link
                           className="w-100 text-dark"
-                          to={`/home/session/${eventId}/${eventDetails.eventDays[selectedDayIndex].id}`}
+                          to={`/home/session/${eventId}/${eventDetails.eventDays[selectedDayIndex]?.id}`}
                         >
                           <div className="session-item bg-white rounded p-2 d-flex align-items-center gap-3">
                             <div className="video-icon">
@@ -702,12 +823,18 @@ function EventDetails() {
                 }}
               >
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Attendance :</span>{" "}
-                  06,07,08 March, 2023
+                  <span style={{ color: "#27AE60" }}>Attends:</span>{" "}
+                  {/* 06,07,08 March, 2023 */}
+                  {speakerAttends.length > 0
+                    ? new Date(speakerAttends[0].attendDay).toDateString()
+                    : ""}
                 </p>
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Departure :</span> 13,17,18
-                  March, 2023
+                  <span style={{ color: "#27AE60" }}>Departure:</span>{" "}
+                  {/* 06,07,08 March, 2023 */}
+                  {speakerDepartures.length > 0
+                    ? new Date(speakerDepartures[0].departureDay).toDateString()
+                    : ""}
                 </p>
               </div>
               <SpeakerTicket
@@ -716,7 +843,26 @@ function EventDetails() {
                 eventDayId={eventDetails.eventDays[selectedDayIndex].id}
                 userId={decodedToken.uid}
                 addResourcesSpeaker={addResourcesSpeaker}
-              ></SpeakerTicket>
+                departureDatesBE={speakerDepartures}
+                departureDates={speakerNewDepartures}
+                datesBE={speakerAttends}
+                dates={speakerNewAttends}
+                setDates={setSpeakerNewAttends}
+                setDepartureDates={setSpeakerNewDepartures}
+                setGetSpeakerDetails={setGetSpeakerDetails}
+                cityTO={cityTO}
+                setCityTO={setCityTO}
+                cityFrom={cityFrom}
+                setCityFrom={setCityFrom}
+                cityTOOld={cityTOOld}
+                cityFromOld={cityFromOld}
+                cityTODepature={cityTODepature}
+                setCityTODepature={setCityTODepature}
+                cityFromDepature={cityFromDepature}
+                setCityFromDepature={setCityFromDepature}
+                cityTOOldDepature={cityTOOldDepature}
+                cityFromOldDepature={cityFromOldDepature}
+              />
             </div>
             {/* Box */}
             <div
@@ -802,32 +948,50 @@ function EventDetails() {
               }}
             >
               <div className="d-flex align-items-center justify-content-between gap-1 event-questions">
-                <div className="event-question-child">
-                  <p>sat</p>
-                  <p>06/11</p>
+                <div
+                  className="event-question-child"
+                  style={{ color: "rgba(189, 189, 189, 1)" }}
+                >
+                  {renderDate(previousDate)}
                 </div>
-                <div className="event-question-child">
-                  <p>sat</p>
-                  <p>06/11</p>
+                <div
+                  className="event-question-child"
+                  style={{
+                    backgroundColor: "#3296D4",
+                    boxShadow: "0px 0px 9.01263px rgba(47, 128, 237, 0.25)",
+                    color: "#fff",
+                  }}
+                >
+                  {renderDate(currentDate)}
                 </div>
-                <div className="event-question-child">
-                  <p>sat</p>
-                  <p>06/11</p>
+                <div
+                  className="event-question-child"
+                  style={{
+                    border: "1px solid #27AE60",
+                    color: "#27AE60",
+                    backgroundColor: "rgba(39, 174, 96, 0.1)",
+                  }}
+                >
+                  {renderDate(nextDate)}
                 </div>
-                <div className="event-question-child">
-                  <p>sat</p>
-                  <p>06/11</p>
+                <div
+                  className="event-question-child"
+                  style={{
+                    border: "1px solid #27AE60",
+                    color: "#27AE60",
+                    backgroundColor: "rgba(39, 174, 96, 0.1)",
+                  }}
+                >
+                  {renderDate(nextTwoDates)}
                 </div>
               </div>
 
-              {/* <Resources
-                eventId={eventId}
-                eventDayId={eventDetails.eventDays[selectedDayIndex].id}
-                userId={decodedToken.uid}
-                addResourcesSpeaker={addResourcesSpeaker}
-                eventDaySpeakerId={eventDaySpeakerId}
-                sendId={sendId ? sendId : ""}
-              /> */}
+              <SpeakerQuestions
+                speakerQuestions={speakerQuestions}
+                eventDayStart={
+                  eventDetails.eventDays[selectedDayIndex].eventStartDay
+                }
+              />
             </div>
           </div>
         </div>

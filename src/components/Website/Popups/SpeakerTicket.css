@@ -31,6 +31,10 @@
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(39, 174, 95, 0.4),
     0 1px 2px 0 rgb(0, 0, 0);
 }
+.speakerTicket-popup .p-button.delete-question-icon:focus {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f7a2a2, 0 1px 2px 0 rgb(0, 0, 0);
+}
+
 .p-datepicker .p-datepicker-header {
   border: none;
   margin-bottom: 5px;
@@ -83,8 +87,56 @@
   font-weight: 400;
   text-align: center;
 }
+.question-container-box {
+  padding: 15px 25px 0px 25px;
+  border-left: 2px solid rgba(242, 242, 242, 1);
+  align-self: flex-start;
+}
+.questions-data {
+  padding: 15px 25px;
+  align-self: flex-start;
+}
+.questions-answers-tabs .p-tabmenu-nav.p-reset {
+  padding: 0;
+  margin: 0;
+  gap: 20px;
+  font-weight: 400;
+  line-height: 30px;
+}
+.questions-answers-tabs .p-tabmenu-nav.p-reset .p-tabmenuitem a {
+  padding: 12px 10px;
+  font-size: 16px;
+  color: #a5a5a5;
+}
+.questions-answers-tabs .p-tabmenu-nav.p-reset .p-tabmenuitem.p-highlight a {
+  border-color: black;
+  color: black;
+}
+.p-inputgroup-addon .p-button.p-component {
+  border-radius: 0 !important;
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+}
+.p-togglebutton.p-component .p-button-label {
+  padding: 0.45rem 0.9375rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 
-@media screen and (max-width: 960px) {
+.p-togglebutton:not(.p-disabled):has(.p-togglebutton-input:hover).p-highlight
+  .p-button {
+  background: rgba(39, 174, 96, 1);
+  border-color: rgba(39, 174, 96, 1);
+  color: #ffffff;
+}
+
+.p-togglebutton.p-highlight .p-button {
+  color: #ffffff;
+  background: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+@media screen and (max-width: 770px) {
   .speakerTicket-popup {
     width: 100%;
   }
@@ -95,6 +147,14 @@
   }
   .speakerTicket-popup .speakerTicket-inputTexts input {
     width: 100% !important;
+  }
+  .question-container-box {
+    border-left: none;
+    border-top: 2px solid rgba(242, 242, 242, 1);
+    padding: 5px 15px;
+  }
+  .questions-data {
+    padding: 5px 15px;
   }
 }
 
