@@ -6,69 +6,130 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { ToggleButton } from "primereact/togglebutton";
+import Cookie from "cookie-universal";
+import axios from "axios";
+import { BASE } from "../../../Api";
+import { jwtDecode } from "jwt-decode";
+import { FloatLabel } from "primereact/floatlabel";
+import { Badge } from "primereact/badge";
 
-export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
+export default function SpeakerQuestions({
+  speakerQuestions,
+  eventDayStart,
+  eventDaySpeakerId,
+  setRegetSpeakerDetails,
+  showAddQuestionToast,
+  showDeleteQuestionToast,
+}) {
   const { t, i18n } = useTranslation();
   const [showPopup, setShowPopup] = useState(true);
-  const [value, setValue] = useState("");
+  const [questionValue, setQuestionValue] = useState("");
+  const [questionValueAr, setQuestionValueAr] = useState("");
   const toast = useRef(null);
   const [showQuestions, setShowQuestions] = useState(true);
   const [answers, setAnswers] = useState([]);
-  const [newAnswer, setNewAnswer] = useState({ inputText: "", checked: false });
+  const [newAnswer, setNewAnswer] = useState({
+    inputText: "",
+    inputTextAr: "",
+    checked: false,
+  });
+
+  const cookie = new Cookie();
+  const token = cookie.get("edu-caring");
+  const decodedToken = token ? jwtDecode(token) : {};
 
   const items = [
     {
       label: t("Questions"),
       icon: "pi pi-home",
-      command: () => {},
+      command: () => {
+        setShowQuestions(true);
+      },
     },
     {
       label: t("Answers"),
       icon: "pi pi-chart-line",
-      command: () => {},
+      command: () => {
+        setShowQuestions(false);
+      },
     },
   ];
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
     if (!showPopup) {
-      //   setCityTO(cityTOOld); // Clear input value
-      //   setCityFrom(cityFromOld); // Clear input value
-      //   setCityTODepature(cityTOOldDepature); // Clear input value
-      //   setCityFromDepature(cityFromOldDepature); // Clear input value
-      //   setFormattedDates([]); // Clear formattedDates array
-      //   // Remove added styles
-      //   setDates(datesBE);
-      //   setDepartureDates(departureDatesBE);
-      //   // setShowAttendanceCalendar(true);
-      //   setSelectedOption("Attendance");
-      //   setShowAttendanceCalendar(true);
+      setAnswers([]);
+      setQuestionValue("");
+      setQuestionValueAr("");
+      setNewAnswer({ inputText: "", checked: false });
+      setShowQuestions(true);
     }
   };
-  const addQuestion = () => {};
+  const addQuestion = async () => {
+    if (questionValue && questionValueAr) {
+      const data = {
+        id: 0,
+        questionAr: questionValueAr,
+        questionEn: questionValue,
+        point: 1,
+        eventDaySpeakerId,
+        speakerId: decodedToken.uid,
+        speakerQuestionAnswers: answers.map((answer) => ({
+          id: 0,
+          answerAr: answer.inputTextAr,
+          answerEn: answer.inputText,
+          isTrueAnswer: answer.checked,
+          speakerQuestionId: 0,
+        })),
+      };
+      console.log([...speakerQuestions, data]);
+      axios
+        .post(`${BASE}/SpeakerQuestion`, [...speakerQuestions, data], {
+          headers: {
+            UserId: decodedToken.uid,
+          },
+        })
+        .then((response) => {
+          if (response.data.isSuccess) {
+            setRegetSpeakerDetails((prev) => prev + 1);
+            showAddQuestionToast();
+            togglePopup();
+          }
+        })
+        .catch((error) => {
+          console.error("Error adding question:", error);
+        });
+    }
+  };
+  const deleteQuestion = async (itemId) => {
+    axios
+      .delete(`${BASE}/SpeakerQuestion/${itemId}`, {
+        headers: {
+          UserId: decodedToken.uid,
+        },
+      })
+      .then((response) => {
+        if (response.data.isSuccess) {
+          setRegetSpeakerDetails((prev) => prev + 1);
+          showDeleteQuestionToast();
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting question:", error);
+      });
+  };
 
   const addNewAnswer = () => {
-    if (newAnswer.inputText) {
+    if (newAnswer.inputText && newAnswer.inputTextAr) {
       setAnswers([...answers, newAnswer]);
-      setNewAnswer({ inputText: "", checked: false });
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Answer Added",
-        life: 3000,
-      });
+      setNewAnswer({ inputText: "", checked: false, inputTextAr: "" });
     }
   };
   const removeAnswer = (index) => {
     const updatedAnswers = answers.filter((answer, i) => i !== index);
     setAnswers(updatedAnswers);
-    toast.current.show({
-      severity: "error",
-      summary: "Error",
-      detail: "Answer Removed",
-      life: 3000,
-    });
   };
+
   const currentDate = new Date(eventDayStart);
   const previousDate = new Date(currentDate);
   previousDate.setDate(currentDate.getDate() - 1); // Get previous day
@@ -76,6 +137,8 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
   nextDate.setDate(currentDate.getDate() + 1); // Get next day
   const nextTwoDates = new Date(currentDate);
   nextTwoDates.setDate(currentDate.getDate() + 2);
+
+  // Date on the box of ticket
   function renderDate(date) {
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const dayOfWeek = daysOfWeek[date.getDay()];
@@ -94,12 +157,19 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
   function padZero(num) {
     return num < 10 ? "0" + num : num;
   }
+  function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + "...";
+    }
+    return str;
+  }
   return (
     <>
       <button
         className="btn btn-success py-2  w-100"
         style={{
-          background: "rgba(195, 43, 67, 1)",
+          background:
+            speakerQuestions?.length > 0 ? "#27AE60" : "rgba(195, 43, 67, 1)",
           border: "none",
           outline: "none",
         }}
@@ -113,6 +183,7 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
           transform: showPopup
             ? "translate(300%, -50%)"
             : "translate(-50%, -50%)",
+          direction: i18n.language === "en" ? "ltr" : "rtl",
         }}
       >
         <div
@@ -177,8 +248,9 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
               onTabChange={(e) => setShowQuestions(e.index === 0)}
             />
             <div style={{ maxHeight: 300, overflow: "auto" }}>
-              {speakerQuestions.length > 0 &&
-                speakerQuestions.map((item, i) => (
+              {showQuestions &&
+                speakerQuestions?.length > 0 &&
+                speakerQuestions?.map((item, i) => (
                   <div
                     className="card"
                     key={i}
@@ -233,7 +305,7 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
                         rounded
                         severity="danger"
                         aria-label="Cancel"
-                        onClick={() => {}}
+                        onClick={() => deleteQuestion(item.id)}
                       ></Button>
                     </div>
                     <div className="d-flex gap-1 flex-column justify-content-center">
@@ -266,17 +338,55 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
           </div>
           <div className="d-flex gap-3 w-50 flex-wrap calendar question-container-box">
             <h2>{t("Question")}</h2>
-            <InputTextarea
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              rows={5}
-              cols={30}
-            />
-            <div className="d-flex gap-2 flex-column mb-2">
+            <div className="w-100 d-flex">
+              <FloatLabel className="pt-3 w-50">
+                <InputTextarea
+                  id="questionEn"
+                  value={questionValue}
+                  onChange={(e) => setQuestionValue(e.target.value)}
+                  rows={5}
+                  cols={15}
+                  placeholder="Question in English"
+                  variant={questionValue ? "filled" : "outlined"}
+                />
+                <label
+                  htmlFor="questionEn"
+                  style={{ right: i18n.language === "ar" ? "0" : "auto" }}
+                  className="mb-5"
+                >
+                  {t("QuestionEn")}
+                </label>
+              </FloatLabel>
+              <FloatLabel className="pt-3 w-50">
+                <InputTextarea
+                  id="questionAr"
+                  value={questionValueAr}
+                  onChange={(e) => setQuestionValueAr(e.target.value)}
+                  rows={5}
+                  cols={15}
+                  placeholder="Question in Arabic"
+                  variant={questionValueAr ? "filled" : "outlined"}
+                />
+                <label
+                  htmlFor="questionAr"
+                  style={{ right: i18n.language === "ar" ? "0" : "auto" }}
+                >
+                  {t("QuestionAr")}
+                </label>
+              </FloatLabel>
+            </div>
+            <div className="d-flex gap-3 align-items-center justify-content-start ">
+              <h3 className="mb-0 fw-bold">{t("Answers")}</h3>
+              <Badge value={answers.length} size="large" severity="secondary" />
+            </div>
+            <div
+              className="d-flex gap-2 flex-column mb-2 w-100"
+              style={{ maxHeight: "120px", overflowY: "auto" }}
+            >
               {answers.map((answer, i) => (
                 <div
                   key={i}
-                  className="d-flex gap-3 align-items-center justify-content-start"
+                  className="d-flex gap-3 align-items-center justify-content-start w-100"
                 >
                   <Button
                     icon="fas fa-times"
@@ -301,37 +411,87 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
                       lineHeight: "22px",
                     }}
                   >
-                    {answer.inputText}
+                    {truncateString(
+                      i18n.language === "en"
+                        ? answer.inputText
+                        : answer.inputTextAr,
+                      25
+                    )}
                   </p>
+                  {answer.checked && (
+                    <i
+                      className="fas fa-check"
+                      style={{
+                        color: "#22c55e",
+                        marginLeft: "auto",
+                        marginRight: "15px",
+                        fontSize: "20px",
+                      }}
+                    ></i>
+                  )}
                 </div>
               ))}
             </div>
-            <div className="p-inputgroup flex-1">
-              <InputText
-                placeholder={t("AddNewAnswer")}
-                value={newAnswer.inputText}
-                onChange={(e) =>
-                  setNewAnswer({ ...newAnswer, inputText: e.target.value })
-                }
-                style={{
-                  fontSize: "1.25rem",
-                  padding: "0.45rem 0.9375rem",
-                }}
-              />
+            <div
+              className={`${
+                i18n.language === "en" ? "" : "ar"
+              } p-inputgroup flex-1`}
+            >
+              <div className="d-flex flex-column">
+                <InputText
+                  placeholder={t("AddNewAnswerEn")}
+                  value={newAnswer.inputText}
+                  variant={newAnswer.inputText ? "filled" : "outlined"}
+                  onChange={(e) =>
+                    setNewAnswer({ ...newAnswer, inputText: e.target.value })
+                  }
+                  style={{
+                    fontSize: "1.25rem",
+                    padding: "0.45rem 0.9375rem",
+                    width: "100%",
+                    borderTopRightRadius: i18n.language === "en" ? "0" : "6px",
+                    borderBottomRightRadius:
+                      i18n.language === "en" ? "0" : "6px",
+                    borderTopLeftRadius: i18n.language === "en" ? "6px" : "0",
+                    borderBottomLeftRadius:
+                      i18n.language === "en" ? "6px" : "0",
+                  }}
+                />
+                <InputText
+                  placeholder={t("AddNewAnswerAr")}
+                  value={newAnswer.inputTextAr}
+                  variant={newAnswer.inputTextAr ? "filled" : "outlined"}
+                  onChange={(e) =>
+                    setNewAnswer({ ...newAnswer, inputTextAr: e.target.value })
+                  }
+                  style={{
+                    fontSize: "1.25rem",
+                    padding: "0.45rem 0.9375rem",
+                    width: "100%",
+                    borderTopRightRadius: i18n.language === "en" ? "0" : "6px",
+                    borderBottomRightRadius:
+                      i18n.language === "en" ? "0" : "6px",
+                    borderTopLeftRadius: i18n.language === "en" ? "6px" : "0",
+                    borderBottomLeftRadius:
+                      i18n.language === "en" ? "6px" : "0",
+                  }}
+                />
+              </div>
               <span
                 className="p-inputgroup-addon"
                 style={{
                   borderRight: "1px solid #d1d5db",
-                  borderTopRightRadius: "6px",
-                  borderBottomRightRadius: "6px",
-                  marginRight: "10px",
+                  borderTopRightRadius: i18n.language === "ar" ? "0" : "6px",
+                  borderBottomRightRadius: i18n.language === "ar" ? "0" : "6px",
+                  borderTopLeftRadius: i18n.language === "ar" ? "6px" : "0",
+                  borderBottomLeftRadius: i18n.language === "ar" ? "6px" : "0",
+                  marginRight: i18n.language === "ar" ? "0" : "10px",
+                  marginLeft: i18n.language === "ar" ? "10px" : "0",
                 }}
               >
                 <ToggleButton
                   onLabel={t("Correct")}
                   offLabel={t("False")}
-                  onIcon="pi pi-check"
-                  offIcon="pi pi-times"
                   checked={newAnswer.checked}
                   className="h-100"
                   onChange={(e) =>
@@ -340,15 +500,16 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
                 />
               </span>
               <Button
-                icon="fas fa-chevron-circle-right"
-                className="p-button-success rounded-2 p-1"
+                icon={`fas fa-${
+                  i18n.language === "ar" ? "angle-left" : "angle-right"
+                }`}
+                className="p-button-success rounded-2 p-1 h-100"
                 severity="success"
                 aria-label="Submit"
-                onClick={() => addNewAnswer()}
+                onClick={addNewAnswer}
                 raised
                 style={{
                   width: "35px",
-                  height: "35px",
                   justifyContent: "center",
                   alignItems: "center",
                   cursor: "pointer",
@@ -356,7 +517,6 @@ export default function SpeakerQuestions({ speakerQuestions, eventDayStart }) {
                 }}
               />
             </div>
-
             <Button
               label={t("AddNewQuestion")}
               icon="pi pi-plus"

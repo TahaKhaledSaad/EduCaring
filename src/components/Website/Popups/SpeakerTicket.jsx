@@ -97,8 +97,8 @@ export default function SpeakerTicket({
 
   const handleConfirm = async () => {
     if (
-      dates.length <= 3 &&
-      departureDates.length <= 3 &&
+      dates?.length <= 3 &&
+      departureDates?.length <= 3 &&
       cityTO &&
       cityFrom &&
       cityFromDepature &&
@@ -107,9 +107,9 @@ export default function SpeakerTicket({
       // Separate formattedDates based on selected option
       try {
         // Send request for attendance
-        const attendanceArray = dates.map((date) => {
+        const attendanceArray = dates?.map((date) => {
           let monthStr, dayNum, year, formattedDate;
-          const oldDate = datesBE.find(
+          const oldDate = datesBE?.find(
             (dateObj) => dateObj.attendDay === date.attendDay
           );
           if (oldDate && oldDate.dayMod === date.dayMod) {
@@ -172,9 +172,9 @@ export default function SpeakerTicket({
         console.log("Attendance Response:", attendanceResponse);
 
         // Send request for departure
-        const departureArray = departureDates.map((date) => {
+        const departureArray = departureDates?.map((date) => {
           let monthStr, dayNum, year, formattedDate;
-          const oldDate = departureDatesBE.find(
+          const oldDate = departureDatesBE?.find(
             (dateObj) => dateObj.departureDay === date.departureDay
           );
           if (oldDate && oldDate.dayMod === date.dayMod) {
@@ -398,7 +398,14 @@ export default function SpeakerTicket({
       <Toast ref={toast} />
       <button
         className="btn btn-success py-2  w-100"
-        style={{ background: "#27AE60", border: "none", outline: "none" }}
+        style={{
+          background:
+            departureDatesBE?.length > 0 && datesBE?.length > 0
+              ? "#27AE60"
+              : "rgba(195, 43, 67, 1)",
+          border: "none",
+          outline: "none",
+        }}
         onClick={togglePopup}
       >
         Edit
@@ -503,11 +510,11 @@ export default function SpeakerTicket({
           <div className="calendar w-50 ">
             {showAttendanceCalendar ? (
               <Calendar
-                value={dates.map((dateObj) => new Date(dateObj.attendDay))}
+                value={dates?.map((dateObj) => new Date(dateObj.attendDay))}
                 // value={dates}
                 onChange={(e) => {
                   const newDates = e.value.map((date) => {
-                    const existingDate = dates.find(
+                    const existingDate = dates?.find(
                       (dateObj) => dateObj.attendDay === date.toDateString()
                     );
                     return existingDate
@@ -525,7 +532,7 @@ export default function SpeakerTicket({
               />
             ) : (
               <Calendar
-                value={departureDates.map(
+                value={departureDates?.map(
                   (dateObj) => new Date(dateObj.departureDay)
                 )}
                 onChange={(e) => {
@@ -557,7 +564,7 @@ export default function SpeakerTicket({
 
         <div className="d-flex gap-3 flex-wrap">
           {showAttendanceCalendar
-            ? dates.map(({ attendDay, dayMod }, index) => (
+            ? dates?.map(({ attendDay, dayMod }, index) => (
                 <div key={index}>
                   <div
                     className="m-2 rounded"
@@ -626,7 +633,7 @@ export default function SpeakerTicket({
                   />
                 </div>
               ))
-            : departureDates.map(({ departureDay, dayMod }, index) => (
+            : departureDates?.map(({ departureDay, dayMod }, index) => (
                 <div key={index}>
                   <div
                     className="m-2 rounded"
@@ -705,8 +712,8 @@ export default function SpeakerTicket({
           <Button
             className="w-50 border-0 rounded text-white py-2 align-items-center justify-content-center"
             disabled={
-              dates.length === 0 ||
-              departureDates.length === 0 ||
+              dates?.length === 0 ||
+              departureDates?.length === 0 ||
               !cityTO ||
               !cityFrom ||
               !cityTODepature ||
