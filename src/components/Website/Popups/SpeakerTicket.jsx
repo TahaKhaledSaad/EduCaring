@@ -13,6 +13,7 @@ import { FloatLabel } from "primereact/floatlabel";
 import { Toast } from "primereact/toast";
 import { useTranslation } from "react-i18next";
 import { Steps } from "primereact/steps";
+import { Badge } from "primereact/badge";
 
 export default function SpeakerTicket({
   eventDaySpeakerId,
@@ -386,6 +387,7 @@ export default function SpeakerTicket({
           padding: "0 1em",
           fontSize: "16px",
           fontWeight: "500",
+          position: "relative",
         }}
       >
         <i
@@ -398,6 +400,26 @@ export default function SpeakerTicket({
           } fa-circle-check px-2`}
         ></i>{" "}
         {t(item)}
+        {item === "Attendance" &&
+          (dates?.length !== 3 || cityTO === "" || cityFrom == "") && (
+            <Badge
+              severity="danger"
+              className="position-absolute top-0 end-0"
+              size={"normal"}
+              style={{ fontSize: "2px" }}
+            ></Badge>
+          )}
+        {item === "Departure" &&
+          (departureDates?.length !== 3 ||
+            cityTODepature === "" ||
+            cityFromDepature === "") && (
+            <Badge
+              severity="danger"
+              className="position-absolute top-0 end-0"
+              size={"normal"}
+              style={{ fontSize: "2px" }}
+            ></Badge>
+          )}
       </div>
     );
   };
@@ -729,8 +751,8 @@ export default function SpeakerTicket({
           <Button
             className="w-50 border-0 rounded text-white py-2 align-items-center justify-content-center"
             disabled={
-              dates?.length === 0 ||
-              departureDates?.length === 0 ||
+              dates?.length !== 3 ||
+              departureDates?.length !== 3 ||
               !cityTO ||
               !cityFrom ||
               !cityTODepature ||
