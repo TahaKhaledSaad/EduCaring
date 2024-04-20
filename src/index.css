@@ -923,10 +923,10 @@ tr {
   background-color: #3296d4 !important;
   color: #fff !important;
 }
-.date {
+.datef {
   position: relative;
 }
-.date::before {
+.datef::before {
   content: "Date of birth";
   position: absolute;
   width: 90%;

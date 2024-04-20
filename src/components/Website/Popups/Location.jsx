@@ -104,20 +104,19 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because getMonth() returns zero-based month index
     const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
 
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    return `${year}-${month}-${day}`;
   }
 
   const currentDate = new Date();
   const formattedDate = formatDate(currentDate);
-  console.log(formattedDate);
+
+  // Extract date part from eventDayDate
+  const eventDayDateOnly = eventDayDate.split("T")[0];
 
   return (
     <>
-      {formattedDate !== eventDayDate &&(
+      {formattedDate === eventDayDateOnly && (
         <div
           className="p-1 text-center text-white justify-content-between align-items-center gap-2"
           style={{
@@ -126,7 +125,7 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
             borderRadius: "20px",
             cursor: "pointer",
             backgroundColor: "#eee",
-            width:"110px",
+            width: "110px",
             display: isSuccess ? "none" : "flex",
           }}
           onClick={togglePopup}
@@ -198,7 +197,7 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
         )}
 
         {isSuccess ? (
-            <div className="p-3 d-flex flex-column justify-content-center align-items-center">
+          <div className="p-3 d-flex flex-column justify-content-center align-items-center">
             <i className="fa-solid fa-check-circle fs-3 p-2 text-success"></i>
             <h5 className="text-center">Attendance taken successfully</h5>
           </div>

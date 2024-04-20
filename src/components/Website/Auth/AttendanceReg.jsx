@@ -279,7 +279,7 @@ export default function AttendanceReg() {
 
               {/* input */}
               <div>
-                <div  className={`${style.input} d-flex align-items-center p-0 date`}>
+                <div  className={`${style.input} d-flex align-items-center p-0 datef`}>
                   {/* <i className="fa-regular fa-calendar-days"></i> */}
                   <input
                     type="date"
