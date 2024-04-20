@@ -460,14 +460,14 @@ export default function SpeakerTicket({
             onClick={togglePopup}
           ></i>
         </div>
-        <dv className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center">
           <Steps
             model={ticketsItems}
             activeIndex={showAttendanceCalendar ? 0 : 1}
             readOnly
             style={{ width: "50%", marginTop: "10px" }}
           />
-        </dv>
+        </div>
         <div className="popup-body d-flex flex-column flex-md-row justify-content-between align-items-center p-2 px-4 my-3">
           <div className="w-50 speakerTicket-data">
             <div className="d-flex gap-4 flex-column">
