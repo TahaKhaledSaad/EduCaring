@@ -816,7 +816,7 @@ function EventDetails() {
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                height: "160px",
+                minHeight: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",
               }}
@@ -899,7 +899,7 @@ function EventDetails() {
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                height: "160px",
+                minHeight: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",
               }}
