@@ -16,6 +16,7 @@ import { PulseLoader } from "react-spinners";
 import { filesNumber, imgsNumber, linksNumber } from "./../Popups/Resources"; // Update the path accordingly
 import SpeakerTicket from "../Popups/SpeakerTicket";
 import SpeakerQuestions from "../Popups/SpeakerQuestions";
+import Location from "../Popups/Location";
 
 // Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
@@ -70,6 +71,8 @@ function EventDetails() {
         console.error("Error fetching event details:", error);
       });
   }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language]);
+
+  console.log(eventDetails);
 
   useEffect(() => {
     if (eventDetails) {
@@ -165,7 +168,6 @@ function EventDetails() {
       </div>
     );
   }
-
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -423,6 +425,16 @@ function EventDetails() {
                         QR={eventDetails.eventDays[selectedDayIndex].qrCode}
                         userId={decodedToken.uid}
                       ></QrCode>
+                    ) : (
+                      ""
+                    )}
+
+                    {eventDetails.eventDays[selectedDayIndex]?.isPaid && !addResourcesSpeaker? (
+                      <Location
+                      eventId={eventId}
+                      eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                      eventDayDate={eventDetails.eventDays[selectedDayIndex].eventStartDay}
+                      ></Location>
                     ) : (
                       ""
                     )}

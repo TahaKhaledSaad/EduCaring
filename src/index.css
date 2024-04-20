@@ -922,5 +922,18 @@ tr {
 .selectedtr {
   background-color: #3296d4 !important;
   color: #fff !important;
-
+}
+.date {
+  position: relative;
+}
+.date::before {
+  content: "Date of birth";
+  position: absolute;
+  width: 90%;
+  height: 100%;
+  padding-left: 10px;
+  background-color: #fff;
+  color: #dcdcdc;
+  display: flex;
+  align-items: center;
 }
