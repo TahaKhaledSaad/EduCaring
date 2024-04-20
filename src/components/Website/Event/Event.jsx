@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ExMark from "../../../assets/Exclamation_mark.png";
 import Carousel from "react-bootstrap/Carousel";
 import { Link, useParams } from "react-router-dom";
@@ -16,27 +16,30 @@ import { PulseLoader } from "react-spinners";
 import { filesNumber, imgsNumber, linksNumber } from "./../Popups/Resources"; // Update the path accordingly
 import SpeakerTicket from "../Popups/SpeakerTicket";
 import SpeakerQuestions from "../Popups/SpeakerQuestions";
+import { Toast } from "primereact/toast";
 import Location from "../Popups/Location";
 
 // Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
 function EventDetails() {
   // Translation Work
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showCompeleteProccese, setShowCompeleteProccese] = useState(false);
 
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
-
   const { eventId } = useParams();
+
   const [eventDetails, setEventDetails] = useState(null);
-  const [selectedDayIndex, setSelectedDayIndex] = useState(0); // State to track the selected day index
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+
   const [getSpeakerDetails, setGetSpeakerDetails] = useState(0);
   const [speakerQuestions, setSpeakerQuestions] = useState([]);
   const [speakerAttends, setSpeakerAttends] = useState([]);
   const [speakerNewAttends, setSpeakerNewAttends] = useState([]);
   const [speakerDepartures, setSpeakerDepartures] = useState([]);
   const [speakerNewDepartures, setSpeakerNewDepartures] = useState([]);
+
   const [cityTO, setCityTO] = useState("");
   const [cityFrom, setCityFrom] = useState("");
   const [cityTOOld, setCityTOOld] = useState("");
@@ -49,6 +52,10 @@ function EventDetails() {
   const decodedToken = token ? jwtDecode(token) : {};
 
   const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const [regetSpeakerDetails, setRegetSpeakerDetails] = useState(0);
+
+  const toast = useRef(null);
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -145,7 +152,13 @@ function EventDetails() {
           );
         });
     }
-  }, [decodedToken.uid, eventDetails, selectedDayIndex, getSpeakerDetails]);
+  }, [
+    decodedToken.uid,
+    eventDetails,
+    selectedDayIndex,
+    getSpeakerDetails,
+    regetSpeakerDetails,
+  ]);
   if (!eventDetails) {
     return (
       <div
@@ -168,6 +181,23 @@ function EventDetails() {
       </div>
     );
   }
+
+  const showAddQuestionToast = () => {
+    toast.current.show({
+      severity: "success",
+      summary: t("QuestionAdded"),
+      detail: t("QuestionAddedSuccessfully"),
+      life: 3000,
+    });
+  };
+  const showDeleteQuestionToast = () => {
+    toast.current.show({
+      severity: "success",
+      summary: t("QuestionDeleted"),
+      detail: t("QuestionDeletedSuccessfully"),
+      life: 3000,
+    });
+  };
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -799,7 +829,7 @@ function EventDetails() {
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                height: "160px",
+                minHeight: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",
               }}
@@ -837,14 +867,14 @@ function EventDetails() {
                 <p className="my-0">
                   <span style={{ color: "#27AE60" }}>Attends:</span>{" "}
                   {/* 06,07,08 March, 2023 */}
-                  {speakerAttends.length > 0
+                  {speakerAttends?.length > 0
                     ? new Date(speakerAttends[0].attendDay).toDateString()
                     : ""}
                 </p>
                 <p className="my-0">
                   <span style={{ color: "#27AE60" }}>Departure:</span>{" "}
                   {/* 06,07,08 March, 2023 */}
-                  {speakerDepartures.length > 0
+                  {speakerDepartures?.length > 0
                     ? new Date(speakerDepartures[0].departureDay).toDateString()
                     : ""}
                 </p>
@@ -882,7 +912,7 @@ function EventDetails() {
               style={{
                 backgroundColor: "#eaf7f0",
                 border: "1px solid #dcdcdc",
-                height: "160px",
+                minHeight: "160px",
                 borderRadius: "12px",
                 padding: "15px 10px",
               }}
@@ -997,11 +1027,21 @@ function EventDetails() {
                   {renderDate(nextTwoDates)}
                 </div>
               </div>
-
+              <Toast ref={toast} />
               <SpeakerQuestions
                 speakerQuestions={speakerQuestions}
+                showAddQuestionToast={showAddQuestionToast}
+                showDeleteQuestionToast={showDeleteQuestionToast}
+                setRegetSpeakerDetails={setRegetSpeakerDetails}
                 eventDayStart={
                   eventDetails.eventDays[selectedDayIndex].eventStartDay
+                }
+                eventDaySpeakerId={
+                  eventDetails.eventDays[
+                    selectedDayIndex
+                  ].eventDaySpeakers.find(
+                    (speaker) => speaker.speakerId === decodedToken.uid
+                  ).id
                 }
               />
             </div>

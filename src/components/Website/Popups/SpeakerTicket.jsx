@@ -12,6 +12,8 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Toast } from "primereact/toast";
 import { useTranslation } from "react-i18next";
+import { Steps } from "primereact/steps";
+import { Badge } from "primereact/badge";
 
 export default function SpeakerTicket({
   eventDaySpeakerId,
@@ -54,7 +56,14 @@ export default function SpeakerTicket({
     setShowAttendanceCalendar(newSelectedOption === "Attendance");
   };
 
-  console.log(confirm);
+  const ticketsItems = [
+    {
+      label: t("Attendance"),
+    },
+    {
+      label: t("Departure"),
+    },
+  ];
 
   // Show popup
 
@@ -97,8 +106,8 @@ export default function SpeakerTicket({
 
   const handleConfirm = async () => {
     if (
-      dates.length <= 3 &&
-      departureDates.length <= 3 &&
+      dates?.length <= 3 &&
+      departureDates?.length <= 3 &&
       cityTO &&
       cityFrom &&
       cityFromDepature &&
@@ -107,9 +116,9 @@ export default function SpeakerTicket({
       // Separate formattedDates based on selected option
       try {
         // Send request for attendance
-        const attendanceArray = dates.map((date) => {
+        const attendanceArray = dates?.map((date) => {
           let monthStr, dayNum, year, formattedDate;
-          const oldDate = datesBE.find(
+          const oldDate = datesBE?.find(
             (dateObj) => dateObj.attendDay === date.attendDay
           );
           if (oldDate && oldDate.dayMod === date.dayMod) {
@@ -172,9 +181,9 @@ export default function SpeakerTicket({
         console.log("Attendance Response:", attendanceResponse);
 
         // Send request for departure
-        const departureArray = departureDates.map((date) => {
+        const departureArray = departureDates?.map((date) => {
           let monthStr, dayNum, year, formattedDate;
-          const oldDate = departureDatesBE.find(
+          const oldDate = departureDatesBE?.find(
             (dateObj) => dateObj.departureDay === date.departureDay
           );
           if (oldDate && oldDate.dayMod === date.dayMod) {
@@ -378,6 +387,7 @@ export default function SpeakerTicket({
           padding: "0 1em",
           fontSize: "16px",
           fontWeight: "500",
+          position: "relative",
         }}
       >
         <i
@@ -390,6 +400,26 @@ export default function SpeakerTicket({
           } fa-circle-check px-2`}
         ></i>{" "}
         {t(item)}
+        {item === "Attendance" &&
+          (dates?.length !== 3 || cityTO === "" || cityFrom == "") && (
+            <Badge
+              severity="danger"
+              className="position-absolute top-0 end-0"
+              size={"normal"}
+              style={{ fontSize: "2px" }}
+            ></Badge>
+          )}
+        {item === "Departure" &&
+          (departureDates?.length !== 3 ||
+            cityTODepature === "" ||
+            cityFromDepature === "") && (
+            <Badge
+              severity="danger"
+              className="position-absolute top-0 end-0"
+              size={"normal"}
+              style={{ fontSize: "2px" }}
+            ></Badge>
+          )}
       </div>
     );
   };
@@ -398,7 +428,14 @@ export default function SpeakerTicket({
       <Toast ref={toast} />
       <button
         className="btn btn-success py-2  w-100"
-        style={{ background: "#27AE60", border: "none", outline: "none" }}
+        style={{
+          background:
+            departureDatesBE?.length > 0 && datesBE?.length > 0
+              ? "#27AE60"
+              : "rgba(195, 43, 67, 1)",
+          border: "none",
+          outline: "none",
+        }}
         onClick={togglePopup}
       >
         Edit
@@ -423,40 +460,17 @@ export default function SpeakerTicket({
             onClick={togglePopup}
           ></i>
         </div>
-
+        <div className="d-flex justify-content-center">
+          <Steps
+            model={ticketsItems}
+            activeIndex={showAttendanceCalendar ? 0 : 1}
+            readOnly
+            style={{ width: "50%", marginTop: "10px" }}
+          />
+        </div>
         <div className="popup-body d-flex flex-column flex-md-row justify-content-between align-items-center p-2 px-4 my-3">
           <div className="w-50 speakerTicket-data">
             <div className="d-flex gap-4 flex-column">
-              <FloatLabel
-                className="w-50 speakerTicket-inputTexts"
-                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
-              >
-                <InputText
-                  id="cityTo"
-                  value={
-                    selectedOption === "Attendance" ? cityTO : cityTODepature
-                  }
-                  style={{
-                    fontSize: "1.25rem",
-                    padding: "0.45rem 0.9375rem",
-                    marginTop: "10px",
-                    width: "100%",
-                  }}
-                  onChange={(e) => {
-                    return selectedOption === "Attendance"
-                      ? setCityTO(e.target.value)
-                      : setCityTODepature(e.target.value);
-                  }}
-                />
-                <label
-                  style={{
-                    right: i18n.language === "ar" ? "0" : "auto",
-                  }}
-                  htmlFor="cityTo"
-                >
-                  {t("CityTo")}
-                </label>
-              </FloatLabel>
               <FloatLabel
                 style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
                 className="w-50 speakerTicket-inputTexts"
@@ -489,6 +503,36 @@ export default function SpeakerTicket({
                   {t("CityFrom")}
                 </label>
               </FloatLabel>
+              <FloatLabel
+                className="w-50 speakerTicket-inputTexts"
+                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+              >
+                <InputText
+                  id="cityTo"
+                  value={
+                    selectedOption === "Attendance" ? cityTO : cityTODepature
+                  }
+                  style={{
+                    fontSize: "1.25rem",
+                    padding: "0.45rem 0.9375rem",
+                    marginTop: "10px",
+                    width: "100%",
+                  }}
+                  onChange={(e) => {
+                    return selectedOption === "Attendance"
+                      ? setCityTO(e.target.value)
+                      : setCityTODepature(e.target.value);
+                  }}
+                />
+                <label
+                  style={{
+                    right: i18n.language === "ar" ? "0" : "auto",
+                  }}
+                  htmlFor="cityTo"
+                >
+                  {t("CityTo")}
+                </label>
+              </FloatLabel>
             </div>
 
             <SelectButton
@@ -503,11 +547,11 @@ export default function SpeakerTicket({
           <div className="calendar w-50 ">
             {showAttendanceCalendar ? (
               <Calendar
-                value={dates.map((dateObj) => new Date(dateObj.attendDay))}
+                value={dates?.map((dateObj) => new Date(dateObj.attendDay))}
                 // value={dates}
                 onChange={(e) => {
                   const newDates = e.value.map((date) => {
-                    const existingDate = dates.find(
+                    const existingDate = dates?.find(
                       (dateObj) => dateObj.attendDay === date.toDateString()
                     );
                     return existingDate
@@ -516,6 +560,7 @@ export default function SpeakerTicket({
                   });
                   setDates(newDates);
                 }}
+                disabled={dates?.length >= 3}
                 style={{ width: "100%" }}
                 dateTemplate={dateTemplate}
                 selectionMode="multiple"
@@ -525,12 +570,12 @@ export default function SpeakerTicket({
               />
             ) : (
               <Calendar
-                value={departureDates.map(
+                value={departureDates?.map(
                   (dateObj) => new Date(dateObj.departureDay)
                 )}
                 onChange={(e) => {
                   const newDates = e.value.map((date) => {
-                    const existingDate = departureDates.find(
+                    const existingDate = departureDates?.find(
                       (dateObj) => dateObj.departureDay === date.toDateString()
                     );
 
@@ -546,6 +591,7 @@ export default function SpeakerTicket({
                 }}
                 style={{ width: "100%" }}
                 dateTemplate={depatureDateTemplate}
+                disabled={departureDates?.length >= 3}
                 selectionMode="multiple"
                 className="custom-calendar"
                 readOnlyInput
@@ -557,7 +603,7 @@ export default function SpeakerTicket({
 
         <div className="d-flex gap-3 flex-wrap">
           {showAttendanceCalendar
-            ? dates.map(({ attendDay, dayMod }, index) => (
+            ? dates?.map(({ attendDay, dayMod }, index) => (
                 <div key={index}>
                   <div
                     className="m-2 rounded"
@@ -626,7 +672,7 @@ export default function SpeakerTicket({
                   />
                 </div>
               ))
-            : departureDates.map(({ departureDay, dayMod }, index) => (
+            : departureDates?.map(({ departureDay, dayMod }, index) => (
                 <div key={index}>
                   <div
                     className="m-2 rounded"
@@ -705,8 +751,8 @@ export default function SpeakerTicket({
           <Button
             className="w-50 border-0 rounded text-white py-2 align-items-center justify-content-center"
             disabled={
-              dates.length === 0 ||
-              departureDates.length === 0 ||
+              dates?.length !== 3 ||
+              departureDates?.length !== 3 ||
               !cityTO ||
               !cityFrom ||
               !cityTODepature ||
