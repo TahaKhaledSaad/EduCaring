@@ -91,94 +91,91 @@ function App() {
           <Route path="register-speaker" element={<SpeakerReg />} />
         </Route>
         {/* Testing */}
-        <Route element={<DirectToDashAuth />}>
-          <Route element={<RequireAuth />}>
-            <Route path="/home" element={<Home />}>
-              <Route path="event/:eventId" element={<Event />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/home" element={<Home />}>
+            <Route path="event/:eventId" element={<Event />} />
+            <Route
+              path="speakerProfile/:eventId/:eventDayId/:speakerId"
+              element={<SpeakerProfile />}
+            />
+            <Route path="myevents" element={<MyEvents />} />
+            <Route path="recommendations" element={<Recommendations />} />
+            <Route path="community" element={<Community />} />
+            <Route path="payment/:eventId" element={<Payment />} />
+            <Route path="session/:eventId/:eventDayId" element={<Session />} />
+            <Route element={<UserAuth />}>
               <Route
-                path="speakerProfile/:eventId/:eventDayId/:speakerId"
-                element={<SpeakerProfile />}
+                path="update-user-profile"
+                element={<UpdateUserProfile />}
               />
-              <Route path="myevents" element={<MyEvents />} />
-              <Route path="recommendations" element={<Recommendations />} />
-              <Route path="community" element={<Community />} />
-              <Route path="payment/:eventId" element={<Payment />} />
+            </Route>
+            <Route element={<SpeakerAuth />}>
               <Route
-                path="session/:eventId/:eventDayId"
-                element={<Session />}
+                path="update-speaker-profile"
+                element={<UpdateSpeakerProfile />}
               />
-              <Route element={<UserAuth />}>
-                <Route
-                  path="update-user-profile"
-                  element={<UpdateUserProfile />}
-                />
-              </Route>
-              <Route element={<SpeakerAuth />}>
-                <Route
-                  path="update-speaker-profile"
-                  element={<UpdateSpeakerProfile />}
-                />
-              </Route>
             </Route>
           </Route>
         </Route>
 
         {/* TODO Dashboard */}
         <Route element={<RequireAuth />}>
-        <Route element={<AdminAuth />}>
-          <Route
-            path="dashboard"
-            element={
-              <Dashboard isEnglish={isEnglish} setIsEnglish={setIsEnglish} />
-            }
-          >
-            <Route path="events" element={<Events isEnglish={isEnglish} />} />
+          <Route element={<AdminAuth />}>
             <Route
-              path="event/create"
+              path="dashboard"
               element={
-                <CreateEvent isEnglish={isEnglish} speakers={speakers} />
+                <Dashboard isEnglish={isEnglish} setIsEnglish={setIsEnglish} />
               }
-            />
-            <Route path="messages" element={<SendMessage />} />
-            <Route path="contactus" element={<ContactUs />} />
-            <Route path="support" element={<Support />} />
-            <Route
-              path="events/:id"
-              element={
-                <UpdateEvent isEnglish={isEnglish} speakers={speakers} />
-              }
-            />
-            <Route path="users" element={<Users isEnglish={isEnglish} />} />
-            <Route
-              path="landing-speakers"
-              element={<LandingSpeakers isEnglish={isEnglish} />}
-            />
-            <Route
-              path="landing-sponsers"
-              element={<LandingSponsers isEnglish={isEnglish} />}
-            />
-            <Route
-              path="landing-text"
-              element={<LandingText isEnglish={isEnglish} />}
-            />
-            <Route
-              path="landing-aboutus"
-              element={<LandingAboutUs isEnglish={isEnglish} />}
-            />
-            <Route
-              path="speakers"
-              element={
-                <Speakers
-                  isEnglish={isEnglish}
-                  speakers={speakers}
-                  setSpeakers={setSpeakers}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              }
-            />
+            >
+              <Route path="events" element={<Events isEnglish={isEnglish} />} />
+              <Route
+                path="event/create"
+                element={
+                  <CreateEvent isEnglish={isEnglish} speakers={speakers} />
+                }
+              />
+              <Route path="messages" element={<SendMessage />} />
+              <Route path="contactus" element={<ContactUs />} />
+              <Route path="support" element={<Support />} />
+              <Route
+                path="events/:id"
+                element={
+                  <UpdateEvent isEnglish={isEnglish} speakers={speakers} />
+                }
+              />
+              <Route path="users" element={<Users isEnglish={isEnglish} />} />
+              <Route
+                path="landing-speakers"
+                element={<LandingSpeakers isEnglish={isEnglish} />}
+              />
+              <Route
+                path="landing-sponsers"
+                element={<LandingSponsers isEnglish={isEnglish} />}
+              />
+              <Route
+                path="landing-text"
+                element={<LandingText isEnglish={isEnglish} />}
+              />
+              <Route
+                path="landing-aboutus"
+                element={<LandingAboutUs isEnglish={isEnglish} />}
+              />
+              <Route
+                path="speakers"
+                element={
+                  <Speakers
+                    isEnglish={isEnglish}
+                    speakers={speakers}
+                    setSpeakers={setSpeakers}
+                    loading={loading}
+                    setLoading={setLoading}
+                  />
+                }
+              />
+            </Route>
           </Route>
-        </Route></Route>
+        </Route>
       </Routes>
     </PrimeReactProvider>
   );
