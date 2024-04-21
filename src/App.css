@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.p-component {
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings, normal);
+  font-size: 1rem;
+  font-weight: normal;
+}
+

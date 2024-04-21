@@ -279,13 +279,14 @@ export default function AttendanceReg() {
 
               {/* input */}
               <div>
-                <div  className={`${style.input} d-flex align-items-center p-0`}>
+                <div  className={`${style.input} d-flex align-items-center p-0 datef`}>
                   {/* <i className="fa-regular fa-calendar-days"></i> */}
                   <input
                     type="date"
                     id="date"
                     className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                     name="DateOfBirth"
+                    placeholder="Date of Birth"
                     onChange={handleChange}
                   />
                 </div>

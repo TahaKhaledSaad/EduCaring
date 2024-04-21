@@ -67,6 +67,7 @@ export default function Resources({
     eventDaySpeakerId,
     addResourcesSpeaker,
     flag,
+    token,
   ]);
 
   // [13] Function to get resources of the user
@@ -493,7 +494,12 @@ export default function Resources({
       {decodedToken.roles.includes("Speaker") && (
         <button
           className="btn btn-success py-2  w-100"
-          style={{ background: "#27AE60", border: "none", outline: "none" }}
+          style={{
+            background:
+              speakerResourses?.length > 0 ? "#27AE60" : "rgba(195, 43, 67, 1)",
+            border: "none",
+            outline: "none",
+          }}
           onClick={togglePopup}
         >
           Edit

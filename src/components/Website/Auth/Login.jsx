@@ -9,6 +9,7 @@ import { BASE } from "../../../Api";
 import Role from "../Popups/Role";
 import verifyStyle from "./../verfiy-number/Verfication.module.css";
 import Verfication from "../verfiy-number/Verfication";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const nav = useNavigate();
@@ -31,7 +32,9 @@ export default function Login() {
   const [showVerify, setShowVerify] = useState(false);
 
   useEffect(() => {
-    newPassword === confirmNewPass ? setPassesEquals(true) : setPassesEquals(false);
+    newPassword === confirmNewPass
+      ? setPassesEquals(true)
+      : setPassesEquals(false);
   }, [newPassword, confirmNewPass]);
 
   const togglePasswordVisibility = () => {
@@ -46,16 +49,22 @@ export default function Login() {
         password: password,
       });
 
-      res.data.isSuccess ? setErrorMessage("") : setErrorMessage(res.data.responseText);
+      res.data.isSuccess
+        ? setErrorMessage("")
+        : setErrorMessage(res.data.responseText);
       console.log(errorMessage);
 
       // Set Token
       res.data.responseObject.isVerified &&
         cookies.set("edu-caring", res.data.responseObject.token);
 
+      const decodedToken = jwtDecode(res.data.responseObject.token);
+
       // Set Navigation
       cookies.get("edu-caring") !== "" && res.data.responseObject.isVerified
-        ? nav("/home")
+        ? decodedToken.roles.includes("SuperAdmin")
+          ? nav("/dashboard")
+          : nav("/home")
         : setShowVerify(true);
     } catch (error) {
       console.log(error);
@@ -192,11 +201,13 @@ export default function Login() {
                   forget password!
                 </div>
 
-                {errorMessage !== "" && <p className="text-danger p-0">{errorMessage}</p>}
+                {errorMessage !== "" && (
+                  <p className="text-danger p-0">{errorMessage}</p>
+                )}
 
                 <button className="my-4">Sign In</button>
                 <p className="m-0 p-0 my-3 fs-6">
-                Don’t have an account? &nbsp;
+                  Don’t have an account? &nbsp;
                   <Link onClick={() => setRole(!role)} className="fw-bold">
                     Sign Up
                   </Link>
@@ -212,7 +223,11 @@ export default function Login() {
                   <h2 className="fw-bold m-0 ">Verfication</h2>
                   <div
                     className={verifyStyle.container}
-                    style={{ height: "auto", padding: "0px", marginBottom: "0px" }}
+                    style={{
+                      height: "auto",
+                      padding: "0px",
+                      marginBottom: "0px",
+                    }}
                   >
                     <div className={verifyStyle.body}>
                       <div className={verifyStyle.form}>
@@ -270,7 +285,7 @@ export default function Login() {
                     </div>
                   )}
                 </div>
-                
+
                 {showForgetErrors && (
                   <p className="text-danger m-0 p-0">
                     {otp.length == 6 ? "" : "Please enter the 6-digit code!"}
@@ -290,7 +305,10 @@ export default function Login() {
                       Reset Password
                     </h2>
                     {/* Password */}
-                    <div className={style.input} style={{ marginBottom: "0px" }}>
+                    <div
+                      className={style.input}
+                      style={{ marginBottom: "0px" }}
+                    >
                       <i className="fa-solid fa-lock"></i>
                       <input
                         type={showPassword ? "text" : "password"}
@@ -306,12 +324,17 @@ export default function Login() {
                     </div>
                     {showForgetErrors && (
                       <p className="text-danger m-0 p-0">
-                        {newPassword.length < 8 ? "Password must be at least 8 characters!" : ""}
+                        {newPassword.length < 8
+                          ? "Password must be at least 8 characters!"
+                          : ""}
                       </p>
                     )}
 
                     {/*Confirm Password */}
-                    <div className={style.input} style={{ marginBottom: "0px", marginTop: "15px" }}>
+                    <div
+                      className={style.input}
+                      style={{ marginBottom: "0px", marginTop: "15px" }}
+                    >
                       <i className="fa-solid fa-lock"></i>
                       <input
                         type={showPassword ? "text" : "password"}
@@ -334,7 +357,11 @@ export default function Login() {
                     <button
                       className="mb-2 mt-3"
                       onClick={() => {
-                        if (newPassword.length >= 8 && passesEquals && otp.length == 6) {
+                        if (
+                          newPassword.length >= 8 &&
+                          passesEquals &&
+                          otp.length == 6
+                        ) {
                           resetPass();
                         } else {
                           setShowForgetErrors(true);
@@ -351,7 +378,11 @@ export default function Login() {
 
           {/* Image */}
           <div className={style.image}>
-            <img src={loginImage} alt="loginImage" style={{ objectFit: "cover" }} />
+            <img
+              src={loginImage}
+              alt="loginImage"
+              style={{ objectFit: "cover" }}
+            />
           </div>
 
           {/* Role */}

@@ -4,7 +4,7 @@
 
 .speakerTicket-popup {
   transition: 0.5s;
-  max-height: 550px;
+  max-height: 600px;
   scrollbar-width: none;
   box-shadow: 0px 0px 10px #666;
   z-index: 100440;
@@ -92,6 +92,9 @@
   border-left: 2px solid rgba(242, 242, 242, 1);
   align-self: flex-start;
 }
+.question-container-box textarea:focus {
+  margin-top: 12px;
+}
 .questions-data {
   padding: 15px 25px;
   align-self: flex-start;
@@ -116,6 +119,11 @@
   border-radius: 0 !important;
   border-top-right-radius: 5px !important;
   border-bottom-right-radius: 5px !important;
+}
+.ar .p-inputgroup-addon .p-button.p-component {
+  border-radius: 0 !important;
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
 }
 .p-togglebutton.p-component .p-button-label {
   padding: 0.45rem 0.9375rem;
@@ -152,6 +160,7 @@
     border-left: none;
     border-top: 2px solid rgba(242, 242, 242, 1);
     padding: 5px 15px;
+    margin-top: 20px;
   }
   .questions-data {
     padding: 5px 15px;
