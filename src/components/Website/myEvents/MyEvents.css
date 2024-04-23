@@ -1,3 +1,6 @@
+.myevents{
+  background-color: #fff !important;
+}
 .myevents .header {
     display: flex;
     gap: 20px;

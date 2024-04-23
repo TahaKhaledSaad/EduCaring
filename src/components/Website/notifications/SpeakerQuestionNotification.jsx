@@ -91,7 +91,7 @@ const SpeakerQuestionNotification = ({
   function togglePopup() {
     setPopupVisible((prevState) => !prevState);
   }
-  const totalQuestions = notification.length;
+  const totalQuestions = notification?.length;
   const answeredQuestions = Object.keys(selectedAnswers).length;
   const progress = (answeredQuestions / totalQuestions) * 100;
   return (
@@ -100,7 +100,7 @@ const SpeakerQuestionNotification = ({
       <div className="notif-row" onClick={togglePopup}>
         <img src={logo} alt="notify-img" />
         <div className="text">
-          <h6>{notification[0].speakerName}</h6>
+          <h6>{notification[0]?.speakerName}</h6>
           <p>{t("PleaseAnswerTheseQuestions")}</p>
           <span className="ago">{new Date(sendTime).toDateString()}</span>
         </div>

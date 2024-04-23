@@ -1,4 +1,7 @@
 /* Start Home Component */
+.home-comp{
+  background-color: #fff;
+}
 .home-comp .period {
   height: 10%;
   padding: 20px;

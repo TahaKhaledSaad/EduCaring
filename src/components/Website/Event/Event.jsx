@@ -586,6 +586,7 @@ function EventDetails() {
                       <button
                         className="border-0 bg-transparent text-primary px-2"
                         onClick={toggleDescription}
+                        style={{width:"fit-content"}}
                       >
                         {showFullDescription ? "Read less..." : "Read more..."}
                       </button>

@@ -227,7 +227,7 @@ export default function LandingPage() {
       <div className="landing-page">
         {/* Start navBar */}
         <nav className="navbar navbar-expand-lg bg-transparent px-2">
-          <div className="container-fluid">
+          <div className="container-fluid flex-nowrap">
             <Link className="navbar-brand" to="/">
               <img src={logo} alt="logo" width={"184px"} height={"62px"} />
             </Link>
@@ -240,6 +240,7 @@ export default function LandingPage() {
               aria-controls="navbarSupportedContent"
               aria-expanded="false"
               aria-label="Toggle navigation"
+              style={{width:"fit-content"}}
             >
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -304,7 +305,7 @@ export default function LandingPage() {
                     <button
                       className="btn m-2 register-btn"
                       onClick={() => setRole(!role)}
-                      style={{ color: "#3296d4", borderColor: "#3296d4" }}
+                      style={{ color: "#3296d4", borderColor: "#3296d4" ,width:"fit-content" }}
                     >
                       Register
                     </button>
@@ -334,7 +335,7 @@ export default function LandingPage() {
               </div>
               {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>
-                  Register <i className="fas fa-chevron-right"></i>
+                  Register <i className="fas fa-chevron-right" style={{fontFamily:"Font Awesome 6 Free"}}></i>
                 </a>
               )}
             </div>
@@ -858,7 +859,7 @@ export default function LandingPage() {
             <span>Register</span>
             <h3>Attendance</h3>
             <button>
-              <Link className="text-dark" to="/register-attendance">
+              <Link className="text-dark font-weight-bold" style={{fontFamily:"Roboto"}} to="/register-attendance">
                 Sign up now
               </Link>
             </button>
@@ -867,7 +868,7 @@ export default function LandingPage() {
             <span>Register</span>
             <h3>Speaker</h3>
             <button>
-              <Link className="text-dark" to="/register-speaker">
+              <Link className="text-dark font-weight-bold" style={{fontFamily:"Roboto"}} to="/register-speaker">
                 Sign up now
               </Link>
             </button>

@@ -4,9 +4,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
 }
 body {
-  font-family: "Cairo", sans-serif;
+  font-family: "Cairo", sans-serif !important;
   overflow-x: hidden;
 }
 ul {
@@ -18,7 +19,9 @@ a {
 i {
   font-weight: 900;
 }
-
+input{
+  border:0 !important;
+}
 /* start website  */
 
 /* start sideBar */
@@ -201,7 +204,8 @@ i {
   flex: none;
   order: 1;
   flex-grow: 0;
-  top: 150px;
+  top: 40px;
+
 }
 .notif-questions-popup.show {
   opacity: 1;
@@ -614,6 +618,7 @@ i {
   margin: auto;
   margin-inline: auto;
   gap: 10px;
+  width: fit-content;
 }
 .answer-question-btn:hover {
   background-color: #1f8c47de;

@@ -532,7 +532,7 @@ export default function Resources({
         </div>
 
         <div className="py-2 px-3 ">
-          <div className="d-flex gap-3 border-bottom">
+          <div className="d-flex gap-3 border-bottom w-75">
             <button
               onClick={() => handleOptionChange("files")}
               className="bg-transparent"

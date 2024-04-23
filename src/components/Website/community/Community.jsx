@@ -243,7 +243,7 @@ export default function Community() {
                   </div>
                   <div className="msg-text rounded p-2 m-2">
                     <p>{msg.message}</p>
-                    {docs ? (
+                    {docs[0].uri ? (
                       <div>
                         <span
                           className="view my-2"

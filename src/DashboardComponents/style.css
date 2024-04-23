@@ -273,7 +273,7 @@ td {
   min-height: calc(100vh - 65px);
   margin-left: 200px;
   padding: 15px;
-  background-color: var(--ofwhite-color);
+  background-color: #fff !important;
 }
 @media (max-width: 767px) {
   .outlet {

@@ -152,7 +152,7 @@ export default function Home() {
     <div>
       <SideBar />
       <TopBar />
-      <div className="outlet pl-2">
+      <div className="outlet p-0">
         {isHomeRoute && (
           <div className="home-comp">
             {

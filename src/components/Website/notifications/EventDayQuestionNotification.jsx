@@ -170,7 +170,7 @@ const EventDayQuestionNotification = ({
             <ProgressBar now={progress} className="questions-progress-bar" />
             <div className="btns p-3">
               <button
-                className={`send-question-btn answer-question-btn btn btn-success flex-column d-flex justify-content-center ${
+                className={`send-question-btn answer-question-btn btn btn-success  ${
                   progress !== 100 ? "disabled bt-disabled-op" : ""
                 } `}
                 onClick={showScore ? () => onHandleMenu(false) : handleSend}

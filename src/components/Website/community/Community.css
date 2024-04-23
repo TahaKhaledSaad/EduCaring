@@ -76,7 +76,7 @@
   line-height: 15px;
   border-radius: 50%;
 }
-.commuinty .chat-item span.event-finished{
+.commuinty .chat-item span.event-finished {
   bottom: 0px;
   font-size: 12px;
   color: #747688;
@@ -157,9 +157,9 @@
     flex: 1;
   }
 }
-#header-bar{
+#header-bar {
   display: none;
 }
-#proxy-renderer{
+#proxy-renderer {
   scrollbar-width: none;
 }

@@ -70,7 +70,7 @@ export default function Gallary({ eventImages }) {
             : "translate(-50%, -50%)",
           transition: "0.5s",
           zIndex: "1000000",
-          height: "60vh",
+          height: "90vh",
           scrollbarWidth: "none",
           boxShadow: "0px 0px 30px #666",
           width: "60%",
@@ -94,7 +94,7 @@ export default function Gallary({ eventImages }) {
               src={image.displayImageURL}
               alt="image"
               className="rounded-3"
-              style={{ objectFit: "cover", boxShadow: "0px 0px 10px #666" }}
+              style={{ objectFit: "cover", boxShadow: "0px 0px 10px #666", cursor: "pointer"}}
               height={"210px"}
               width={"248px"}
               onClick={() => openPopup(image)}
@@ -111,7 +111,7 @@ export default function Gallary({ eventImages }) {
               : "translate(-50%, -50%)",
             transition: "0.5s",
             zIndex: "1000000",
-            height: "60vh",
+            height: "90vh",
             scrollbarWidth: "none",
             boxShadow: "0px 0px 30px #666",
             width: "60%",

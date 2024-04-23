@@ -431,8 +431,8 @@ export default function Session() {
           </div>
 
           <div className="text">
-            <h3 className="text-dark">{selectedEventDay?.name}</h3>
-            <p className="text-secondary" style={{ fontSize: "12px" }}>
+            <h3 className="text-dark my-3">{selectedEventDay?.name}</h3>
+            <p className="text-secondary" style={{ fontSize: "14px" }}>
               {selectedEventDay?.description}
             </p>
           </div>
@@ -447,7 +447,7 @@ export default function Session() {
           }}
         >
           <h3>Resources</h3>
-          <div className="d-flex gap-3 border-bottom">
+          <div className="d-flex gap-3 border-bottom w-75">
             <button
               onClick={() => handleOptionChange("files")}
               className="bg-transparent"
