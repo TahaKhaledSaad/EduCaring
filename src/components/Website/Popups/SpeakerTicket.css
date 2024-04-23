@@ -115,17 +115,17 @@
   border-color: black;
   color: black;
 }
-.p-inputgroup-addon .p-button.p-component {
+.p-inputgroup-addon .p-button.paragraph-component {
   border-radius: 0 !important;
   border-top-right-radius: 5px !important;
   border-bottom-right-radius: 5px !important;
 }
-.ar .p-inputgroup-addon .p-button.p-component {
+.ar .p-inputgroup-addon .p-button.paragraph-component {
   border-radius: 0 !important;
   border-top-left-radius: 5px !important;
   border-bottom-left-radius: 5px !important;
 }
-.p-togglebutton.p-component .p-button-label {
+.p-togglebutton.paragraph-component .p-button-label {
   padding: 0.45rem 0.9375rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;

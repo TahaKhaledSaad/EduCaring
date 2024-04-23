@@ -7,7 +7,10 @@ import "./style.css";
 
 export default function Dashboard({ isEnglish, setIsEnglish }) {
   return (
-    <div style={{ direction: isEnglish ? "" : "rtl" }}>
+    <div
+      style={{ direction: isEnglish ? "" : "rtl" }}
+      className="only-dashboard"
+    >
       <TopBar isEnglish={isEnglish} setIsEnglish={setIsEnglish} />
       <div className="dash-content">
         <SideBar />

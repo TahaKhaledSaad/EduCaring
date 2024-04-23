@@ -56,7 +56,6 @@ import Payment from "./components/Website/payment/Payment.jsx";
 import RequireBack from "./components/Website/Auth/RequireBack.jsx";
 import Session from "./components/Website/session/Session.jsx";
 import Recommendations from "./components/Website/recommendations/Recommendations.jsx";
-import DirectToDashAuth from "./components/Website/Auth/DirectToDashAuth.jsx";
 
 function App() {
   const { i18n } = useTranslation();
@@ -120,62 +119,58 @@ function App() {
         </Route>
 
         {/* TODO Dashboard */}
-        <Route element={<RequireAuth />}>
-          <Route element={<AdminAuth />}>
-            <Route
-              path="dashboard"
-              element={
-                <Dashboard isEnglish={isEnglish} setIsEnglish={setIsEnglish} />
-              }
-            >
-              <Route path="events" element={<Events isEnglish={isEnglish} />} />
-              <Route
-                path="event/create"
-                element={
-                  <CreateEvent isEnglish={isEnglish} speakers={speakers} />
-                }
+        {/* <Route element={<RequireAuth />}>
+          <Route element={<AdminAuth />}> */}
+        <Route
+          path="dashboard"
+          element={
+            <Dashboard isEnglish={isEnglish} setIsEnglish={setIsEnglish} />
+          }
+        >
+          <Route path="events" element={<Events isEnglish={isEnglish} />} />
+          <Route
+            path="event/create"
+            element={<CreateEvent isEnglish={isEnglish} speakers={speakers} />}
+          />
+          <Route path="messages" element={<SendMessage />} />
+          <Route path="contactus" element={<ContactUs />} />
+          <Route path="support" element={<Support />} />
+          <Route
+            path="events/:id"
+            element={<UpdateEvent isEnglish={isEnglish} speakers={speakers} />}
+          />
+          <Route path="users" element={<Users isEnglish={isEnglish} />} />
+          <Route
+            path="landing-speakers"
+            element={<LandingSpeakers isEnglish={isEnglish} />}
+          />
+          <Route
+            path="landing-sponsers"
+            element={<LandingSponsers isEnglish={isEnglish} />}
+          />
+          <Route
+            path="landing-text"
+            element={<LandingText isEnglish={isEnglish} />}
+          />
+          <Route
+            path="landing-aboutus"
+            element={<LandingAboutUs isEnglish={isEnglish} />}
+          />
+          <Route
+            path="speakers"
+            element={
+              <Speakers
+                isEnglish={isEnglish}
+                speakers={speakers}
+                setSpeakers={setSpeakers}
+                loading={loading}
+                setLoading={setLoading}
               />
-              <Route path="messages" element={<SendMessage />} />
-              <Route path="contactus" element={<ContactUs />} />
-              <Route path="support" element={<Support />} />
-              <Route
-                path="events/:id"
-                element={
-                  <UpdateEvent isEnglish={isEnglish} speakers={speakers} />
-                }
-              />
-              <Route path="users" element={<Users isEnglish={isEnglish} />} />
-              <Route
-                path="landing-speakers"
-                element={<LandingSpeakers isEnglish={isEnglish} />}
-              />
-              <Route
-                path="landing-sponsers"
-                element={<LandingSponsers isEnglish={isEnglish} />}
-              />
-              <Route
-                path="landing-text"
-                element={<LandingText isEnglish={isEnglish} />}
-              />
-              <Route
-                path="landing-aboutus"
-                element={<LandingAboutUs isEnglish={isEnglish} />}
-              />
-              <Route
-                path="speakers"
-                element={
-                  <Speakers
-                    isEnglish={isEnglish}
-                    speakers={speakers}
-                    setSpeakers={setSpeakers}
-                    loading={loading}
-                    setLoading={setLoading}
-                  />
-                }
-              />
-            </Route>
-          </Route>
+            }
+          />
         </Route>
+        {/* </Route>
+        </Route> */}
       </Routes>
     </PrimeReactProvider>
   );

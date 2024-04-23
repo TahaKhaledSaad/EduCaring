@@ -1,20 +1,18 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 
-export default function DirectToDashAuth() {
+export default function RequireAuth() {
   // Handle Cookies
   const cookies = Cookie();
   const token = cookies.get("edu-caring");
 
-  const nav = useNavigate();
-
   const decodedToken = token ? jwtDecode(token) : {};
 
   // Edditting in the token prevent it
-  return decodedToken.roles.includes("SuperAdmin") ? (
-    <Navigate to="/dashboard" replace={true} />
+  return token && decodedToken.uid ? (
+    <Outlet />
   ) : (
-    nav("/login")
+    <Navigate to="/login" replace={true} />
   );
 }

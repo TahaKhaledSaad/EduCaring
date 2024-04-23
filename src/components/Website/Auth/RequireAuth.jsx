@@ -10,5 +10,5 @@ export default function RequireAuth() {
   const decodedToken = token ? jwtDecode(token) : {};
 
   // Edditting in the token prevent it
-  return token && decodedToken.uid ? <Outlet /> : <Navigate to="/login" replace={true} />;
+  return token && decodedToken.uid && !decodedToken.roles.includes("SuperAdmin") ? <Outlet /> : <Navigate to="/login" replace={true} />;
 }
