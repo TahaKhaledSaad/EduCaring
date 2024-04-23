@@ -83,7 +83,7 @@ export default function Logout() {
           </h2>
           <div className="btns d-flex gap-4 justify-content-center my-2">
             <button
-              className="btn  btn-danger px-4 py-2"
+              className="btn  btn-danger "
               onClick={() => {
                 cookies.remove("edu-caring");
                 cookies.remove("userId");
@@ -93,7 +93,9 @@ export default function Logout() {
             >
               Yes, Log out
             </button>
-            <button className="btn  btn-light px-4 py-2" onClick={handleHidePopup}>
+            <button className="btn  btn-light" style={{
+              width:""
+            }} onClick={handleHidePopup}>
               No, I am stying
             </button>
           </div>

@@ -147,6 +147,9 @@
   transform: translateY(100%);
   justify-content: center;
 }
+.landing .landing-text {
+  width: 60%;
+}
 
 @media (max-width: 1200px) {
   .landing {
@@ -159,6 +162,9 @@
     flex-direction: column;
     align-items: center;
     gap: 30px;
+  }
+  .landing .landing-text {
+    width: 70%;
   }
 }
 
@@ -233,6 +239,9 @@
 @media (max-width: 920px) {
   .landing .images {
     display: none;
+  }
+  .landing .landing-text {
+    width: 90%;
   }
 }
 
