@@ -326,8 +326,7 @@ export default function LandingPage() {
           <div className="ellips2"></div>
           <div className="ellips3"></div>
           <div className="landing">
-            <div className="p-3 d-flex flex-column justify-content-around align-items-center align-items-md-start gap-3 landing-text">
-            >
+            <div className="p-3 d-flex flex-column justify-content-around align-items-center align-items-md-start gap-3 landing-text">            
               <div className="text">
                 <h1>
                   Welcome To <span>Edu Caring</span>
