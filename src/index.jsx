@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./i18n.js";
+import "../src/API/I18n.js";
 import App from "./App.jsx";
 import "./all.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
