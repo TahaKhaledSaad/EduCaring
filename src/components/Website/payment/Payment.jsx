@@ -461,7 +461,7 @@ export default function Payment() {
                         className="text-center"
                         style={{ fontSize: "16px", color: "#27AE60" }}
                       >
-                        {day.price ? `${day.price} SAR ` : "free"}
+                        {day.price ? `${day.price} ${i18n.language === "en" ? "SAR" : "ريال"} ` : `${i18n.language === "en" ? "Free" : "مجانا"}`}
                       </p>
                     </div>
                   );
@@ -547,7 +547,7 @@ export default function Payment() {
                   style={{ color: "#747688" }}
                 >
                   <span>{i18n.language === "en" ? "Fees" : "المصاريف"} </span>
-                  <span>00 SAR</span>
+                  <span>00  {i18n.language === "en" ? "SAR" : "ريال"}</span>
                 </div>
 
                 <div
@@ -555,7 +555,7 @@ export default function Payment() {
                   style={{ color: "#747688" }}
                 >
                   <span>{i18n.language === "en" ? "Discount" : "الخصم"}</span>
-                  <span>00 SAR</span>
+                  <span>00  {i18n.language === "en" ? "SAR" : "ريال"}</span>
                 </div>
               </div>
               <div className="total fw-bold d-flex justify-content-between pt-3">

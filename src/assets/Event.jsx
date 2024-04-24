@@ -92,7 +92,7 @@ export default function Event() {
                   fontSize: "14px",
                 }}
               >
-                <span className="mx-1">Buy ticket 520 SAR</span>
+                <span className="mx-1">Buy ticket 520 </span>
                 <svg
                   width="18"
                   height="18"

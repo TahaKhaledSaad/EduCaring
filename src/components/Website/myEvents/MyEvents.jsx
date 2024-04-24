@@ -347,7 +347,7 @@ export default function MyEvents() {
                 </div>
                 <div className="price">
                   <h6>{event.totalPrice}</h6>
-                  <span>SAR</span>
+                  <span> {i18n.language === "en" ? "SAR" : "ريال"}</span>
                 </div>
               </Link>
             ))}

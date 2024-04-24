@@ -490,7 +490,7 @@ function EventDetails() {
                       >
                         <span className="mx-1">
                           Buy ticket{" "}
-                          {eventDetails.eventDays[selectedDayIndex]?.price} SAR
+                          {eventDetails.eventDays[selectedDayIndex]?.price} {i18n.language === "en" ? "SAR" : "ريال"}
                         </span>
                         <svg
                           width="18"
