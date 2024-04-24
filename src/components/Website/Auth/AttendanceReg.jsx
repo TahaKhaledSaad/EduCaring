@@ -279,7 +279,11 @@ export default function AttendanceReg() {
 
               {/* input */}
               <div>
-                <div  className={`${style.input} d-flex align-items-center p-0 datef`}>
+                <div
+                  className={`${style.input} d-flex align-items-center p-0 ${
+                    userData.DateOfBirth ? "" : "datef"
+                  }`}
+                >
                   {/* <i className="fa-regular fa-calendar-days"></i> */}
                   <input
                     type="date"
@@ -415,7 +419,6 @@ export default function AttendanceReg() {
               {/* input */}
               <div>
                 <div className={`${style.input} d-flex align-items-center p-0`}>
-                  
                   <RegionDropdown
                     country={country}
                     value={region}

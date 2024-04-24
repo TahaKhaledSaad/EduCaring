@@ -59,6 +59,10 @@
   position: absolute;
   right: 10px;
 }
+.outlet-rtl .commuinty .chat-item span {
+  left: 10px;
+  right: auto;
+}
 .commuinty .chat-item span.time {
   top: 10px;
   color: #3296d4;

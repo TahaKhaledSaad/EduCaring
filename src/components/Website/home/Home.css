@@ -92,7 +92,6 @@
   }
 }
 .home-comp .coming-events .event {
-  display: block;
   width: 375px;
   height: 230px;
   background-color: #e1c6c6;
@@ -106,6 +105,12 @@
 @media (max-width: 500px) {
   .home-comp .coming-events .event {
     width: 300px;
+    height: 200px;
+  }
+}
+@media (max-width: 400px) {
+  .home-comp .coming-events .event {
+    width: 280px;
     height: 200px;
   }
 }

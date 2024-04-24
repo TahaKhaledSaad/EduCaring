@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BASE } from "../../../Api";
 import axios from "axios";
 import PropTypes from "prop-types";
+// Translation Work
 import { useTranslation } from "react-i18next";
 import upload from "./../../../assets/image.png";
 import Cookie from "cookie-universal";
@@ -464,7 +465,7 @@ export default function Resources({
           onClick={togglePopup}
         >
           <p className="m-0">
-            Resources{" "}
+            {i18n.language === "en" ? "Resources" : "الموارد"}{" "}
             <svg
               width="18"
               height="18"
@@ -523,7 +524,7 @@ export default function Resources({
           className="d-flex justify-content-between align-items-center py-2 px-3"
           style={{ backgroundColor: "#F2F2F2" }}
         >
-          <h3>Resources</h3>
+          <h3>{i18n.language === "en" ? "Resources" : "الموارد"}</h3>
           <i
             className="fa-solid fa-x"
             style={{ cursor: "pointer" }}
@@ -543,7 +544,7 @@ export default function Resources({
                   selectedOption === "files" ? "2px solid #3296D4" : "none",
               }}
             >
-              Files
+              {i18n.language === "en" ? "Files" : "الملفات"}
             </button>
             <button
               onClick={() => handleOptionChange("images")}
@@ -555,7 +556,7 @@ export default function Resources({
                   selectedOption === "images" ? "2px solid #3296D4" : "none",
               }}
             >
-              Images
+              {i18n.language === "en" ? "Images" : "الصور"}
             </button>
             <button
               onClick={() => handleOptionChange("links")}
@@ -567,7 +568,7 @@ export default function Resources({
                   selectedOption === "links" ? "2px solid #3296D4" : "none",
               }}
             >
-              Links
+              {i18n.language === "en" ? "Links" : "الروابط"}
             </button>
           </div>
 
@@ -652,7 +653,8 @@ export default function Resources({
                     target="blank"
                     rel="noopener noreferrer"
                   >
-                    {getFileIcon(file)} file {index + 1}
+                    {getFileIcon(file)}
+                    {i18n.language === "en" ? "file" : "ملف"} {index + 1}
                   </a>
                   {addResourcesSpeaker && (
                     <i
@@ -728,7 +730,10 @@ export default function Resources({
                   </div>
 
                   <div className="p-2 flex-grow-1">
-                    <h5 className="m-0 fw-bold text-start">Link {index + 1}</h5>
+                    <h5 className="m-0 fw-bold">
+                      {i18n.language === "en" ? "Link" : "الرابط"}
+                      {index + 1}
+                    </h5>
                     <a
                       href={link}
                       target="_blank"

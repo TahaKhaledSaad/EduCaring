@@ -10,8 +10,8 @@ export default function Language() {
 
   //
   const [chosenLang, setChosenLang] = useState({
-    img: en,
-    name: "English",
+    img: i18n.language === "en" ? en : ar,
+    name: i18n.language === "en" ? "English" : "العربية",
   });
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeChoice, setActiveChoice] = useState(null);
@@ -21,20 +21,27 @@ export default function Language() {
   }
 
   function handleChoiceClick(imgSrc, langName, option) {
-    return () => {
+    return (event) => {
+      event.stopPropagation();
       setChosenLang({ img: imgSrc, name: langName });
-      setPopupVisible(false);
       setActiveChoice(option);
-      langName === "English" ? i18n.changeLanguage("en") : i18n.changeLanguage("ar");
+      langName === "English"
+        ? i18n.changeLanguage("en")
+        : i18n.changeLanguage("ar");
+      setPopupVisible(false);
     };
   }
-
+  // console.log(popupVisible);
   return (
     <>
       <div className="chosen" onClick={handleChosenClick}>
         <img src={chosenLang.img} alt="" width="30" height="30" />
         <span>{chosenLang.name}</span>
-        <i className={`fa-solid fa-chevron-${popupVisible ? "up" : "down"} fa-xs`}></i>
+        <i
+          className={`fa-solid fa-chevron-${
+            popupVisible ? "up" : "down"
+          } fa-xs`}
+        ></i>
         <div
           className="chosLang"
           style={{

@@ -19,8 +19,8 @@ a {
 i {
   font-weight: 900;
 }
-input{
-  border:0 !important;
+input {
+  border: 0 !important;
 }
 /* start website  */
 
@@ -33,6 +33,12 @@ input{
   top: 0;
   left: 0;
   z-index: 1111;
+}
+.side-rtl {
+  direction: rtl;
+  right: 0;
+  left: auto;
+  z-index: 44444;
 }
 .nav-link {
   color: #9db2ce;
@@ -70,6 +76,10 @@ input{
   z-index: 2222;
   background-color: #fff;
 }
+.topbar-rtl {
+  right: 200px;
+  left: 0;
+}
 @media (max-width: 767px) {
   .topbar .icons {
     position: absolute;
@@ -87,6 +97,10 @@ input{
   margin-top: 65px;
   margin-left: 200px;
 }
+.outlet-rtl {
+  margin-left: 0;
+  margin-right: 200px;
+}
 
 @media screen and (max-width: 991px) {
   .topbar {
@@ -99,6 +113,10 @@ input{
     bottom: 0;
     left: 0;
   }
+  .side-rtl{
+    right: 0;
+    left: auto;
+  }
   .sideBar li {
     text-align: center;
   }
@@ -110,6 +128,10 @@ input{
   }
   .outlet {
     margin-left: 60px;
+  }
+  .outlet-rtl {
+    margin-left: 0%;
+    margin-right: 60px;
   }
 }
 
@@ -205,7 +227,6 @@ input{
   order: 1;
   flex-grow: 0;
   top: 40px;
-
 }
 .notif-questions-popup.show {
   opacity: 1;

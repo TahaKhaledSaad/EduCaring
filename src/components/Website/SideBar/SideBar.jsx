@@ -1,5 +1,5 @@
 import logo from "../../../assets/logo-removebg-preview.png";
-import { Link ,NavLink} from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import Cookie from "cookie-universal";
@@ -8,7 +8,7 @@ import Logout from "../Popups/Logout";
 
 import { useLocation } from "react-router-dom";
 
-function SideBar() {
+function SideBar(isEnglish) {
   // State to track the active link
   const [activeLink, setActiveLink] = useState("home");
   const location = useLocation();
@@ -32,12 +32,13 @@ function SideBar() {
 
   return (
     <>
-      <div className="d-flex flex-column justify-content-between p-2 sideBar shadow-sm">
-        <Link
-          to="/"
-          className=""
-          onClick={() => handleSetActiveLink("home")}
-        >
+      <div
+        className={`d-flex flex-column justify-content-between p-2 sideBar shadow-sm ${
+          isEnglish.isEnglish === "en" ? "" : "side-rtl"
+        }`}
+        // style={{ direction: isEnglish.isEnglish === "en" ? "" : "rtl" }}
+      >
+        <Link to="/" className="" onClick={() => handleSetActiveLink("home")}>
           <img src={logo} alt="logo" className="mw-100 h-auto" />
         </Link>
         <hr className="opacity-0" />
@@ -52,8 +53,11 @@ function SideBar() {
                 color: activeLink === "home" && "#fff",
               }}
             >
-              <i className="bi bi-house-door me-2 fs-6"></i>
-              <span className="fs-6 ">Home</span>
+              <i className="bi bi-house-door me-2 fs-6 mx-2"></i>
+              <span className="fs-6 ">
+                {" "}
+                {isEnglish.isEnglish === "en" ? "Home" : "الرئيسية"}
+              </span>
             </Link>
           </li>
           <li
@@ -68,8 +72,13 @@ function SideBar() {
                 color: activeLink === "myevents" && "#fff",
               }}
             >
-              <i className="bi bi-ticket-perforated me-2 fs-6"></i>
-              <span className="fs-6 ">My Events</span>
+              <i className="bi bi-ticket-perforated me-2 fs-6 mx-2"></i>
+              <span className="fs-6 ">
+                {" "}
+                {isEnglish.isEnglish === "en"
+                  ? "My Events"
+                  : "الفعاليات الخاصة بي"}
+              </span>
             </Link>
           </li>
           <li
@@ -86,8 +95,11 @@ function SideBar() {
                 color: activeLink === "community" && "#fff",
               }}
             >
-              <i className="bi bi-chat-square-text me-2 fs-6"></i>
-              <span className="fs-6 ">Community</span>
+              <i className="bi bi-chat-square-text me-2 fs-6 mx-2"></i>
+              <span className="fs-6 ">
+                {" "}
+                {isEnglish.isEnglish === "en" ? "Community" : "المجتمع"}
+              </span>
             </Link>
           </li>
           <li
@@ -112,12 +124,15 @@ function SideBar() {
                 color: activeLink === "profile" && "#fff",
               }}
             >
-              <i className="bi bi-person me-2 fs-6"></i>
-              <span className="fs-6 ">Profile</span>
+              <i className="bi bi-person me-2 fs-6 mx-2"></i>
+              <span className="fs-6 ">
+                {" "}
+                {isEnglish.isEnglish === "en" ? "Profile" : "الملف الشخصي"}
+              </span>
             </NavLink>
           </li>
         </ul>
-        <Logout />
+        <Logout isEnglish={isEnglish} />
       </div>
     </>
   );

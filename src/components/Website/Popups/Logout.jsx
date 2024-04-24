@@ -2,7 +2,7 @@ import { useState } from "react";
 import cookie from "cookie-universal";
 import { useNavigate } from "react-router-dom";
 
-export default function Logout() {
+export default function Logout(isEnglish) {
   const [popupVisible, setPopupVisible] = useState(false);
 
   const cookies = cookie();
@@ -23,8 +23,11 @@ export default function Logout() {
         style={{ cursor: "pointer" }}
         onClick={handleTogglePopup}
       >
-        <i className="fa-solid fa-arrow-right-from-bracket me-2 fs-6 "></i>
-        <span className="fs-6 ">log out</span>
+        <i className="fa-solid fa-arrow-right-from-bracket me-2 fs-6 mx-2"></i>
+        <span className="fs-6 ">
+          {" "}
+          {isEnglish.isEnglish.isEnglish === "en" ? "log out" : "تسجيل الخروج"}
+        </span>
       </div>
 
       {
@@ -33,7 +36,9 @@ export default function Logout() {
           style={{
             boxShadow: "0 0 100px rgba(0,0,0,0.2)",
             width: "360px",
-            transform: popupVisible ? "translate(-50%, -50%)" : "translate(250%, -50%)",
+            transform: popupVisible
+              ? "translate(-50%, -50%)"
+              : "translate(250%, -50%)",
             transition: "0.5s",
             left: "50%",
             zIndex: "1000",
@@ -79,7 +84,10 @@ export default function Logout() {
             </svg>
           </div>
           <h2 className="my-3 fw-bold" style={{ color: "#565656" }}>
-            Already Leaving ?
+            {" "}
+            {isEnglish.isEnglish.isEnglish === "en"
+              ? " Already Leaving ?"
+              : "هل تريد الخروج بالفعل؟"}
           </h2>
           <div className="btns d-flex gap-4 justify-content-center my-2">
             <button
@@ -91,12 +99,20 @@ export default function Logout() {
                 window.location.reload();
               }}
             >
-              Yes, Log out
+              {" "}
+              {isEnglish.isEnglish.isEnglish === "en"
+                ? "Yes, Log out"
+                : "نعم، سجل الخروج"}
             </button>
-            <button className="btn  btn-light" style={{
-              width:""
-            }} onClick={handleHidePopup}>
-              No, I am stying
+            <button
+              className="btn  btn-light"
+              style={{
+                width: "",
+              }}
+              onClick={handleHidePopup}
+            >
+              {" "}
+              {isEnglish.isEnglish.isEnglish === "en" ? "No, I am stying ?" : "لا ، سأبقى"}
             </button>
           </div>
         </div>

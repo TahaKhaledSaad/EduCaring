@@ -355,7 +355,7 @@ function EventDetails() {
                 }}
                 onClick={() => setSelectedDayIndex(index)}
               >
-                Day {index + 1}
+                {i18n.language === "en" ? "Day" : "يوم"} {index + 1}
               </div>
             ))}
           </div>
@@ -379,7 +379,7 @@ function EventDetails() {
                         {eventDetails.eventDays[selectedDayIndex]?.noOfAttend
                           ? eventDetails.eventDays[selectedDayIndex]?.noOfAttend
                           : 0}{" "}
-                        Attendees
+                        {i18n.language === "en" ? "Attendees" : "الحضور"}
                       </span>
                       <span
                         className="m-0 fw-bold"
@@ -393,7 +393,7 @@ function EventDetails() {
                           eventDetails.eventDays[selectedDayIndex]
                             ?.numberOfReviews
                         }{" "}
-                        reviews)
+                        {i18n.language === "en" ? "reviews" : "تقييم"})
                       </span>
                       <span className="m-0 fw-bold d-flex align-items-center gap-1">
                         <svg
@@ -442,28 +442,33 @@ function EventDetails() {
                     ) : (
                       ""
                     )}
+
                     {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
-                      <Gallary eventImages={eventDetails.eventImages}></Gallary>
+                      <Gallary
+                        eventImages={eventDetails.eventImages}
+                        isEnglish={i18n.language}
+                      ></Gallary>
                     ) : (
                       ""
                     )}
 
                     {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
                       <QrCode
-                        eventId={eventId}
-                        eventDayId={eventDetails.eventDays[selectedDayIndex].id}
                         QR={eventDetails.eventDays[selectedDayIndex].qrCode}
-                        userId={decodedToken.uid}
+                        isEnglish={i18n.language}
                       ></QrCode>
                     ) : (
                       ""
                     )}
 
-                    {eventDetails.eventDays[selectedDayIndex]?.isPaid && !addResourcesSpeaker? (
+                    {eventDetails.eventDays[selectedDayIndex]?.isPaid &&
+                    !addResourcesSpeaker ? (
                       <Location
-                      eventId={eventId}
-                      eventDayId={eventDetails.eventDays[selectedDayIndex].id}
-                      eventDayDate={eventDetails.eventDays[selectedDayIndex].eventStartDay}
+                        eventId={eventId}
+                        eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                        eventDayDate={
+                          eventDetails.eventDays[selectedDayIndex].eventStartDay
+                        }
                       ></Location>
                     ) : (
                       ""
@@ -586,9 +591,13 @@ function EventDetails() {
                       <button
                         className="border-0 bg-transparent text-primary px-2"
                         onClick={toggleDescription}
-                        style={{width:"fit-content"}}
+                        style={{ width: "fit-content" }}
                       >
-                        {showFullDescription ? "Read less..." : "Read more..."}
+                        {showFullDescription ? 
+                        i18n.language === "en" ? "Read less..." : "أقل..."
+                        
+                         : 
+                         i18n.language === "en" ? "Read more...": "المزيد..."}
                       </button>
                     )}
                   </div>
@@ -737,7 +746,11 @@ function EventDetails() {
                                 />
                               </svg>
                             </div>
-                            <h4 className="m-0">Session Video</h4>
+                            <h4 className="m-0">
+                              {i18n.language === "en"
+                                ? "Session Video"
+                                : "فيديو الجلسة"}
+                            </h4>
                           </div>
                         </Link>
                       </div>

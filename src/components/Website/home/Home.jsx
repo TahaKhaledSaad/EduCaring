@@ -134,6 +134,31 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, [reminder]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()].slice(0, 3);
+    const year = date.getFullYear();
+    return `${day < 10 ? "0" + day : day} ${month}, ${year}`;
+  };
+
+
+
   if (loading) {
     // Render loading spinner while loading is true
     return (
@@ -150,9 +175,12 @@ export default function Home() {
 
   return (
     <div>
-      <SideBar />
-      <TopBar />
-      <div className="outlet p-0">
+      <SideBar isEnglish={i18n.language} />
+      <TopBar isEnglish={i18n.language} />
+      <div
+        className={`outlet p-0 ${i18n.language === "en" ? "" : "outlet-rtl"}`}
+        style={{ direction: i18n.language === "en" ? "" : "rtl" }}
+      >
         {isHomeRoute && (
           <div className="home-comp">
             {
@@ -198,8 +226,11 @@ export default function Home() {
             <div className="coming-events">
               <h3 className="fw-bold mb-4">
                 {decodedToken.roles.includes("Speaker")
-                  ? "My Events"
-                  : "Upcoming Events"}{" "}
+                  ? 
+                  i18n.language === "en" ? "My Events" : "أحداثي"
+                  : 
+                  i18n.language === "en" ? "Upcoming Events" : "الأحداث القادمة"
+                  }{" "}
               </h3>
 
               {events?.length === 0 ? (
@@ -437,7 +468,9 @@ export default function Home() {
             {!decodedToken.roles.includes("Speaker") && (
               <div className="recommend mb-3">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center px-3 my-3">
-                  <h4 className="fw-bold mb-4">Recommendations for you</h4>
+                  <h4 className="fw-bold mb-4">
+                    {i18n.language === "en" ? "Recommendations for you" : "توصيات لك"}
+                    </h4>
                   <Link
                     to="recommendations"
                     style={{
@@ -446,7 +479,8 @@ export default function Home() {
                       alignSelf: "end",
                     }}
                   >
-                    See All
+                    {i18n.language === "en" ? "See All" :  " عرض الكل"}
+                    
                   </Link>
                 </div>
 
@@ -469,7 +503,7 @@ export default function Home() {
                         </h6>
                         <p>
                           <i className="fa-solid fa-calendar-days"></i>
-                          05 Mars, 2023
+                          {formatDate(event.startDay)}
                         </p>
                         <p>
                           <i className="bi bi-geo-alt-fill"></i>

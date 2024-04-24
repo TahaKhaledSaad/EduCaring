@@ -4,50 +4,101 @@ import Support from "./Support";
 import Notification from "./Notification";
 import Person from "./Person";
 import { useLocation } from "react-router-dom";
+// Translation Work
+import { useTranslation } from "react-i18next";
 
-export default function TopBar() {
+export default function TopBar(isEnglish) {
   const location = useLocation();
   const [routeText, setRouteText] = useState("Home");
   const [iconsVisible, setIconsVisible] = useState(true);
   const eventId = location.pathname.split("/")[3];
 
+  const { i18n } = useTranslation();
   useEffect(() => {
     switch (location.pathname) {
       case "/home":
-        setRouteText("Home");
+        {
+          (" ");
+        }
+        {
+          i18n.language === "en"
+            ? setRouteText("Home")
+            : setRouteText("الرئيسية");
+        }
+
         break;
       case "/home/myevents":
-        setRouteText("My Events");
+        {
+          i18n.language === "en"
+            ? setRouteText("My Events")
+            : setRouteText("الفعاليات الخاصة بي");
+        }
+
         break;
       case "/home/community":
-        setRouteText("Community");
+        {
+          i18n.language === "en"
+            ? setRouteText("Community")
+            : setRouteText("المجتمع");
+        }
+
         break;
       case "/home/recommendations":
-        setRouteText("Recommendations");
+        {
+          i18n.language === "en"
+            ? setRouteText("Recommendations")
+            : setRouteText("التوصيات");
+        }
+
         break;
       case "/home/update-user-profile":
       case "/home/update-speaker-profile":
-        setRouteText("Profile");
+        {
+          i18n.language === "en"
+            ? setRouteText("Update Profile")
+            : setRouteText("تحديث الملف الشخصي");
+        }
+
         break;
       case `/home/event/${eventId}`:
-        setRouteText("Event Details");
+        {
+          i18n.language === "en"
+            ? setRouteText("Event Details")
+            : setRouteText("تفاصيل الفعالية");
+        }
+
         break;
       case `/home/payment/${eventId}`:
-        setRouteText("Payment");
+        {
+          i18n.language === "en"
+            ? setRouteText("Payment")
+            : setRouteText("الدفع");
+        }
         break;
       default:
-        setRouteText("Event Details");
+        {
+          i18n.language === "en"
+            ? setRouteText("Event Details")
+            : setRouteText("تفاصيل الفعالية");
+        }
         break;
     }
-  }, [location, eventId]);
+  }, [location, eventId, i18n.language]);
 
   const toggleIconsVisibility = () => {
     setIconsVisible(!iconsVisible);
   };
 
+  // console.log(isEnglish);
+
   return (
     <>
-      <div className="topbar d-flex justify-content-between align-items-center px-2 pt-2">
+      <div
+        className={`topbar d-flex justify-content-between align-items-center px-2 pt-2 ${
+          isEnglish.isEnglish === "en" ? "" : "topbar-rtl"
+        }`}
+        style={{ direction: isEnglish.isEnglish === "en" ? "" : "rtl" }}
+      >
         <span>{routeText}</span>
 
         <i

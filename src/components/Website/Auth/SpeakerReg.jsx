@@ -55,6 +55,7 @@ export default function SpeakerReg() {
     Country: "",
     City: "",
   });
+  console.log(userData.DateOfBirth);
 
   const handleChange = (e) => {
     // Check if the name is "ExpYears"
@@ -304,7 +305,11 @@ export default function SpeakerReg() {
 
                 {/* input */}
                 <div>
-                  <div className={`${style.input} d-flex align-items-center p-0 datef`}>
+                  <div
+                    className={`${style.input} d-flex align-items-center p-0 ${
+                      userData.DateOfBirth ? "" : "datef"
+                    }`}
+                  >
                     {/* <i className="fa-regular fa-calendar-days"></i> */}
                     <input
                       type="date"
@@ -321,7 +326,9 @@ export default function SpeakerReg() {
 
                 {/* input */}
                 <div>
-                  <div className={`${style.input} d-flex align-items-center p-0`}>
+                  <div
+                    className={`${style.input} d-flex align-items-center p-0`}
+                  >
                     <select
                       name="GenderId"
                       className="p-0 px-2 text-muted w-100 h-100 rounded-3"

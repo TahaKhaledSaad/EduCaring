@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function QrCode({ QR }) {
+export default function QrCode({ QR, isEnglish }) {
   const [showPopup, setShowPopup] = useState(true);
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -11,7 +11,6 @@ export default function QrCode({ QR }) {
       <div
         className="p-1 text-center text-white"
         style={{
-          width: "120px",
           fontSize: "14px",
           border: "1px solid #BDBDBD",
           borderRadius: "20px",
@@ -21,7 +20,7 @@ export default function QrCode({ QR }) {
         onClick={togglePopup}
       >
         <p className="m-0">
-          Show Qr Code{" "}
+          {isEnglish === "en" ? "Show Qr Code" : "عرض الكود الشريطي"}{" "}
           <svg
             width="18"
             height="18"
@@ -52,7 +51,7 @@ export default function QrCode({ QR }) {
           className="d-flex justify-content-between align-items-center py-2 px-3"
           style={{ backgroundColor: "#F2F2F2" }}
         >
-          <h3>QR Code</h3>
+          <h3>{isEnglish === "en" ? "QR Code" : "الكود الشريطي"}</h3>
           <i
             className="fa-solid fa-x"
             style={{ cursor: "pointer" }}
@@ -70,7 +69,9 @@ export default function QrCode({ QR }) {
           className="text-center mt-0"
           style={{ color: "#323232", fontSize: "12px" }}
         >
-          verified by @EduCaring
+          {isEnglish === "en"
+            ? "verified by @EduCaring"
+            : " تم التحقق من قبل @EduCaring"}
         </p>
         <div className="d-flex justify-content-center align-items-center gap-2 my-2">
           <button
@@ -110,7 +111,7 @@ export default function QrCode({ QR }) {
               printWindow.print();
             }}
           >
-            Print
+            {isEnglish === "en" ? "Print" : "Print"}
           </button>
           <button
             className="btn"
@@ -121,7 +122,7 @@ export default function QrCode({ QR }) {
             }}
             onClick={togglePopup}
           >
-            Close
+            {isEnglish === "en" ? "Close" : " إغلاق"}
           </button>
         </div>
       </div>

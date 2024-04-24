@@ -1,10 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function Gallary({ eventImages }) {
+export default function Gallary({ eventImages, isEnglish }) {
   const [showPopup, setShowPopup] = useState(true);
   // Add Modal to image
-
+  console.log(isEnglish);
   const [selectedImage, setSelectedImage] = useState(null);
   const [popupVisible, setPopupVisible] = useState(true);
 
@@ -38,7 +38,7 @@ export default function Gallary({ eventImages }) {
         onClick={togglePopup}
       >
         <p className="m-0">
-          Gallary{" "}
+          {isEnglish === "en" ? "Gallary" : "المعرض"}{" "}
           <svg
             width="18"
             height="18"
@@ -80,7 +80,7 @@ export default function Gallary({ eventImages }) {
           className="d-flex justify-content-between align-items-center py-2 px-3"
           style={{ backgroundColor: "#F2F2F2" }}
         >
-          <h3>Gallary</h3>
+          <h3>{isEnglish === "en" ? "Gallary" : "المعرض"}</h3>
           <i
             className="fa-solid fa-x"
             style={{ cursor: "pointer" }}
@@ -94,7 +94,11 @@ export default function Gallary({ eventImages }) {
               src={image.displayImageURL}
               alt="image"
               className="rounded-3"
-              style={{ objectFit: "cover", boxShadow: "0px 0px 10px #666", cursor: "pointer"}}
+              style={{
+                objectFit: "cover",
+                boxShadow: "0px 0px 10px #666",
+                cursor: "pointer",
+              }}
               height={"210px"}
               width={"248px"}
               onClick={() => openPopup(image)}
@@ -122,7 +126,7 @@ export default function Gallary({ eventImages }) {
               className="d-flex justify-content-between align-items-center py-2 px-3"
               style={{ backgroundColor: "#F2F2F2" }}
             >
-              <h3>Zoomed Image</h3>
+              <h3>{isEnglish === "en" ? "Zoomed Image" : "الصورة المكبرة"}</h3>
               <i
                 className="fa-solid fa-x"
                 style={{ cursor: "pointer" }}

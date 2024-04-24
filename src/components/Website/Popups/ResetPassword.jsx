@@ -3,6 +3,8 @@ import style from "./../Auth/Login.module.css";
 import { BASE } from "../../../Api";
 import axios from "axios";
 import PropTypes from "prop-types";
+// Translation Work
+import { useTranslation } from "react-i18next";
 
 export default function ResetPassword({ userID, email }) {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -18,6 +20,8 @@ export default function ResetPassword({ userID, email }) {
   const [passesEquals, setPassesEquals] = useState(false);
   const [showErrors, setshowErrors] = useState(false);
 
+  const { i18n } = useTranslation();
+
   const handleTogglePopup = () => {
     setPopupVisible(!popupVisible);
   };
@@ -30,7 +34,9 @@ export default function ResetPassword({ userID, email }) {
   const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
 
   useEffect(() => {
-    newPassword === confirmNewPass ? setPassesEquals(true) : setPassesEquals(false);
+    newPassword === confirmNewPass
+      ? setPassesEquals(true)
+      : setPassesEquals(false);
   }, [newPassword, confirmNewPass]);
 
   async function handleResetPassword() {
@@ -95,7 +101,9 @@ export default function ResetPassword({ userID, email }) {
             strokeLinejoin="round"
           />
         </svg>
-        <span style={{ fontSize: "13px" }}>Change Password</span>
+        <span style={{ fontSize: "13px" }}>
+          {i18n.language === "en" ? "Change Password" : "تغيير كلمة المرور"}
+        </span>
       </button>
 
       <div
@@ -103,7 +111,9 @@ export default function ResetPassword({ userID, email }) {
         style={{
           boxShadow: "0 0 100px rgba(0,0,0,0.2)",
           width: "360px",
-          transform: popupVisible ? "translate(-50%, -50%)" : "translate(300%, -50%)",
+          transform: popupVisible
+            ? "translate(-50%, -50%)"
+            : "translate(300%, -50%)",
           transition: "0.5s",
           left: "50%",
           zIndex: "1000",
@@ -118,14 +128,20 @@ export default function ResetPassword({ userID, email }) {
         <div className={style.form}>
           <section>
             <h2 className="fw-bold mb-4" style={{ margin: "0" }}>
-              Reset Password
+              {i18n.language === "en"
+                ? "Reset Password"
+                : " إعادة تعيين كلمة المرور"}
             </h2>
             {/*Current Password */}
             <div className={style.input} style={{ marginBottom: "0px" }}>
               <i className="fa-solid fa-lock"></i>
               <input
                 type={showCurrentPassword ? "text" : "password"}
-                placeholder="Current Password"
+                placeholder={
+                  i18n.language === "en"
+                    ? "Current Password"
+                    : "كلمة المرور الحالية"
+                }
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <i
@@ -137,16 +153,27 @@ export default function ResetPassword({ userID, email }) {
             </div>
             {showErrors && (
               <p className="text-danger m-0 p-0">
-                {currentPassword.length < 6 ? "Wrong Password!" : ""}
+                {currentPassword.length < 6
+                  ? i18n.language === "en"
+                    ? "Wrong Password!"
+                    : "كلمة المرور خاطئة!"
+                  : ""}
               </p>
             )}
 
             {/*new Password */}
-            <div className={style.input} style={{ marginBottom: "0px", marginTop: "15px" }}>
+            <div
+              className={style.input}
+              style={{ marginBottom: "0px", marginTop: "15px" }}
+            >
               <i className="fa-solid fa-lock"></i>
               <input
                 type={showNewPassword ? "text" : "password"}
-                placeholder="Enter New Password"
+                placeholder={
+                  i18n.language === "en"
+                    ? "Enter New Password"
+                    : "أدخل كلمة مرور جديدة"
+                }
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <i
@@ -158,16 +185,27 @@ export default function ResetPassword({ userID, email }) {
             </div>
             {showErrors && (
               <p className="text-danger m-0 p-0">
-                {newPassword.length < 8 ? "Password must be at least 8 characters!" : ""}
+                {newPassword.length < 8
+                  ? i18n.language === "en"
+                    ? "Password must be at least 8 characters!"
+                    : "يجب أن تكون كلمة المرور على الأقل 8 أحرف!"
+                  : ""}
               </p>
             )}
 
             {/*Confirm Password */}
-            <div className={style.input} style={{ marginBottom: "0px", marginTop: "15px" }}>
+            <div
+              className={style.input}
+              style={{ marginBottom: "0px", marginTop: "15px" }}
+            >
               <i className="fa-solid fa-lock"></i>
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
+                placeholder={
+                  i18n.language === "en"
+                    ? "Confirm Password"
+                    : "تأكيد كلمة المرور"
+                }
                 onChange={(e) => setConfirmNewPass(e.target.value)}
               />
               <i
@@ -178,7 +216,13 @@ export default function ResetPassword({ userID, email }) {
               ></i>
             </div>
             {showErrors && (
-              <p className="text-danger m-0 p-0">{passesEquals ? "" : "Passwords do not match!"}</p>
+              <p className="text-danger m-0 p-0">
+                {passesEquals
+                  ? ""
+                  : i18n.language === "en"
+                  ? "Passwords do not match!"
+                  : "كلمات المرور غير متطابقة!"}
+              </p>
             )}
           </section>
         </div>
@@ -193,7 +237,11 @@ export default function ResetPassword({ userID, email }) {
               border: "none",
             }}
             onClick={() => {
-              if (currentPassword.length >= 6 && newPassword.length >= 8 && passesEquals) {
+              if (
+                currentPassword.length >= 6 &&
+                newPassword.length >= 8 &&
+                passesEquals
+              ) {
                 handleResetPassword();
                 console.log("Done");
               } else {
@@ -201,14 +249,14 @@ export default function ResetPassword({ userID, email }) {
               }
             }}
           >
-            Change
+            {i18n.language === "en" ? "Change" : "تغيير"}
           </button>
           <button
             className="btn flex-fill"
             style={{ background: "#F3F5F5", outline: "none", border: "none" }}
             onClick={handleHidePopup}
           >
-            Cancel
+            {i18n.language === "en" ? "Cancel" : "إلغاء"}
           </button>
 
           {wrongCurrentPassword && (

@@ -125,12 +125,13 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
             borderRadius: "20px",
             cursor: "pointer",
             backgroundColor: "#eee",
-            width: "110px",
             display: isSuccess ? "none" : "flex",
           }}
           onClick={togglePopup}
         >
-          <p className="m-0 text-dark">Attendance </p>
+          <p className="m-0 text-dark">
+            {i18n.language === "en" ? "Attendance" : "الحضور"}
+          </p>
           <img src={attendanceImg} alt="" width={"20px"} height={"20px"} />
         </div>
       )}
@@ -151,7 +152,7 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
           className="d-flex justify-content-between align-items-center py-2 px-3"
           style={{ backgroundColor: "#F2F2F2" }}
         >
-          <h3>Take Attendance</h3>
+          <h3>{i18n.language === "en" ? "Take Attendance" : "أخذ الحضور"}</h3>
           <i
             className="fa-solid fa-x"
             style={{ cursor: "pointer" }}
@@ -163,7 +164,9 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
             <div className="p-3 d-flex flex-column justify-content-center align-items-center">
               <i className="fa-solid fa-location-dot fs-3 p-2 text-danger"></i>
               <h5 className="text-center">
-                Allow us to access your location to take attendance
+                {i18n.language === "en"
+                  ? "Allow us to access your location to take attendance"
+                  : "اسمح لنا بالوصول إلى موقعك لأخذ الحضور"}
               </h5>
             </div>
             <div className="d-flex justify-content-center align-items-center gap-2 my-2 p-2">
@@ -177,7 +180,7 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
                 }}
                 onClick={permission}
               >
-                take attendance
+                {i18n.language === "en" ? "Confirm" : "تأكيد"}
               </button>
               <button
                 className="btn"
@@ -188,7 +191,8 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
                 }}
                 onClick={togglePopup}
               >
-                Close
+                 {i18n.language === "en" ? "Close" : "إغلاق"}
+                
               </button>
             </div>
           </>
