@@ -438,7 +438,7 @@ export default function SpeakerTicket({
         }}
         onClick={togglePopup}
       >
-        Edit
+        {i18n.language === "en" ? "Edit" : "تعديل"}
       </button>
 
       <div
@@ -453,7 +453,7 @@ export default function SpeakerTicket({
           className="d-flex justify-content-between align-items-center py-2 px-3"
           style={{ backgroundColor: "#F2F2F2" }}
         >
-          <h3>{t("BookingTicket")}</h3>
+          <h3>{i18n.language === "en" ? "Booking Tickets" : "حجز التذاكر"}</h3>
           <i
             className="fa-solid fa-x"
             style={{ cursor: "pointer" }}

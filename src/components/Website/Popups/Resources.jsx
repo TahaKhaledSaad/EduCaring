@@ -503,7 +503,7 @@ export default function Resources({
           }}
           onClick={togglePopup}
         >
-          Edit
+          {i18n.language === "en" ? "Edit" : "تعديل"}
         </button>
       )}
 
@@ -612,7 +612,9 @@ export default function Resources({
               <div className="input-group p-2 mb-3 border border-muted rounded d-flex justify-content-between">
                 <input
                   type="text"
-                  placeholder="Enter Link"
+                  placeholder={
+                    i18n.language === "en" ? "Enter new link" : "أدخل رابط جديد"
+                  }
                   style={{
                     border: "none",
                     outline: "none",
@@ -634,7 +636,7 @@ export default function Resources({
                     setLink("");
                   }}
                 >
-                  Add new Link
+                  {i18n.language === "en" ? "Add new Link" : "إضافة رابط جديد"}
                 </button>
               </div>
             )}

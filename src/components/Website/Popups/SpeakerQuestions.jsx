@@ -175,7 +175,7 @@ export default function SpeakerQuestions({
         }}
         onClick={togglePopup}
       >
-        Add Questions
+        {i18n.language === "en" ? " Add Questions" : "إضافة أسئلة"}
       </button>
       <div
         className=" speakerTicket-popup bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "

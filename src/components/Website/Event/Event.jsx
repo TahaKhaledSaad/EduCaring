@@ -77,7 +77,7 @@ function EventDetails() {
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language]);
+  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language, token]);
 
   console.log(eventDetails);
 
@@ -435,7 +435,9 @@ function EventDetails() {
                               setShowCompeleteProccese(true);
                             }}
                           >
-                            Compelete Proccese
+                            {i18n.language === "en"
+                              ? "Complete the process"
+                              : "إتمام العملية"}
                           </button>
                         )}
                       </>
@@ -593,11 +595,13 @@ function EventDetails() {
                         onClick={toggleDescription}
                         style={{ width: "fit-content" }}
                       >
-                        {showFullDescription ? 
-                        i18n.language === "en" ? "Read less..." : "أقل..."
-                        
-                         : 
-                         i18n.language === "en" ? "Read more...": "المزيد..."}
+                        {showFullDescription
+                          ? i18n.language === "en"
+                            ? "Read less..."
+                            : "أقل..."
+                          : i18n.language === "en"
+                          ? "Read more..."
+                          : "المزيد..."}
                       </button>
                     )}
                   </div>
@@ -773,7 +777,7 @@ function EventDetails() {
             onClick={() => setShowCompeleteProccese(false)}
           >
             <i className="fas fa-angle-left fa-lg"></i>
-            <span className="fw-bold fs-5 mx-1">Back</span>
+            <span className="fw-bold fs-5 mx-1">{i18n.language === "en" ? "Back" : "عودة"}</span>
           </span>
 
           <div
@@ -863,9 +867,9 @@ function EventDetails() {
                 </svg>
 
                 <span style={{ fontSize: "18px", color: "#565656" }}>
-                  Booking Tickets{" "}
+                  {i18n.language === "en" ? "Booking Tickets" : "حجز التذاكر"}{" "}
                   <span className="text-danger" style={{ fontSize: "14px" }}>
-                    (required)
+                    ({i18n.language === "en" ? "required" : "مطلوب"})
                   </span>
                 </span>
               </div>
@@ -879,14 +883,14 @@ function EventDetails() {
                 }}
               >
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Attends:</span>{" "}
+                  <span style={{ color: "#27AE60" }}>{i18n.language === "en" ? "Attendes:" : "يحضر:"}</span>{" "}
                   {/* 06,07,08 March, 2023 */}
                   {speakerAttends?.length > 0
                     ? new Date(speakerAttends[0].attendDay).toDateString()
                     : ""}
                 </p>
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>Departure:</span>{" "}
+                  <span style={{ color: "#27AE60" }}>{i18n.language === "en" ? "Departure:" : "يغادر: "}</span>{" "}
                   {/* 06,07,08 March, 2023 */}
                   {speakerDepartures?.length > 0
                     ? new Date(speakerDepartures[0].departureDay).toDateString()
@@ -949,9 +953,11 @@ function EventDetails() {
                   />
                 </svg>
                 <span style={{ fontSize: "18px", color: "#565656" }}>
-                  Upload Resources{" "}
+                  {i18n.language === "en"
+                    ? "Upload Resources"
+                    : "تحميل الموارد"}{" "}
                   <span className="text-danger" style={{ fontSize: "14px" }}>
-                    (required)
+                    ({i18n.language === "en" ? "required" : "مطلوب"})
                   </span>
                 </span>
               </div>
@@ -965,19 +971,19 @@ function EventDetails() {
                 }}
               >
                 <p>
-                  Files{" "}
+                  {i18n.language === "en" ? "Files" : "الملفات"}{" "}
                   <span style={{ color: "#747688", fontSize: "14px" }}>
                     ({filesNumber})
                   </span>
                 </p>
                 <p>
-                  Links{" "}
+                  {i18n.language === "en" ? "Links" : "الروابط"}{" "}
                   <span style={{ color: "#747688", fontSize: "14px" }}>
                     ({linksNumber})
                   </span>
                 </p>
                 <p>
-                  Images{" "}
+                  {i18n.language === "en" ? "Images" : "الصور"}{" "}
                   <span style={{ color: "#747688", fontSize: "14px" }}>
                     ({imgsNumber})
                   </span>
