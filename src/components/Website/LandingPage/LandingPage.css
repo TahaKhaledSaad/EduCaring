@@ -1,7 +1,9 @@
 .landing-page {
   overflow: hidden;
 }
-
+.landing-page-rtl{
+  direction: rtl;
+}
 /*  start NavBar */
 .navbar-toggler {
   border: none;
@@ -438,6 +440,10 @@
   position: absolute;
   top: -15px;
 }
+.landing-page-rtl .contact .rectangle{
+  transform: rotate(-90deg);
+  right: -10px;
+}
 
 .contact .text {
   padding: 50px 30px 50px 50px;
@@ -502,6 +508,10 @@
   position: absolute;
   right: 50px;
   top: 50px;
+}
+.landing-page-rtl .contact .shapes {
+  left: 50px;
+  right: auto;
 }
 
 @media (max-width: 850px) {

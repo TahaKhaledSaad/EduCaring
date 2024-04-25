@@ -144,7 +144,11 @@ export default function Login() {
   return (
     <>
       {!showVerify && (
-        <div className={style.container}>
+        <div className={style.container}
+        style={{
+          direction : i18n.language === "en" ? "" : "rtl"
+        }}
+        >
           <form className={style.form} onSubmit={handleFormSubmit}>
             <img src={logo} alt="logo" />
 

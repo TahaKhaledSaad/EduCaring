@@ -150,7 +150,11 @@ export default function AttendanceReg() {
   return (
     <>
       {!showVerify && (
-        <div className={style.container}>
+        <div className={style.container}
+        style={{
+          direction : i18n.language === "en" ? "" : "rtl"
+        }}
+        >
           {/* Header */}
           <div className={style.header}>
             {/* Before Uploading */}

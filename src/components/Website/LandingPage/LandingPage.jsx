@@ -224,7 +224,9 @@ export default function LandingPage() {
   };
   return (
     <>
-      <div className="landing-page"
+      <div
+        className={`landing-page ${i18n.language}=== "en" ? "" : landing-page-rtl
+        `}
       >
         {/* Start navBar */}
         <nav className="navbar navbar-expand-lg bg-transparent px-2">
@@ -343,8 +345,8 @@ export default function LandingPage() {
                     </>
                   ) : (
                     <>
-                      <span className="px-2">Edu Caring</span>
                       مرحبا بكم في
+                      <span className="px-2">Edu Caring</span>
                     </>
                   )}{" "}
                 </h1>
@@ -362,11 +364,11 @@ export default function LandingPage() {
                     </>
                   ) : (
                     <>
+                      التسجيل
                       <i
                         className="fas fa-chevron-left mx-2"
                         style={{ fontFamily: "Font Awesome 6 Free" }}
                       ></i>
-                      التسجيل
                     </>
                   )}
                 </a>
