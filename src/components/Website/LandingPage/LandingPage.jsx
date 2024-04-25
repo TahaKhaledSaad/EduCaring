@@ -225,8 +225,9 @@ export default function LandingPage() {
   return (
     <>
       <div
-        className={`landing-page ${i18n.language}=== "en" ? "" : landing-page-rtl
-        `}
+        className={`landing-page ${
+          i18n.language === "en" ? "" : "landing-page-rtl"
+        }`}
       >
         {/* Start navBar */}
         <nav className="navbar navbar-expand-lg bg-transparent px-2">
@@ -358,7 +359,7 @@ export default function LandingPage() {
                     <>
                       Register
                       <i
-                        className="fas fa-chevron-right"
+                        className="fas fa-chevron-right mx-2"
                         style={{ fontFamily: "Font Awesome 6 Free" }}
                       ></i>
                     </>

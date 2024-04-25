@@ -120,35 +120,35 @@ function EventDetails() {
           );
           setCityTO(
             response.data.responseObject[0].eventDaySpeakerAttends[0]
-              .cityAttendTo
+              ?.cityAttendTo
           );
           setCityFrom(
             response.data.responseObject[0].eventDaySpeakerAttends[0]
-              .cityAttendFrom
+              ?.cityAttendFrom
           );
           setCityTOOld(
             response.data.responseObject[0].eventDaySpeakerAttends[0]
-              .cityAttendTo
+              ?.cityAttendTo
           );
           setCityFromOld(
             response.data.responseObject[0].eventDaySpeakerAttends[0]
-              .cityAttendFrom
+              ?.cityAttendFrom
           );
           setCityTODepature(
             response.data.responseObject[0].eventDaySpeakerDepartures[0]
-              .cityDepartureTo
+              ?.cityDepartureTo
           );
           setCityFromDepature(
             response.data.responseObject[0].eventDaySpeakerDepartures[0]
-              .cityDepartureFrom
+              ?.cityDepartureFrom
           );
           setCityTOOldDepature(
             response.data.responseObject[0].eventDaySpeakerDepartures[0]
-              .cityDepartureTo
+              ?.cityDepartureTo
           );
           setCityFromOldDepature(
             response.data.responseObject[0].eventDaySpeakerDepartures[0]
-              .cityDepartureFrom
+              ?.cityDepartureFrom
           );
         });
     }
@@ -490,7 +490,8 @@ function EventDetails() {
                       >
                         <span className="mx-1">
                           Buy ticket{" "}
-                          {eventDetails.eventDays[selectedDayIndex]?.price} {i18n.language === "en" ? "SAR" : "ريال"}
+                          {eventDetails.eventDays[selectedDayIndex]?.price}{" "}
+                          {i18n.language === "en" ? "SAR" : "ريال"}
                         </span>
                         <svg
                           width="18"
@@ -777,7 +778,9 @@ function EventDetails() {
             onClick={() => setShowCompeleteProccese(false)}
           >
             <i className="fas fa-angle-left fa-lg"></i>
-            <span className="fw-bold fs-5 mx-1">{i18n.language === "en" ? "Back" : "عودة"}</span>
+            <span className="fw-bold fs-5 mx-1">
+              {i18n.language === "en" ? "Back" : "عودة"}
+            </span>
           </span>
 
           <div
@@ -883,14 +886,18 @@ function EventDetails() {
                 }}
               >
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>{i18n.language === "en" ? "Attendes:" : "يحضر:"}</span>{" "}
+                  <span style={{ color: "#27AE60" }}>
+                    {i18n.language === "en" ? "Attendes:" : "يحضر:"}
+                  </span>{" "}
                   {/* 06,07,08 March, 2023 */}
                   {speakerAttends?.length > 0
                     ? new Date(speakerAttends[0].attendDay).toDateString()
                     : ""}
                 </p>
                 <p className="my-0">
-                  <span style={{ color: "#27AE60" }}>{i18n.language === "en" ? "Departure:" : "يغادر: "}</span>{" "}
+                  <span style={{ color: "#27AE60" }}>
+                    {i18n.language === "en" ? "Departure:" : "يغادر: "}
+                  </span>{" "}
                   {/* 06,07,08 March, 2023 */}
                   {speakerDepartures?.length > 0
                     ? new Date(speakerDepartures[0].departureDay).toDateString()

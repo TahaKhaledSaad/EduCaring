@@ -428,7 +428,7 @@ export default function Profile() {
                       fontSize: isEditMode ? "12px" : "14px",
                     }}
                   >
-                    date
+                    {i18n.language === "en" ? "date" : "التاريخ"}
                   </span>
                 </div>
                 {/* Gender Input */}
@@ -499,7 +499,7 @@ export default function Profile() {
                       fontSize: isEditMode ? "12px" : "14px",
                     }}
                   >
-                    gender
+                    {i18n.language === "en" ? "gender" : "النوع"}
                   </span>
                 </div>
               </div>
@@ -532,7 +532,9 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  health authority number
+                  {i18n.language === "en"
+                    ? "health authority number"
+                    : "رقم الهيئة الصحية"}
                 </span>
               </div>
 
@@ -561,7 +563,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  passport
+                  {i18n.language === "en" ? "passport" : "جواز السفر"}
                 </span>
               </div>
 
@@ -590,7 +592,9 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  Saudi Commission for Specializations number
+                  {i18n.language === "en"
+                    ? "Saudi Commission for Specializations number"
+                    : "رقم الهيئة السعودية للتخصصات"}
                 </span>
               </div>
 
@@ -619,7 +623,9 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  Current Position
+                  {i18n.language === "en"
+                    ? "Current Position"
+                    : "المنصب الحالي"}
                 </span>
               </div>
 
@@ -648,7 +654,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  Credit Card
+                  {i18n.language === "en" ? "Credit Card" : "بطاقة إئتمان"}
                 </span>
               </div>
             </div>
@@ -677,7 +683,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  bio
+                  {i18n.language === "en" ? "Bio" : "نبذه"}
                 </span>
               </div>
             </div>
@@ -689,8 +695,12 @@ export default function Profile() {
               <div className="elem">
                 <div className="text-muted my-2">
                   <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                  upload Wlaa Card{" "}
-                  <div className="text-danger d-inline">(not required)</div>
+                  {i18n.language === "en"
+                    ? "upload Wlaa Card"
+                    : "تحميل بطاقة Wlaa"}{" "}
+                  <div className="text-danger d-inline">
+                    {i18n.language === "en" ? "(not required)" : "(غير مطلوب)"}
+                  </div>
                 </div>
                 {/* Upload Label */}
                 {!showCommingWalaaFile && (
@@ -711,15 +721,19 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>
@@ -813,7 +827,9 @@ export default function Profile() {
               <div className="elem">
                 <div className="text-muted my-2">
                   <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                  upload passport photo
+                  {i18n.language === "en"
+                    ? "upload passport photo"
+                    : "تحميل صورة جواز السفر"}
                 </div>
                 {/* Upload Label */}
                 {!showCommingPassportFile && (
@@ -838,15 +854,19 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>
@@ -919,7 +939,9 @@ export default function Profile() {
               <div className="elem">
                 <div className="text-muted my-2">
                   <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                  upload cv
+                  {i18n.language === "en"
+                    ? "upload cv"
+                    : "تحميل السيرة الذاتية"}
                 </div>
                 {/* Upload Label */}
                 {!showCommingCvFile && (
@@ -940,15 +962,19 @@ export default function Profile() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>

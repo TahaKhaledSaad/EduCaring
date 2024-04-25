@@ -1823,3 +1823,11 @@ body {
     border-radius: 6px !important;
   }
 }
+.only-dashboard .btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.only-dashboard .btn-light {
+  background-color: #e2e5e7;
+  color: #000;
+}

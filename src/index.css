@@ -113,7 +113,7 @@ input {
     bottom: 0;
     left: 0;
   }
-  .side-rtl{
+  .side-rtl {
     right: 0;
     left: auto;
   }
@@ -431,6 +431,10 @@ input {
   right: 20px;
   transition: 0.3s;
   z-index: 333333;
+}
+.topbar-rtl .notification .notif-popup {
+  left: 0px;
+  right: auto;
 }
 @media (max-width: 767px) {
   .notification .notif-popup {

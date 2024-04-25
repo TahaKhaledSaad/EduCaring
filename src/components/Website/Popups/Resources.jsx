@@ -592,15 +592,19 @@ export default function Resources({
                     <img src={upload} alt="upload files" width="80px" />
                     <div>
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </div>
                   </label>
