@@ -10,8 +10,10 @@ import Role from "../Popups/Role";
 import verifyStyle from "./../verfiy-number/Verfication.module.css";
 import Verfication from "../verfiy-number/Verfication";
 import { jwtDecode } from "jwt-decode";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { i18n } = useTranslation();
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -149,14 +151,18 @@ export default function Login() {
             {/* Main Info */}
             {show1 && (
               <section>
-                <h2 className="fw-bold">Sign in</h2>
+                <h2 className="fw-bold">
+                  {i18n.language === "en" ? "Sign in" : "تسجيل الدخول"}
+                </h2>
 
                 {/* Input */}
                 <div>
                   <i className="fa-regular fa-envelope"></i>
                   <input
                     type="email"
-                    placeholder="email"
+                    placeholder={
+                      i18n.language === "en" ? "Email" : "البريد الإلكتروني"
+                    }
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -166,7 +172,9 @@ export default function Login() {
                   <i className="fa-solid fa-lock"></i>
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="password"
+                    placeholder={
+                      i18n.language === "en" ? "Password" : "كلمة المرور"
+                    }
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <i
@@ -198,18 +206,25 @@ export default function Login() {
                     }
                   }}
                 >
-                  forget password!
+                  {i18n.language === "en"
+                    ? "Forget password!"
+                    : "نسيت كلمة المرور!"}
                 </div>
 
                 {errorMessage !== "" && (
                   <p className="text-danger p-0">{errorMessage}</p>
                 )}
 
-                <button className="my-4">Sign In</button>
+                <button className="my-4">
+                  {i18n.language === "en" ? "Sign In" : "تسجيل الدخول"}
+                </button>
                 <p className="m-0 p-0 my-3 fs-6">
-                  Don’t have an account? &nbsp;
+                  {i18n.language === "en"
+                    ? "Don't have an account?"
+                    : "ليس لديك حساب؟"}
+                  &nbsp;
                   <Link onClick={() => setRole(!role)} className="fw-bold">
-                    Sign Up
+                    {i18n.language === "en" ? "Sign Up" : "سجل"}
                   </Link>
                 </p>
               </section>
@@ -220,7 +235,9 @@ export default function Login() {
               <>
                 {/* Verification */}
                 <div>
-                  <h2 className="fw-bold m-0 ">Verfication</h2>
+                  <h2 className="fw-bold m-0 ">
+                    {i18n.language === "en" ? "Verfication" : "التحقق"}
+                  </h2>
                   <div
                     className={verifyStyle.container}
                     style={{
@@ -296,13 +313,17 @@ export default function Login() {
                   style={{ cursor: "pointer" }}
                   onClick={forgetPassword}
                 >
-                  Resend Code...
+                  {i18n.language === "en"
+                    ? "Resend Code..."
+                    : "إعادة الإرسال..."}
                 </p>
                 {/* Reset */}
                 <section>
                   <div style={{ border: "none" }}>
                     <h2 className="fw-bold mb-4" style={{ margin: "0" }}>
-                      Reset Password
+                      {i18n.language === "en"
+                        ? "Reset Password"
+                        : "إعادة تعيين"}
                     </h2>
                     {/* Password */}
                     <div
@@ -312,7 +333,11 @@ export default function Login() {
                       <i className="fa-solid fa-lock"></i>
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Enter New Password"
+                        placeholder={
+                          i18n.language === "en"
+                            ? "New Password"
+                            : "كلمة المرور الجديدة"
+                        }
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                       <i
@@ -325,7 +350,9 @@ export default function Login() {
                     {showForgetErrors && (
                       <p className="text-danger m-0 p-0">
                         {newPassword.length < 8
-                          ? "Password must be at least 8 characters!"
+                          ? i18n.language === "en"
+                            ? "Password must be at least 8 characters!"
+                            : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل!"
                           : ""}
                       </p>
                     )}
@@ -338,7 +365,11 @@ export default function Login() {
                       <i className="fa-solid fa-lock"></i>
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Confirm Password"
+                        placeholder={
+                          i18n.language === "en"
+                            ? "Confirm Password"
+                            : "تأكيد كلمة المرور"
+                        }
                         onChange={(e) => setConfirmNewPass(e.target.value)}
                       />
                       <i
@@ -368,7 +399,7 @@ export default function Login() {
                         }
                       }}
                     >
-                      Reset
+                      {i18n.language === "en" ? "Reset" : "إعادة تعيين"}
                     </button>
                   </div>
                 </section>

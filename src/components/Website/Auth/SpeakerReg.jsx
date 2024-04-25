@@ -11,9 +11,11 @@ import axios from "axios";
 import { BASE } from "../../../Api";
 import DeleteModel from "./../Popups/DeleteModel";
 import Verfication from "../verfiy-number/Verfication";
+import { useTranslation } from "react-i18next";
 
 export default function SpeakerReg() {
   // [0] States
+  const { i18n } = useTranslation();
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
 
@@ -222,7 +224,11 @@ export default function SpeakerReg() {
             )}
           </div>
 
-          <h4 className="m-2 mb-5">Create new account as an speaker</h4>
+          <h4 className="m-2 mb-5">
+            {i18n.language === "en"
+              ? "Create new account as an speaker"
+              : "إنشاء حساب جديد كـمتحدث"}
+          </h4>
 
           <form onSubmit={handleSubmit}>
             {/* Main Info : 1 */}
@@ -242,7 +248,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError && userData.NameAr.length < 3 && (
                     <span className="m-0 my-0 text-danger">
-                      Name Should be More 3 characters
+                      {i18n.language === "en"
+                        ? "Name Should be More 3 characters"
+                        : "الإسم يجب أن يكون أكثر من 3 أحرف"}
                     </span>
                   )}
                 </div>
@@ -260,7 +268,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError && userData.NameEn.length < 3 && (
                     <span className="m-0 my-0 text-danger">
-                      Name Should be More 3 characters
+                      {i18n.language === "en"
+                        ? "Name Should be More 3 characters"
+                        : "الإسم يجب أن يكون أكثر من 3 أحرف"}
                     </span>
                   )}
                 </div>
@@ -271,7 +281,11 @@ export default function SpeakerReg() {
                     <i className="fa-regular fa-envelope"></i>
                     <input
                       type="email"
-                      placeholder="email"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Invalid Email"
+                          : "البريد الإلكتروني غير صحيح"
+                      }
                       name="Email"
                       onChange={handleChange}
                     />
@@ -287,7 +301,11 @@ export default function SpeakerReg() {
                 {/* input */}
                 <div>
                   <PhoneInput
-                    placeholder="Enter phone number"
+                    placeholder={
+                      i18n.language === "en"
+                        ? "Enter Phone Number"
+                        : "أدخل رقم الهاتف"
+                    }
                     value={userData.PhoneNumber}
                     onChange={(e) =>
                       setUserData({ ...userData, PhoneNumber: e })
@@ -298,7 +316,9 @@ export default function SpeakerReg() {
                   />
                   {showError && userData.PhoneNumber.length < 10 && (
                     <span className="m-0 my-0 text-danger">
-                      Invalid Phone Number
+                      {i18n.language === "en"
+                        ? "Invalid Phone Number"
+                        : "رقم الهاتف غير صحيح"}
                     </span>
                   )}
                 </div>
@@ -320,7 +340,11 @@ export default function SpeakerReg() {
                     />
                   </div>
                   {showError && userData.DateOfBirth.length < 8 && (
-                    <span className="m-0 my-0 text-danger">Invalid Date</span>
+                    <span className="m-0 my-0 text-danger">
+                      {i18n.language === "en"
+                        ? "Invalid Date"
+                        : "تاريخ غير صحيح"}
+                    </span>
                   )}
                 </div>
 
@@ -334,7 +358,11 @@ export default function SpeakerReg() {
                       className="p-0 px-2 text-muted w-100 h-100 rounded-3"
                       onChange={handleChange}
                     >
-                      <option disabled>Gender</option>
+                      <option disabled>
+                        {i18n.language === "en"
+                          ? "Select Gender"
+                          : "إختر النوع"}
+                      </option>
                       <option value="1">Male</option>
                       <option value="2">Female</option>
                     </select>
@@ -346,7 +374,11 @@ export default function SpeakerReg() {
                   <i className="fa-solid fa-id-card"></i>
                   <input
                     type="text"
-                    placeholder="Enter passport number"
+                    placeholder={
+                      i18n.language === "en"
+                        ? "Enter passport number"
+                        : "ادخل رقم جواز السقر"
+                    }
                     name="PassportNumber"
                     onChange={handleChange}
                   />
@@ -357,7 +389,11 @@ export default function SpeakerReg() {
                   <i className="fa-solid fa-heart-pulse"></i>
                   <input
                     type="text"
-                    placeholder="health authority number"
+                    placeholder={
+                      i18n.language === "en"
+                        ? "Health Authority Number"
+                        : "رقم الهيئة الصحية"
+                    }
                     name="HealthAuthorityNumber"
                     onChange={handleChange}
                   />
@@ -379,7 +415,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError && userData.Country.length < 3 && (
                     <span className="m-0 my-0 text-danger">
-                      Please Select The Country
+                      {i18n.language === "en"
+                        ? "Please Select The Country"
+                        : "من فضلك اختر الدولة"}
                     </span>
                   )}
                 </div>
@@ -401,7 +439,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError && userData.City.length < 3 && (
                     <span className="m-0 my-0 text-danger">
-                      Please Select The City
+                      {i18n.language === "en"
+                        ? " Please Select The City"
+                        : "من فضلك اختر المدينة"}
                     </span>
                   )}
                 </div>
@@ -412,7 +452,9 @@ export default function SpeakerReg() {
                     <i className="fa-solid fa-lock"></i>
                     <input
                       type={showPassword ? "text" : "password"}
-                      placeholder="password"
+                      placeholder={
+                        i18n.language === "en" ? "password" : "كلمة المرور"
+                      }
                       onChange={handleChange}
                       name="Password"
                     />
@@ -425,7 +467,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError && userData.Password.length < 8 && (
                     <span className="m-0 my-0 text-danger">
-                      Passoword Should be More 8 characters
+                      {i18n.language === "en"
+                        ? "Passoword Should be More 8 characters"
+                        : " كلمة المرور يجب ان تكون اكثر من 8 احرف"}
                     </span>
                   )}
                 </div>
@@ -436,7 +480,11 @@ export default function SpeakerReg() {
                     <i className="fa-solid fa-lock"></i>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="confirm password"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Confirm Password"
+                          : "تأكيد كلمة المرور"
+                      }
                       onChange={handleChange}
                       name="ConfirmPassword"
                     />
@@ -450,7 +498,9 @@ export default function SpeakerReg() {
                   {showError &&
                     userData.Password !== userData.ConfirmPassword && (
                       <span className="m-0 my-0 text-danger">
-                        Password not Match
+                        {i18n.language === "en"
+                          ? "Password not Match"
+                          : "كلمتي المرور غير متطابقتين "}
                       </span>
                     )}
                 </div>
@@ -481,18 +531,21 @@ export default function SpeakerReg() {
                 className="signup btn btn-info text-white fw-bold fs-5"
                 style={{ background: "#3296d4", width: "300px" }}
               >
-                Sign Up
+                {i18n.language === "en" ? "Sign Up" : "سجل"}
               </div>
 
               {/* Have Account */}
               <div className="mt-3">
-                I Already have an Account? &nbsp;
+                {i18n.language === "en"
+                  ? "I Already have an Account?"
+                  : " لديك حساب بالفعل ؟"}{" "}
+                &nbsp;
                 <Link
                   to="/login"
                   className="fw-bold"
                   style={{ color: "#3296d4" }}
                 >
-                  Sign In
+                  {i18n.language === "en" ? "Sign In" : "تسجيل الدخول"}
                 </Link>
               </div>
             </div>
@@ -509,12 +562,14 @@ export default function SpeakerReg() {
                 cols="30"
                 rows="10"
                 className="w-100 rounded p-2 mb-2 mt-4"
-                placeholder="Bio"
+                placeholder={i18n.language === "en" ? "Bio" : "نبذه"}
                 onChange={handleChange}
               ></textarea>
               {showError2 && userData.Bio.length < 10 && (
                 <span className="m-0 my-0 mb-3 text-danger">
-                  Bio Should be More 10 characters
+                  {i18n.language === "en"
+                    ? "Bio Should be More 10 characters"
+                    : " يجب ان تكون اكثر من عشرة احرف"}
                 </span>
               )}
               <div className={style.form}>
@@ -523,7 +578,11 @@ export default function SpeakerReg() {
                   <div className={style.input}>
                     <input
                       type="text"
-                      placeholder="Saudi Authority Number"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Saudi Authority Number"
+                          : "رقم الهيئة السعودية"
+                      }
                       name="SaudiAuthorityNumber"
                       onChange={handleChange}
                       className="p-2"
@@ -531,7 +590,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError2 && userData.SaudiAuthorityNumber.length < 10 && (
                     <span className="m-0 my-0 text-danger">
-                      Saudi Authority Number Should be More 10 characters
+                      {i18n.language === "en"
+                        ? "Saudi Authority Number Should be More 10 characters"
+                        : "رقم الهيئة السعودية يجب ان يكون اكثر من عشر احرف"}
                     </span>
                   )}
                 </div>
@@ -541,7 +602,11 @@ export default function SpeakerReg() {
                   <div className={style.input}>
                     <input
                       type="number"
-                      placeholder="Experience Years"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Experience Years"
+                          : "عدد سنين الخبرة"
+                      }
                       name="ExpYears"
                       onChange={handleChange}
                       className="p-2"
@@ -549,7 +614,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError2 && userData.ExpYears < 1 && (
                     <span className="m-0 my-0 text-danger">
-                      Experience Years Should be More 1 Year
+                      {i18n.language === "en"
+                        ? "Experience Years Should be More 1 Year"
+                        : "عدد سنين الخبرة يجب ان يكون اكبر من 1"}
                     </span>
                   )}
                 </div>
@@ -559,7 +626,11 @@ export default function SpeakerReg() {
                   <div className={style.input}>
                     <input
                       type="text"
-                      placeholder="Current Position"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Current Position"
+                          : "المنصب الحالي"
+                      }
                       name="CurrentWorkPlace"
                       onChange={handleChange}
                       className="p-2"
@@ -567,7 +638,9 @@ export default function SpeakerReg() {
                   </div>
                   {showError2 && userData.CurrentWorkPlace.length < 3 && (
                     <span className="m-0 my-0 text-danger">
-                      Current Position Should be More 3 characters
+                      {i18n.language === "en"
+                        ? "Current Position Should be More 3 characters"
+                        : "المنصب الحالي يجب ان يكون اكثر من 3 احرف"}
                     </span>
                   )}
                 </div>
@@ -597,7 +670,7 @@ export default function SpeakerReg() {
                   setShow3(false);
                 }}
               >
-                Back
+                {i18n.language === "en" ? "Back" : "رجوع"}
               </div>
 
               <div
@@ -618,7 +691,7 @@ export default function SpeakerReg() {
                   }
                 }}
               >
-                Next
+                {i18n.language === "en" ? "Next" : "التالي"}
               </div>
             </div>
 
@@ -636,8 +709,14 @@ export default function SpeakerReg() {
                 <div className="elem">
                   <div className="text-muted my-2">
                     <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                    upload Wlaa Card{" "}
-                    <div className="text-danger d-inline">(not required)</div>
+                    {i18n.language === "en"
+                      ? "upload Wlaa Card"
+                      : "تحميل بطاقة Wlaa"}{" "}
+                    <div className="text-danger d-inline">
+                      {i18n.language === "en"
+                        ? "(not required)"
+                        : "(غير مطلوب)"}
+                    </div>
                   </div>
                   <div
                     className="input-group"
@@ -658,15 +737,19 @@ export default function SpeakerReg() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>
@@ -718,7 +801,9 @@ export default function SpeakerReg() {
                 <div className="elem">
                   <div className="text-muted my-2">
                     <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                    upload passport photo
+                    {i18n.language === "en"
+                      ? "upload passport photo"
+                      : "تحميل صورة جواز السفر"}
                   </div>
                   <div
                     className="input-group"
@@ -741,15 +826,19 @@ export default function SpeakerReg() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>
@@ -786,7 +875,9 @@ export default function SpeakerReg() {
                 <div className="elem">
                   <div className="text-muted my-2">
                     <i className="fas fa-arrow-up border border-secondary rounded fa-xs p-2 "></i>{" "}
-                    upload cv
+                    {i18n.language === "en"
+                      ? "upload cv"
+                      : "تحميل السيرة الذاتية"}
                   </div>
                   <div
                     className="input-group"
@@ -805,15 +896,19 @@ export default function SpeakerReg() {
                     >
                       <img src={upload} alt="upload files" width="80px" />
                       <div className="text-center my-0">
-                        Drag and Drop image{" "}
-                        <p className="text-info d-inline">here</p>
+                        {i18n.language === "en"
+                          ? "Drag and Drop image"
+                          : "سحب وإسقاط الصورة"}{" "}
+                        <p className="text-info d-inline">
+                          {i18n.language === "en" ? "here" : "هنا"}
+                        </p>
                       </div>
                       <div className="text-center my-0">
-                        or{" "}
+                        {i18n.language === "en" ? "or" : "او"}{" "}
                         <p className="text-info d-inline text-decoration-down">
-                          upload
+                          {i18n.language === "en" ? "upload" : "رفع"}
                         </p>{" "}
-                        image
+                        {i18n.language === "en" ? "image" : "صورة"}
                       </div>
                     </label>
                   </div>
@@ -877,7 +972,7 @@ export default function SpeakerReg() {
                     setShow3(false);
                   }}
                 >
-                  Back
+                  {i18n.language === "en" ? "Back" : "رجوع"}
                 </div>
 
                 <div
@@ -885,7 +980,7 @@ export default function SpeakerReg() {
                   style={{ background: "#3296d4" }}
                   onClick={handleSubmit}
                 >
-                  Finish
+                  {i18n.language === "en" ? "Finish" : "تم"}
                 </div>
               </div>
             </div>

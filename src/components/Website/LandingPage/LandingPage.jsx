@@ -24,9 +24,9 @@ import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
 import Logout from "../Popups/Logout";
 import { BASE } from "../../../Api";
-import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { PulseLoader } from "react-spinners";
+import { useTranslation } from "react-i18next";
 
 export default function LandingPage() {
   const { i18n } = useTranslation();
@@ -224,7 +224,8 @@ export default function LandingPage() {
   };
   return (
     <>
-      <div className="landing-page">
+      <div className="landing-page"
+      >
         {/* Start navBar */}
         <nav className="navbar navbar-expand-lg bg-transparent px-2">
           <div className="container-fluid flex-nowrap">
@@ -240,7 +241,7 @@ export default function LandingPage() {
               aria-controls="navbarSupportedContent"
               aria-expanded="false"
               aria-label="Toggle navigation"
-              style={{width:"fit-content"}}
+              style={{ width: "fit-content" }}
             >
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -252,12 +253,12 @@ export default function LandingPage() {
               <ul className="navbar-nav mx-auto m-2 mb-lg-0">
                 <li className="nav-item active">
                   <NavLink className="nav-link active" to="/home">
-                    Home
+                    {i18n.language === "en" ? "Home" : "الرئيسية"}
                   </NavLink>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/home/myevents">
-                    Events
+                    {i18n.language === "en" ? "Events" : "الفعاليات"}
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -266,7 +267,9 @@ export default function LandingPage() {
                     onClick={scrollToPhotos}
                     style={{ cursor: "pointer" }}
                   >
-                    Photos and Videos
+                    {i18n.language === "en"
+                      ? "Photos and Videos"
+                      : "الصور والفيديوهات"}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -275,7 +278,7 @@ export default function LandingPage() {
                     onClick={scrollToSpeakers}
                     style={{ cursor: "pointer" }}
                   >
-                    Speakers
+                    {i18n.language === "en" ? "Speakers" : "المتحدثون"}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -284,7 +287,7 @@ export default function LandingPage() {
                     onClick={scrollToContact}
                     style={{ cursor: "pointer" }}
                   >
-                    Contact us
+                    {i18n.language === "en" ? "Contact us" : "تواصل معنا"}
                   </a>
                 </li>
               </ul>
@@ -297,7 +300,7 @@ export default function LandingPage() {
                       to="/login"
                       style={{ backgroundColor: "#3296d4" }}
                     >
-                      Login
+                      {i18n.language === "en" ? "Login" : "تسجيل الدخول"}
                     </Link>
                   </li>
 
@@ -305,9 +308,13 @@ export default function LandingPage() {
                     <button
                       className="btn m-2 register-btn"
                       onClick={() => setRole(!role)}
-                      style={{ color: "#3296d4", borderColor: "#3296d4" ,width:"fit-content" }}
+                      style={{
+                        color: "#3296d4",
+                        borderColor: "#3296d4",
+                        width: "fit-content",
+                      }}
                     >
-                      Register
+                      {i18n.language === "en" ? "Register" : "التسجيل"}
                     </button>
                   </li>
                 </ul>
@@ -326,16 +333,42 @@ export default function LandingPage() {
           <div className="ellips2"></div>
           <div className="ellips3"></div>
           <div className="landing">
-            <div className="p-3 d-flex flex-column justify-content-around align-items-center align-items-md-start gap-3 landing-text">            
+            <div className="p-3 d-flex flex-column justify-content-around align-items-center align-items-md-start gap-3 landing-text">
               <div className="text">
                 <h1>
-                  Welcome To <span>Edu Caring</span>
+                  {i18n.language === "en" ? (
+                    <>
+                      Welcome To
+                      <span>Edu Caring</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="px-2">Edu Caring</span>
+                      مرحبا بكم في
+                    </>
+                  )}{" "}
                 </h1>
-                <span className="d-block">  {text.welcomeDescription} </span>
+                <span className="d-block"> {text.welcomeDescription} </span>
               </div>
               {!decodedToken.uid && (
                 <a className="button" onClick={() => setRole(!role)}>
-                  Register <i className="fas fa-chevron-right" style={{fontFamily:"Font Awesome 6 Free"}}></i>
+                  {i18n.language === "en" ? (
+                    <>
+                      Register
+                      <i
+                        className="fas fa-chevron-right"
+                        style={{ fontFamily: "Font Awesome 6 Free" }}
+                      ></i>
+                    </>
+                  ) : (
+                    <>
+                      <i
+                        className="fas fa-chevron-left mx-2"
+                        style={{ fontFamily: "Font Awesome 6 Free" }}
+                      ></i>
+                      التسجيل
+                    </>
+                  )}
                 </a>
               )}
             </div>
@@ -487,10 +520,10 @@ export default function LandingPage() {
             </div>
 
             <div className="text">
-              <p>Days</p>
-              <p>Hours</p>
-              <p>Minutes</p>
-              <p>Seconds</p>
+              <p>{i18n.language === "en" ? "Days" : "أيام"}</p>
+              <p>{i18n.language === "en" ? "Hours" : "ساعات"}</p>
+              <p>{i18n.language === "en" ? "Minutes" : "دقائق"}</p>
+              <p>{i18n.language === "en" ? "Seconds" : "ثواني"}</p>
             </div>
           </div>
         </div>
@@ -562,7 +595,7 @@ export default function LandingPage() {
               strokeLinejoin="round"
             />
           </svg>
-          <h2>About Us</h2>
+          <h2>{i18n.language === "en" ? "About Us" : "من نحن"}</h2>
           <span>{about.description}</span>
 
           <svg
@@ -625,12 +658,18 @@ export default function LandingPage() {
           </div>
 
           <div className="text">
-            <h2>Photos and Videos</h2>
+            <h2>
+              {i18n.language === "en"
+                ? "Photos and Videos"
+                : "الصور والفيديوهات"}
+            </h2>
             <span className="d-block w-75">
               {text.photoAndVideoDescription}
             </span>
             <div className="more">
-              <Link to="#">view more</Link>
+              <Link to="#">
+                {i18n.language === "en" ? "view more" : "عرض المزيد"}
+              </Link>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -665,11 +704,16 @@ export default function LandingPage() {
             />
           </svg>
           <div className="text">
-            <h2>Contact Us</h2>
+            <h2>{i18n.language === "en" ? "Contact Us" : "تواصل معنا"}</h2>
             <div className="form">
-              <input type="text" placeholder="Email address" />
+              <input
+                type="text"
+                placeholder={
+                  i18n.language === "en" ? "Email address" : "البريد الإلكتروني"
+                }
+              />
               <button>
-                Send
+                {i18n.language === "en" ? "Send" : "إرسال"}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15"
@@ -723,7 +767,7 @@ export default function LandingPage() {
 
         {/* Start Speaker */}
         <div className="landingSpeakers" id="speakers">
-          <h2>Our speakers</h2>
+          <h2>{i18n.language === "en" ? " Our speakers" : "المتحدثون"}</h2>
 
           <div className="arrow">
             <svg
@@ -856,20 +900,28 @@ export default function LandingPage() {
         {/* Start Register */}
         <div className="register">
           <div className="person">
-            <span>Register</span>
-            <h3>Attendance</h3>
+            <span>{i18n.language === "en" ? "Register" : "تسجيل"}</span>
+            <h3>{i18n.language === "en" ? "Attendance" : "محاضر"}</h3>
             <button>
-              <Link className="text-dark font-weight-bold" style={{fontFamily:"Roboto"}} to="/register-attendance">
-                Sign up now
+              <Link
+                className="text-dark font-weight-bold"
+                style={{ fontFamily: "Roboto" }}
+                to="/register-attendance"
+              >
+                {i18n.language === "en" ? "Sign up now" : "سجل الآن"}
               </Link>
             </button>
           </div>
           <div className="person">
-            <span>Register</span>
-            <h3>Speaker</h3>
+            <span>{i18n.language === "en" ? "Register" : "تسجيل"}</span>
+            <h3>{i18n.language === "en" ? "Speaker" : "متحدث"}</h3>
             <button>
-              <Link className="text-dark font-weight-bold" style={{fontFamily:"Roboto"}} to="/register-speaker">
-                Sign up now
+              <Link
+                className="text-dark font-weight-bold"
+                style={{ fontFamily: "Roboto" }}
+                to="/register-speaker"
+              >
+                {i18n.language === "en" ? "Sign up now" : "سجل الآن"}
               </Link>
             </button>
           </div>
@@ -886,42 +938,71 @@ export default function LandingPage() {
               <i className="fa-brands fa-instagram"></i>
               <i className="fa-brands fa-facebook"></i>
             </div>
-            <span>&copy; educaring . All rights reserved </span>
+            <span>
+              &copy;
+              {i18n.language === "en"
+                ? "All rights reserved"
+                : "جميع الحقوق محفوظة"}
+            </span>
           </div>
 
           <div className="links">
             <div className="col">
-              <h6>Company</h6>
+              <h6>{i18n.language === "en" ? "Company" : "الشركة"}</h6>
               <ul>
                 <li>
-                  <a href="#">Events</a>
+                  <a href="#">
+                    {i18n.language === "en" ? "Events" : "الفعاليات"}
+                  </a>
                 </li>
                 <li>
-                  <a href="#">Speakers</a>
+                  <a href="#">
+                    {i18n.language === "en" ? "Speakers" : "المتحدثون"}
+                  </a>
                 </li>
                 <li>
-                  <a href="#">Photos and Videos</a>
+                  <a href="#">
+                    {i18n.language === "en"
+                      ? "Photos and Videos"
+                      : "الصور والفيديوهات"}
+                  </a>
                 </li>
               </ul>
             </div>
             <div className="col">
-              <h6>support</h6>
+              <h6>{i18n.language === "en" ? "Support" : "الدعم"}</h6>
               <ul>
                 <li>
-                  <a href="#">contact us</a>
+                  <a href="#">
+                    {i18n.language === "en" ? "Contact Us" : "تواصل معنا"}
+                  </a>
                 </li>
                 <li>
-                  <a href="#">Terms of service</a>
+                  <a href="#">
+                    {i18n.language === "en"
+                      ? "Terms of service"
+                      : "شروط الخدمة"}
+                  </a>
                 </li>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <a href="#">
+                    {i18n.language === "en"
+                      ? "Privacy Policy"
+                      : "سياسة الخصوصية"}
+                  </a>
                 </li>
               </ul>
             </div>
             <div className="col">
-              <h6>Subscribe</h6>
+              <h6>{i18n.language === "en" ? " Subscribe" : "اشترك"}</h6>
               <div className="subscribe">
-                <input type="text" placeholder="mail" className="p-1"></input>
+                <input
+                  type="text"
+                  placeholder={
+                    i18n.language === "en" ? "mail" : "البريد الالكتروني"
+                  }
+                  className="p-1"
+                ></input>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15"

@@ -8,8 +8,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../../../Api";
 import Verfication from "../verfiy-number/Verfication";
+import { useTranslation } from "react-i18next";
 
 export default function AttendanceReg() {
+  const { i18n } = useTranslation();
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
 
@@ -200,7 +202,11 @@ export default function AttendanceReg() {
             )}
           </div>
 
-          <h4 className="m-2 mb-5">Create new account as an attendance</h4>
+          <h4 className="m-2 mb-5">
+            {i18n.language === "en"
+              ? "Create new account as an attendance"
+              : "إنشاء حساب جديد كمحاضر"}
+          </h4>
 
           <form onSubmit={handleSubmit}>
             <div className={style.form}>
@@ -218,7 +224,9 @@ export default function AttendanceReg() {
                 </div>
                 {showError && userData.NameAr.length < 3 && (
                   <span className="m-0 my-0 text-danger">
-                    Name Should be More 3 characters
+                    {i18n.language === "en"
+                      ? "Name Should be More 3 characters"
+                      : "الإسم يجب أن يكون أكثر من 3 أحرف"}
                   </span>
                 )}
               </div>
@@ -236,7 +244,9 @@ export default function AttendanceReg() {
                 </div>
                 {showError && userData.NameEn.length < 3 && (
                   <span className="m-0 my-0 text-danger">
-                    Name Should be More 3 characters
+                    {i18n.language === "en"
+                      ? "Name Should be More 3 characters"
+                      : "الإسم يجب أن يكون أكثر من 3 أحرف"}
                   </span>
                 )}
               </div>
@@ -247,13 +257,19 @@ export default function AttendanceReg() {
                   <i className="fa-regular fa-envelope"></i>
                   <input
                     type="email"
-                    placeholder="email"
+                    placeholder={
+                      i18n.language === "en" ? "Email" : "البريد الإلكتروني"
+                    }
                     name="Email"
                     onChange={handleChange}
                   />
                 </div>
                 {showError && !userData.Email.includes("@") && (
-                  <span className="m-0 my-0 text-danger">Invalid Email</span>
+                  <span className="m-0 my-0 text-danger">
+                    {i18n.language === "en"
+                      ? "Invalid Email"
+                      : "البريد الإلكتروني غير صحيح"}
+                  </span>
                 )}
                 {errorMessage !== "" && (
                   <p className="m-0 my-0 text-danger">{errorMessage}</p>
@@ -263,7 +279,11 @@ export default function AttendanceReg() {
               {/* input */}
               <div>
                 <PhoneInput
-                  placeholder="Enter phone number"
+                  placeholder={
+                    i18n.language === "en"
+                      ? "Enter Phone Number"
+                      : "أدخل رقم الهاتف"
+                  }
                   value={userData.PhoneNumber}
                   onChange={(e) => setUserData({ ...userData, PhoneNumber: e })}
                   defaultCountry="SA" // Set the default country code
@@ -272,7 +292,9 @@ export default function AttendanceReg() {
                 />
                 {showError && userData.PhoneNumber.length < 10 && (
                   <span className="m-0 my-0 text-danger">
-                    Invalid Phone Number
+                    {i18n.language === "en"
+                      ? "Invalid Phone Number"
+                      : "رقم الهاتف غير صحيح"}
                   </span>
                 )}
               </div>
@@ -295,7 +317,9 @@ export default function AttendanceReg() {
                   />
                 </div>
                 {showError && userData.DateOfBirth.length < 8 && (
-                  <span className="m-0 my-0 text-danger">Invalid Date</span>
+                  <span className="m-0 my-0 text-danger">
+                    {i18n.language === "en" ? "Invalid Date" : "تاريخ غير صحيح"}
+                  </span>
                 )}
               </div>
 
@@ -309,7 +333,7 @@ export default function AttendanceReg() {
                     defaultValue="0"
                   >
                     <option value="0" disabled>
-                      Select Gender
+                      {i18n.language === "en" ? "Select Gender" : "إختر النوع"}
                     </option>
                     {genders.map((gender, index) => (
                       <option
@@ -357,7 +381,11 @@ export default function AttendanceReg() {
                 <input
                   className="m-0 p-0"
                   type="text"
-                  placeholder="health authority number"
+                  placeholder={
+                    i18n.language === "en"
+                      ? "Health Authority Number"
+                      : "رقم الهيئة الصحية"
+                  }
                   name="HealthAuthorityNumber"
                   onChange={handleChange}
                 />
@@ -373,7 +401,9 @@ export default function AttendanceReg() {
                     defaultValue="1"
                   >
                     <option value="1" disabled>
-                      Select Specialization Category
+                      {i18n.language === "en"
+                        ? "Select Specialization Category"
+                        : "إختر التخصص"}
                     </option>
                     {specializationCategories.map((category, index) => (
                       <option value={category.id} key={index}>
@@ -390,7 +420,9 @@ export default function AttendanceReg() {
                   <i className="fas fa-quote-left"></i>
                   <input
                     type="text"
-                    placeholder="Spcialization"
+                    placeholder={
+                      i18n.language === "en" ? "Specialization" : "التخصص"
+                    }
                     name="Specialization"
                     onChange={handleChange}
                   />
@@ -411,7 +443,9 @@ export default function AttendanceReg() {
                 </div>
                 {showError && userData.Country.length < 3 && (
                   <span className="m-0 my-0 text-danger">
-                    Please Select The Country
+                    {i18n.language === "en"
+                      ? "Please Select The Country"
+                      : "من فضلك اختر الدولة"}
                   </span>
                 )}
               </div>
@@ -431,7 +465,9 @@ export default function AttendanceReg() {
                 </div>
                 {showError && userData.City.length < 3 && (
                   <span className="m-0 my-0 text-danger">
-                    Please Select The City
+                    {i18n.language === "en"
+                      ? " Please Select The City"
+                      : "من فضلك اختر المدينة"}
                   </span>
                 )}
               </div>
@@ -442,7 +478,9 @@ export default function AttendanceReg() {
                   <i className="fa-solid fa-lock"></i>
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="password"
+                    placeholder={
+                      i18n.language === "en" ? "password" : "كلمة المرور"
+                    }
                     onChange={handleChange}
                     name="Password"
                   />
@@ -455,7 +493,9 @@ export default function AttendanceReg() {
                 </div>
                 {showError && userData.Password.length < 8 && (
                   <span className="m-0 my-0 text-danger">
-                    Passoword Should be More 8 characters
+                    {i18n.language === "en"
+                      ? "Passoword Should be More 8 characters"
+                      : " كلمة المرور يجب ان تكون اكثر من 8 احرف"}
                   </span>
                 )}
               </div>
@@ -466,7 +506,11 @@ export default function AttendanceReg() {
                   <i className="fa-solid fa-lock"></i>
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="confirm password"
+                    placeholder={
+                      i18n.language === "en"
+                        ? "Confirm Password"
+                        : "تأكيد كلمة المرور"
+                    }
                     onChange={handleChange}
                     name="ConfirmPassword"
                   />
@@ -480,7 +524,9 @@ export default function AttendanceReg() {
                 {showError &&
                   userData.Password !== userData.ConfirmPassword && (
                     <span className="m-0 my-0 text-danger">
-                      Password not Match
+                      {i18n.language === "en"
+                        ? "Password not Match"
+                        : "كلمتي المرور غير متطابقتين "}
                     </span>
                   )}
               </div>
@@ -513,13 +559,16 @@ export default function AttendanceReg() {
                 }
               }}
             >
-              Sign Up
+              {i18n.language === "en" ? "Sign Up" : "سجل"}
             </button>
           </form>
           <p className="my-2" style={{ fontSize: "17px" }}>
-            I Already have an Account? &nbsp;
+            {i18n.language === "en"
+              ? "I Already have an Account?"
+              : " لديك حساب بالفعل ؟"}
+            &nbsp;
             <Link to="/login" className="fw-bold" style={{ color: "#3296d4" }}>
-              Sign In
+              {i18n.language === "en" ? "Sign In" : "تسجيل الدخول"}
             </Link>
           </p>
         </div>

@@ -1,8 +1,13 @@
 import { useState } from "react";
 import cookie from "cookie-universal";
 import { useNavigate } from "react-router-dom";
+// Translation Work
+import { useTranslation } from "react-i18next";
 
 export default function Logout(isEnglish) {
+  // Translation Work
+  const { i18n } = useTranslation();
+
   const [popupVisible, setPopupVisible] = useState(false);
 
   const cookies = cookie();
@@ -26,7 +31,7 @@ export default function Logout(isEnglish) {
         <i className="fa-solid fa-arrow-right-from-bracket me-2 fs-6 mx-2"></i>
         <span className="fs-6 ">
           {" "}
-          {isEnglish.isEnglish.isEnglish === "en" ? "log out" : "تسجيل الخروج"}
+          {i18n.language === "en" ? "log out" : "تسجيل الخروج"}
         </span>
       </div>
 
@@ -85,7 +90,7 @@ export default function Logout(isEnglish) {
           </div>
           <h2 className="my-3 fw-bold" style={{ color: "#565656" }}>
             {" "}
-            {isEnglish.isEnglish.isEnglish === "en"
+            {i18n.language === "en"
               ? " Already Leaving ?"
               : "هل تريد الخروج بالفعل؟"}
           </h2>
@@ -100,9 +105,7 @@ export default function Logout(isEnglish) {
               }}
             >
               {" "}
-              {isEnglish.isEnglish.isEnglish === "en"
-                ? "Yes, Log out"
-                : "نعم، سجل الخروج"}
+              {i18n.language === "en" ? "Yes, Log out" : "نعم، سجل الخروج"}
             </button>
             <button
               className="btn  btn-light"
@@ -112,7 +115,7 @@ export default function Logout(isEnglish) {
               onClick={handleHidePopup}
             >
               {" "}
-              {isEnglish.isEnglish.isEnglish === "en" ? "No, I am stying ?" : "لا ، سأبقى"}
+              {i18n.language === "en" ? "No, I am stying ?" : "لا ، سأبقى"}
             </button>
           </div>
         </div>

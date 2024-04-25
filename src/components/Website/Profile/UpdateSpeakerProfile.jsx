@@ -11,7 +11,7 @@ import ResetPassword from "../Popups/ResetPassword";
 import { useTranslation } from "react-i18next";
 
 export default function Profile() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [user, setUser] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -376,7 +376,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  phone number
+                  {i18n.language === "en" ? " Phone Number" : " رقم الهاتف"}
                 </span>
               </div>
 
