@@ -40,6 +40,7 @@ export default function Profile() {
             "Content-Type": "application/json",
             Accept: "text/plain",
             Authorization: `Bearer ${token}`,
+            language: i18n.language,
           },
         }
       )
@@ -47,7 +48,7 @@ export default function Profile() {
         setUser(data.data.responseObject);
       })
       .catch((err) => console.log(err));
-  }, [decodedToken.uid]);
+  }, [decodedToken.uid, i18n.language]);
 
   // console.log(user);
 
@@ -118,23 +119,31 @@ export default function Profile() {
   const [specializationCategories, setSpecializationCategories] = useState([]);
   useEffect(() => {
     axios
-      .get(`${BASE}/MainData/GetAllSpecialization`)
+      .get(`${BASE}/MainData/GetAllSpecialization`, {
+        headers: {
+          language: i18n.language,
+        },
+      })
       .then((res) => {
         setSpecializationCategories(res.data.responseObject);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [i18n.language]);
 
   // [11] Get All Gender
   const [genders, setGenders] = useState([]);
   useEffect(() => {
     axios
-      .get(`${BASE}/MainData/GetAllGender`)
+      .get(`${BASE}/MainData/GetAllGender`, {
+        headers: {
+          language: i18n.language,
+        },
+      })
       .then((res) => {
         setGenders(res.data.responseObject);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [i18n.language]);
 
   const [showSelect, setShowSelect] = useState(true);
   const [showDateOfBirth, setShowDateOfBirth] = useState(true);
@@ -153,10 +162,24 @@ export default function Profile() {
           }}
         >
           {showSuccessPopup && (
-            <Success text="Profile Updated Successfully!" type="success" />
+            <Success
+              text={
+                i18n.language === "en"
+                  ? "Profile Updated Successfully!"
+                  : "تم تحديث الملف الشخصي بنجاح!"
+              }
+              type="success"
+            />
           )}
           {showErrorPopup && (
-            <Success text="Profile Updated Failed!" type="error" />
+            <Success
+              text={
+                i18n.language === "en"
+                  ? "Error Updating Profile!"
+                  : "خطأ في تحديث الملف الشخصي!"
+              }
+              type="error"
+            />
           )}
 
           {/* Head */}
@@ -349,7 +372,7 @@ export default function Profile() {
                   fontSize: isEditMode ? "12px" : "14px",
                 }}
               >
-                phone number
+                {i18n.language === "en" ? "Phone Number" : "رقم الهاتف"}
               </span>
             </div>
 
@@ -402,7 +425,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  date
+                  {i18n.language === "en" ? "date" : "تاريخ الميلاد"}
                 </span>
               </div>
               {/* Gender Input */}
@@ -440,7 +463,9 @@ export default function Profile() {
                         }}
                       >
                         <option disabled value="0">
-                          Select Gender
+                          {i18n.language === "en"
+                            ? "Select Gender"
+                            : "اختر الجنس"}
                         </option>
                         {genders.map((gender) => (
                           <option key={gender.id} value={gender.id}>
@@ -473,7 +498,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  gender
+                  {i18n.language === "en" ? " Gender" : " الجنس"}
                 </span>
               </div>
             </div>
@@ -503,7 +528,9 @@ export default function Profile() {
                   fontSize: isEditMode ? "12px" : "14px",
                 }}
               >
-                health authority number
+                {i18n.language === "en"
+                  ? "health authority number"
+                  : "رقم الهيئة الصحية"}
               </span>
             </div>
 
@@ -545,7 +572,9 @@ export default function Profile() {
                         }}
                       >
                         <option disabled value="1">
-                          Select Category
+                          {i18n.language === "en"
+                            ? "Select Category"
+                            : " اختر التخصص"}
                         </option>
                         {specializationCategories.map((specialization) => (
                           <option
@@ -581,7 +610,9 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  Specialization Category
+                  {i18n.language === "en"
+                    ? "Specialization Category"
+                    : " تصنيف التخصص"}
                 </span>
               </div>
               {/* Specialization */}
@@ -609,7 +640,7 @@ export default function Profile() {
                     fontSize: isEditMode ? "12px" : "14px",
                   }}
                 >
-                  specialization
+                  {i18n.language === "en" ? "Specialization" : " التخصص"}
                 </span>
               </div>
             </div>

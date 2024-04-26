@@ -90,6 +90,7 @@ function EventDetails() {
           },
           headers: {
             UserId: decodedToken.uid,
+            language: i18n.language,
           },
         })
         .then((response) => {
@@ -489,7 +490,9 @@ function EventDetails() {
                         }}
                       >
                         <span className="mx-1">
-                          Buy ticket{" "}
+                          {i18n.language === "en"
+                            ? "Buy ticket"
+                            : "شراء التذكرة"}{" "}
                           {eventDetails.eventDays[selectedDayIndex]?.price}{" "}
                           {i18n.language === "en" ? "SAR" : "ريال"}
                         </span>

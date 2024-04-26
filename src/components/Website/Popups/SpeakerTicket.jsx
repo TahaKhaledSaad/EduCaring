@@ -472,7 +472,7 @@ export default function SpeakerTicket({
           <div className="w-50 speakerTicket-data">
             <div className="d-flex gap-4 flex-column">
               <FloatLabel
-                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr", }}
                 className="w-50 speakerTicket-inputTexts"
               >
                 <InputText
@@ -487,6 +487,7 @@ export default function SpeakerTicket({
                     padding: "0.45rem 0.9375rem",
                     marginTop: "10px",
                     width: "100%",
+                    border:"1px solid #eee"
                   }}
                   onChange={(e) =>
                     selectedOption === "Attendance"
@@ -517,6 +518,7 @@ export default function SpeakerTicket({
                     padding: "0.45rem 0.9375rem",
                     marginTop: "10px",
                     width: "100%",
+                    border:"1px solid #eee"
                   }}
                   onChange={(e) => {
                     return selectedOption === "Attendance"

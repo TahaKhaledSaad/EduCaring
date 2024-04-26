@@ -6,8 +6,11 @@ import { BASE } from "../../../Api";
 import { useParams } from "react-router-dom";
 import ExMark from "../../../assets/Exclamation_mark.png";
 import { PulseLoader } from "react-spinners";
+// Translation Work
+import { useTranslation } from "react-i18next";
 
 export default function SpeakerProfile() {
+  const { i18n } = useTranslation();
   const { eventId, eventDayId, speakerId } = useParams();
   // console.log(typeof (speakerId));
 
@@ -32,6 +35,7 @@ export default function SpeakerProfile() {
         headers: {
           UserId: decodedToken.uid,
           Authorization: `Bearer ${token}`,
+          language: i18n.language,
         },
       })
       .then((response) => {
@@ -204,7 +208,10 @@ export default function SpeakerProfile() {
                 style={{ right: "30%" }}
                 role="alert"
               >
-                There Is No CV For This Speaker Yet
+                {i18n.language === "en"
+                  ? "There Is No CV For This Speaker Yet"
+                  : "لا يوجد سيرة ذاتية لهذا المتحدث حتى الآن"}
+
                 <i
                   className="bi bi-x close fw-bold fs-4"
                   style={{ cursor: "pointer" }}
@@ -256,7 +263,7 @@ export default function SpeakerProfile() {
                   strokeLinejoin="round"
                 />
               </svg>{" "}
-              Show CV
+              {i18n.language === "en" ? "Show CV" : "عرض السيرة الذاتية"}
             </button>
           </div>
 
@@ -297,7 +304,7 @@ export default function SpeakerProfile() {
                 {speakerObj.expYears ? speakerObj.expYears : "-"}
               </span>
               <p className="py-2" style={{ color: "#747688" }}>
-                Experience
+                {i18n.language === "en" ? "Experience" : "الخبرة"}
               </p>
             </div>
 
@@ -343,10 +350,11 @@ export default function SpeakerProfile() {
               </svg>
 
               <span className="px-1 fw-bold" style={{ color: "#3296D4" }}>
-                {age} years old
+                {age} {""}
+                {i18n.language === "en" ? "years old" : "سنة"}
               </span>
               <p className="py-2" style={{ color: "#747688" }}>
-                age
+                {i18n.language === "en" ? "Age" : "العمر"}
               </p>
             </div>
 
@@ -377,13 +385,15 @@ export default function SpeakerProfile() {
                 {speakerObj.gender?.name}
               </span>
               <p className="py-2" style={{ color: "#747688" }}>
-                Gender
+                {i18n.language === "en" ? "Gender" : "النوع"}
               </p>
             </div>
           </div>
 
           <div>
-            <h4 className="fw-bold text-center text-md-start ">About</h4>
+            <h4 className="fw-bold ">
+              {i18n.language === "en" ? "About" : "نبذة عنه"}
+            </h4>
             <p
               className="m-auto m-md-0"
               style={{ color: "#747688", fontSize: "14px", width: "90%" }}

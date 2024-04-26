@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "./success.css";
+// Translation Work
+import { useTranslation } from "react-i18next";
 
 export default function Success({ text, type }) {
+  const { i18n } = useTranslation();
   const [x, setX] = useState(false);
   const hide = () => {
     setX(true);
