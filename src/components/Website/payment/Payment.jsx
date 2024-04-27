@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -12,22 +12,25 @@ import applePay from "../../../assets/Apple_Pay_logo.png";
 import mada from "../../../assets/Mada_Logo.png";
 import paypal from "../../../assets/PayPal_Logo.png";
 import { PulseLoader } from "react-spinners";
+import { set } from "firebase/database";
 
 export default function Payment() {
+  // [0] stats
   const { i18n } = useTranslation();
-
   const { eventId } = useParams();
-
   const cookie = new Cookie();
-  // const userId = cookie.get("userId");
-
   const [eventDetails, setEventDetails] = useState(null);
   const [userEventDays, setUserEventDays] = useState([]);
-
   const [userId, setUserId] = useState("");
-
+  const [tickets, setTickets] = useState([]);
+  const [show, setShow] = useState(true);
+  const [show2, setShow2] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
+  const [paymentMethodLink, setPaymentMethodLink] = useState("");
+  const [selectedDayTicket, setSelectedDayTicket] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
 
+  // [1] Fetch event details
   useEffect(() => {
     const token = cookie.get("edu-caring");
     const decodedToken = token ? jwtDecode(token) : {};
@@ -53,12 +56,11 @@ export default function Payment() {
     }
   }, [eventId, i18n.language]);
 
-  // Rest of your code...
-
-  console.log(eventDetails);
+  // [2] Fetch tickets
 
   const [selectedDayIndices, setSelectedDayIndices] = useState([]);
 
+  // Function to toggle day selection
   const toggleDaySelection = (index) => {
     const isSelected = selectedDayIndices.includes(index);
     if (isSelected) {
@@ -84,19 +86,24 @@ export default function Payment() {
       ]);
     }
   };
+  console.log(userEventDays);
 
-  // console.log(userEventDays);
-
-  const [isPaid, setIsPaid] = useState(false);
-
-  const [tickets, setTickets] = useState([]);
-
+  // fetch tickets from eventDetials
   useEffect(() => {
-    if (isPaid && userEventDays.length > 0) {
-      // Check if isPaid is true and userEventDays has data
+    if (eventDetails) {
+      const newTickets = eventDetails.eventDays.map((day) => day.qrCode);
+      setTickets(newTickets);
+    }
+  }, [eventDetails]);
+  console.log(tickets);
+
+  // [3] Fetch payment method link
+  useEffect(() => {
+    if (userEventDays.length > 0) {
+      // Check if userEventDays has data
       axios
         .post(
-          `${BASE}/Event/UserBuyEvents`,
+          `${BASE}/Event/UserBuyEvents2`,
           {
             id: 0,
             userId: userId,
@@ -106,6 +113,7 @@ export default function Payment() {
             discountCode: "",
             isPaid: true,
             userEventDays: userEventDays,
+            PaymentMethod: "PayPal",
           },
           {
             headers: {
@@ -116,39 +124,24 @@ export default function Payment() {
         )
         .then((data) => {
           console.log(data);
-          setTickets(data.data.responseObject);
+          setPaymentMethodLink(data.data.responseObject.url);
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
-  }, [isPaid, userEventDays, eventId]);
+  }, [userEventDays, eventId, userId]);
 
-  const [show, setShow] = useState(true);
-  const [show2, setShow2] = useState(false);
-  // console.log(tickets);
+  console.log(paymentMethodLink);
 
+  // [4] continue button click handler
   const handleContinueClick = () => {
-    setIsPaid(true); // Set isPaid state to true when "Continue" button is clicked
-    setShow(false);
-    setShow2(true);
-    setLoading(true);
+    // open new window with paymentMethodLink
+    if (userEventDays.length > 0 && paymentMethodLink) {
+      window.open(paymentMethodLink, "_blank");
+    }
   };
 
-  function expDateValidate(month, year) {
-    if (Number(year) > 2035) {
-      return "Expiry Date Year cannot be greater than 2035";
-    }
-    return;
-  }
-
-  const {
-    getCardNumberProps,
-    getCVCProps,
-    getExpiryDateProps,
-
-    meta: { erroredInputs },
-  } = useCreditCardValidator({ expiryDateValidator: expDateValidate });
-
+  // [5] Format date
   const formatDate = (dateString) => {
     if (!dateString) return ""; // Check if dateString is undefined or null
 
@@ -179,23 +172,14 @@ export default function Payment() {
 
     return formattedDate;
   };
-
-  // Test the function with your date string
   const inputDateString = eventDetails?.startDay;
   const formattedDateString = formatDate(inputDateString);
-
-  const subtotal = selectedDayIndices.reduce((total, selectedIndex) => {
-    const price = eventDetails?.eventDays[selectedIndex]?.price || 0;
-    return total + price;
-  }, 0);
-
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
   const handlePaymentMethodClick = (method) => {
     setSelectedPaymentMethod(method);
   };
-  const [selectedDayTicket, setSelectedDayTicket] = useState(0);
 
+  // [6] Render loading spinner while loading is true
   if (loading) {
     // Render loading spinner while loading is true
     return (
@@ -226,18 +210,21 @@ export default function Payment() {
         <div className="payment row p-4 justify-content-around">
           <div className="col-md-6 col-lg-6">
             <div className=" border rounded p-4 d-flex gap-4">
-              <div className="d-flex flex-column align-items-center justify-content-around gap-4">
+              <div className="d-flex align-items-center justify-content-around align-items-center gap-4 w-100">
                 <div
                   className={`p-2 ${
                     selectedPaymentMethod === "mada" ? " rounded" : ""
                   }`}
                   style={
-                    selectedPaymentMethod === "mada"
-                      ? {
-                          boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-                          cursor: "pointer",
-                        }
-                      : { cursor: "pointer" }
+                    // selectedPaymentMethod === "mada"
+                    //   ? {
+                    //       boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+                    //       cursor: "pointer",
+                    //     }
+                    //   : { cursor: "pointer" }
+                    {
+                      opacity: 0.5,
+                    }
                   }
                   onClick={() => handlePaymentMethodClick("mada")}
                 >
@@ -247,6 +234,12 @@ export default function Payment() {
                     height={"30px"}
                     width={"45px"}
                   />
+                  <p
+                    className="text-danger text-center m-0"
+                    style={{ fontSize: "12px" }}
+                  >
+                    Soon
+                  </p>
                 </div>
                 <div
                   className={`p-2  ${
@@ -264,6 +257,7 @@ export default function Payment() {
                 >
                   <img
                     src={paypal}
+                    className="m-1"
                     alt="paypal pay img"
                     height={"30px"}
                     width={"45px"}
@@ -274,12 +268,15 @@ export default function Payment() {
                     selectedPaymentMethod === "applePay" ? " rounded" : ""
                   }`}
                   style={
-                    selectedPaymentMethod === "applePay"
-                      ? {
-                          boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-                          cursor: "pointer",
-                        }
-                      : { cursor: "pointer" }
+                    // selectedPaymentMethod === "applePay"
+                    //   ? {
+                    //       boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+                    //       cursor: "pointer",
+                    //     }
+                    //   : { cursor: "pointer" }
+                    {
+                      opacity: 0.5,
+                    }
                   }
                   onClick={() => handlePaymentMethodClick("applePay")}
                 >
@@ -289,142 +286,14 @@ export default function Payment() {
                     height={"30px"}
                     width={"45px"}
                   />
+                  <p
+                    className="text-danger text-center m-0"
+                    style={{ fontSize: "12px" }}
+                  >
+                    Soon
+                  </p>
                 </div>
               </div>
-
-              <div className="form flex-grow-1 overflow-hidden">
-                <div className="d-flex flex-column my-3 position-relative">
-                  <label
-                    htmlFor="numCard"
-                    style={{ color: "#747688", fontSize: "14px" }}
-                  >
-                    {i18n.language === "en" ? "Card Number" : "رقم البطاقة"}
-                  </label>
-                  <input
-                    type="number"
-                    id="numCard"
-                    className="p-2 border rounded"
-                    style={{ borderColor: "#DCDCDC", outline: "none" }}
-                    {...getCardNumberProps()}
-                  />
-
-                  <small
-                    className="text-danger position-absolute"
-                    style={{ bottom: "-20px" }}
-                  >
-                    {i18n.language === "en"
-                      ? erroredInputs.cardNumber && erroredInputs.cardNumber
-                      : "ادخل رقم البطاقة الصحيح"}
-                  </small>
-                </div>
-
-                <div className="d-flex flex-column my-3">
-                  <label
-                    htmlFor="name"
-                    style={{ color: "#747688", fontSize: "14px" }}
-                  >
-                    {i18n.language === "en"
-                      ? "Name On Card"
-                      : "الاسم المكتوب على البطاقة"}
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="p-2 border rounded"
-                    style={{ borderColor: "#DCDCDC", outline: "none" }}
-                  />
-                </div>
-
-                <div className="d-flex flex-column flex-md-row justify-content-between  my-3 ">
-                  <div className="d-flex flex-column col-md-6 col-lg-7 position-relative my-2">
-                    <label
-                      htmlFor="exDate"
-                      style={{ color: "#747688", fontSize: "14px" }}
-                    >
-                      {i18n.language === "en" ? "Exp Date" : "انتهاء الصلاحية"}
-                    </label>
-                    <input
-                      type="number"
-                      id="exDate"
-                      className="p-2 border rounded"
-                      style={{ borderColor: "#DCDCDC", outline: "none" }}
-                      {...getExpiryDateProps()}
-                    />
-                    <small
-                      className="text-danger position-absolute"
-                      style={{ bottom: "-20px" }}
-                    >
-                      {i18n.language === "en"
-                        ? erroredInputs.expiryDate && erroredInputs.expiryDate
-                        : "أدخل تاريخ انتهاء الصلاحية الصحيح"}
-                    </small>
-                  </div>
-
-                  <div className="d-flex flex-column col-lg-4 col-md-3 position-relative my-2">
-                    <label
-                      htmlFor="cvv"
-                      style={{ color: "#747688", fontSize: "14px" }}
-                    >
-                      CVC
-                    </label>
-                    <input
-                      type="number"
-                      id="cvv"
-                      className="p-2 border rounded"
-                      style={{ borderColor: "#DCDCDC", outline: "none" }}
-                      {...getCVCProps()}
-                    />
-                    <small
-                      className="text-danger position-absolute"
-                      style={{ bottom: "-20px" }}
-                    >
-                      {erroredInputs.cvc && erroredInputs.cvc}
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="border p-3 my-3 rounded d-flex gap-2 align-items-center">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.9023 19.8701H17.3723C21.0723 19.8701 21.9923 18.9501 21.9923 15.2501C20.7123 15.2501 19.6823 14.2101 19.6823 12.9401C19.6823 11.6601 20.7123 10.6201 21.9923 10.6201V9.70008C21.9923 6.00008 21.0723 5.08008 17.3723 5.08008H10.9923V11.8701"
-                  stroke="#C8C8C8"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M10.9936 16.87V19.87H8.22356C6.74356 19.87 5.87357 18.86 4.91357 16.54L4.73356 16.09C5.94356 15.61 6.53357 14.21 6.02357 13C5.53357 11.79 4.14357 11.21 2.92357 11.71L2.75357 11.28C1.31356 7.76 1.81357 6.53 5.33357 5.08L7.97357 4L10.9936 11.32V13.87"
-                  stroke="#C8C8C8"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8.16219 19.8701H7.99219"
-                  stroke="#C8C8C8"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <input
-                type="text"
-                className="border-0 outline-0 flex-grow-1 px-2"
-                style={{ color: "#C8C8C8", outline: 0 }}
-                placeholder={
-                  i18n.language === "en" ? "Promocode" : "رقم العرض الترويجي"
-                }
-              />
-              <button className="btn btn-secondary">
-                {i18n.language === "en" ? "Apply" : "تم"}{" "}
-              </button>
             </div>
 
             <div className="p-3 d-flex gap-3">
@@ -461,7 +330,11 @@ export default function Payment() {
                         className="text-center"
                         style={{ fontSize: "16px", color: "#27AE60" }}
                       >
-                        {day.price ? `${day.price} ${i18n.language === "en" ? "SAR" : "ريال"} ` : `${i18n.language === "en" ? "Free" : "مجانا"}`}
+                        {day.price
+                          ? `${day.price} ${
+                              i18n.language === "en" ? "SAR" : "ريال"
+                            } `
+                          : `${i18n.language === "en" ? "Free" : "مجانا"}`}
                       </p>
                     </div>
                   );
@@ -530,44 +403,11 @@ export default function Payment() {
             </div>
 
             <div className="w-75 mt-5 mx-auto">
-              <h4>{i18n.language === "en" ? "Summary" : "الفاتورة"}</h4>
-              <div className="border-bottom mt-4 mx-1">
-                <div
-                  className="d-flex justify-content-between my-2"
-                  style={{ color: "#747688" }}
-                >
-                  <span>
-                    {i18n.language === "en" ? "Subtotal" : "المجموع الفرعي"}{" "}
-                  </span>
-                  <span>{subtotal}</span>
-                </div>
-
-                <div
-                  className="d-flex justify-content-between my-2"
-                  style={{ color: "#747688" }}
-                >
-                  <span>{i18n.language === "en" ? "Fees" : "المصاريف"} </span>
-                  <span>00  {i18n.language === "en" ? "SAR" : "ريال"}</span>
-                </div>
-
-                <div
-                  className="d-flex justify-content-between my-2"
-                  style={{ color: "#747688" }}
-                >
-                  <span>{i18n.language === "en" ? "Discount" : "الخصم"}</span>
-                  <span>00  {i18n.language === "en" ? "SAR" : "ريال"}</span>
-                </div>
-              </div>
-              <div className="total fw-bold d-flex justify-content-between pt-3">
-                <span>
-                  {i18n.language === "en" ? "Total" : "المجموع الكلي"}{" "}
-                </span>
-                <span>{subtotal}</span>
-              </div>
               <Link
                 className="d-block text-center w-100 mt-5 p-3  text-white"
                 style={{ backgroundColor: "#3296D4", borderRadius: "12px" }}
                 onClick={userEventDays.length > 0 ? handleContinueClick : ""}
+                to={paymentMethodLink ? "/home" : ""}
               >
                 {i18n.language === "en" ? "Continue" : "استمرار"}
               </Link>

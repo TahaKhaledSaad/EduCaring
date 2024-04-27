@@ -77,9 +77,9 @@ function EventDetails() {
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language, token]);
+  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language, token, selectedDayIndex]);
 
-  console.log(eventDetails);
+  // console.log(eventDetails);
 
   useEffect(() => {
     if (eventDetails) {
@@ -120,35 +120,36 @@ function EventDetails() {
             response.data.responseObject[0]?.speakerQuestions
           );
           setCityTO(
-            response.data.responseObject[0].eventDaySpeakerAttends[0]
+            response.data.responseObject[0]?.eventDaySpeakerAttends[0]
               ?.cityAttendTo
           );
           setCityFrom(
-            response.data.responseObject[0].eventDaySpeakerAttends[0]
+            response.data.responseObject[0]
+            ?.eventDaySpeakerAttends[0]
               ?.cityAttendFrom
           );
           setCityTOOld(
-            response.data.responseObject[0].eventDaySpeakerAttends[0]
+            response.data.responseObject[0]?.eventDaySpeakerAttends[0]
               ?.cityAttendTo
           );
           setCityFromOld(
-            response.data.responseObject[0].eventDaySpeakerAttends[0]
+            response.data.responseObject[0]?.eventDaySpeakerAttends[0]
               ?.cityAttendFrom
           );
           setCityTODepature(
-            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+            response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
               ?.cityDepartureTo
           );
           setCityFromDepature(
-            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+            response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
               ?.cityDepartureFrom
           );
           setCityTOOldDepature(
-            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+            response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
               ?.cityDepartureTo
           );
           setCityFromOldDepature(
-            response.data.responseObject[0].eventDaySpeakerDepartures[0]
+            response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
               ?.cityDepartureFrom
           );
         });
