@@ -14,6 +14,7 @@ import UpdateEvent from "./dashboard/events/UpdateEvent.jsx";
 
 // 6- Users && Speakers
 import Users from "./dashboard/Users.jsx";
+import Admins from "./dashboard/Admins.jsx";
 import Speakers from "./dashboard/Speakers.jsx";
 import { PrimeReactProvider } from "primereact/api";
 import { useEffect, useState } from "react";
@@ -140,6 +141,7 @@ function App() {
             element={<UpdateEvent isEnglish={isEnglish} speakers={speakers} />}
           />
           <Route path="users" element={<Users isEnglish={isEnglish} />} />
+          <Route path="admins" element={<Admins isEnglish={isEnglish} />} />
           <Route
             path="landing-speakers"
             element={<LandingSpeakers isEnglish={isEnglish} />}

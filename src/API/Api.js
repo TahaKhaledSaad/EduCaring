@@ -10,10 +10,15 @@ export const LOGIN = "Auth/Login";
 // Events
 export const ADD_EVENT = "Event";
 export const GET_EVENT = "Event/GetAll";
+export const GET_EVENT_DAY_ATTENDANCE = "Event/EventDayAttentanceReport";
 
 // Users && Speakers
 export const GET_USERS = "Dashboard/GetAllUsers";
 export const GET_SPEAKERS = "Dashboard/GetAllSpeakers";
+export const GET_ADMINS = "Dashboard/GetAllSuperAdmin";
+export const GET_NIGHT_USERS = "Dashboard/GetNightEventUsers";
+export const GET_USERS_FOR_EVENTDAY = "Dashboard/GetUsersForEventDay";
+export const ADD_SUPER_ADMIN = "Auth/SuperAdminRegister";
 
 // Upload
 export const UPLOAD = "Upload";

@@ -21,6 +21,7 @@ import DeclarativeConfirmDialog from "../../DashboardComponents/DeclarativeConfi
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
+import EventReport from "../../DashboardComponents/EventReport";
 
 const UpdateEvent = ({ speakers, isEnglish }) => {
   //
@@ -35,6 +36,7 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
   const [speakerCardVisible, setSpeakerCardVisible] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [modalRatingsVisible, setModalRatingsVisible] = useState(false);
+  const [modalEventReportVisible, setModalEventReportVisible] = useState(false);
   const [modalConfirmDialogVisible, setModalConfirmDialogVisible] =
     useState(false);
   const [modalConfirmQuestionVisible, setModalConfirmQuestionVisible] =
@@ -42,6 +44,7 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
   //
   const [activeModalIndex, setActiveModalIndex] = useState(null);
   const [activeRatingsModalIndex, setActiveRatingsModalIndex] = useState(null);
+  const [activeReportModalIndex, setActiveReportModalIndex] = useState(null);
 
   const [activeConfirmDialogIndex, setActiveConfirmDialogIndex] =
     useState(null);
@@ -245,6 +248,10 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
   const handleOpenRatingsModal = (index) => {
     setModalRatingsVisible(true);
     setActiveRatingsModalIndex(index);
+  };
+  const handleOpenEventReportModal = (index) => {
+    setModalEventReportVisible(true);
+    setActiveReportModalIndex(index);
   };
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -1219,6 +1226,18 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
                               <i className="fas fa-play"></i>
                             </div>
                           </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEventReportModal(dayIndex)}
+                            className="btn mb-2 mb-md-0 btn-primary btn-block btn-round start-actions-button"
+                          >
+                            <span className=" d-md-inline pb-2">
+                              {t("EventReport")}
+                            </span>
+                            <div className="icon icon-round d-flex align-items-center justify-content-center start-actions-icon">
+                              <i className="fas fa-play"></i>
+                            </div>
+                          </button>
                         </div>
                       </div>
 
@@ -1235,6 +1254,16 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
                         users={eventDayUserData}
                         eventDayId={eventData.eventDays[dayIndex].id}
                       />
+                      {activeReportModalIndex === dayIndex &&
+                        modalEventReportVisible && (
+                          <EventReport
+                            eventDayId={eventData.eventDays[dayIndex].id}
+                            modalEventReportVisible={modalEventReportVisible}
+                            setModalEventReportVisible={
+                              setModalEventReportVisible
+                            }
+                          />
+                        )}
 
                       <SpeakersRatings
                         isBestSpeakersModalOpen={
