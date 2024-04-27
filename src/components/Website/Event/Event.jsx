@@ -77,9 +77,16 @@ function EventDetails() {
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language, token, selectedDayIndex]);
+  }, [
+    eventId,
+    decodedToken.uid,
+    decodedToken.roles,
+    i18n.language,
+    token,
+    selectedDayIndex,
+  ]);
 
-  // console.log(eventDetails);
+  console.log(eventDetails?.eventDays[selectedDayIndex]?.id);
 
   useEffect(() => {
     if (eventDetails) {
@@ -112,45 +119,48 @@ function EventDetails() {
           setSpeakerQuestions(
             response.data.responseObject[0]?.SpeakerQuestions
           );
-          setSpeakerNewAttends(speakerAttends);
-          setSpeakerNewDepartures(speakerDepartures);
-          setSpeakerAttends(speakerAttends);
-          setSpeakerDepartures(speakerDepartures);
+          setSpeakerNewAttends(speakerAttends.length > 0 ? speakerAttends : []);
+          setSpeakerNewDepartures(
+            speakerDepartures?.length > 0 ? speakerDepartures : []
+          );
+          setSpeakerAttends(speakerAttends.length > 0 ? speakerAttends : []);
+          setSpeakerDepartures(
+            speakerDepartures.length > 0 ? speakerDepartures : []
+          );
           setSpeakerQuestions(
             response.data.responseObject[0]?.speakerQuestions
           );
           setCityTO(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
-              ?.cityAttendTo
+              ?.cityAttendTo || ""
           );
           setCityFrom(
-            response.data.responseObject[0]
-            ?.eventDaySpeakerAttends[0]
-              ?.cityAttendFrom
+            response.data.responseObject[0]?.eventDaySpeakerAttends[0]
+              ?.cityAttendFrom || ""
           );
           setCityTOOld(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
-              ?.cityAttendTo
+              ?.cityAttendTo || ""
           );
           setCityFromOld(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
-              ?.cityAttendFrom
+              ?.cityAttendFrom || ""
           );
           setCityTODepature(
             response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
-              ?.cityDepartureTo
+              ?.cityDepartureTo || ""
           );
           setCityFromDepature(
             response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
-              ?.cityDepartureFrom
+              ?.cityDepartureFrom || ""
           );
           setCityTOOldDepature(
             response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
-              ?.cityDepartureTo
+              ?.cityDepartureTo || ""
           );
           setCityFromOldDepature(
             response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
-              ?.cityDepartureFrom
+              ?.cityDepartureFrom || ""
           );
         });
     }
@@ -160,6 +170,7 @@ function EventDetails() {
     selectedDayIndex,
     getSpeakerDetails,
     regetSpeakerDetails,
+    i18n.language,
   ]);
   if (!eventDetails) {
     return (
@@ -319,7 +330,14 @@ function EventDetails() {
       </>
     );
   }
-
+  console.log(
+    eventDetails.eventDays[selectedDayIndex].eventDaySpeakers.find(
+      (speaker) => speaker.speakerId === decodedToken.uid
+    ).id,
+    selectedDayIndex,
+    selectedDayIndex,
+    selectedDayIndex
+  );
   // Function to pad single digit numbers with zero
   function padZero(num) {
     return num < 10 ? "0" + num : num;
@@ -909,7 +927,13 @@ function EventDetails() {
                 </p>
               </div>
               <SpeakerTicket
-                eventDaySpeakerId={sendId ? sendId : ""}
+                eventDaySpeakerId={
+                  eventDetails?.eventDays[
+                    selectedDayIndex
+                  ]?.eventDaySpeakers?.find(
+                    (speaker) => speaker.speakerId === decodedToken.uid
+                  ).id
+                }
                 eventId={eventId}
                 eventDayId={eventDetails.eventDays[selectedDayIndex].id}
                 userId={decodedToken.uid}

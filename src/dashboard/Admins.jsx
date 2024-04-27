@@ -98,7 +98,7 @@ export default function Admins() {
     formData.append("ProfileImage", uploadedFiles[0]);
     formData.append(
       "Premissions",
-      selectedPermission.map((item) => item.type)
+      JSON.stringify(selectedPermission.map((item) => item.type))
     );
 
     // Make a POST request to your backend endpoint
