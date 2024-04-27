@@ -186,10 +186,24 @@ export default function Profile() {
       {user && (
         <div className="p-4">
           {showSuccessPopup && (
-            <Success text="Profile Updated Successfully!" type="success" />
+            <Success
+              text={
+                i18n.language === "en"
+                  ? "Profile Updated Successfully!"
+                  : "تم تحديث الملف الشخصي بنجاح!"
+              }
+              type="success"
+            />
           )}
           {showErrorPopup && (
-            <Success text="Profile Updated Failed!" type="error" />
+            <Success
+              text={
+                i18n.language === "en"
+                  ? "Error Updating Profile!"
+                  : "خطأ في تحديث الملف الشخصي!"
+              }
+              type="error"
+            />
           )}
 
           {/* Head */}

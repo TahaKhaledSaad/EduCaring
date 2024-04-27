@@ -1046,13 +1046,13 @@ function EventDetails() {
             >
               <div className="d-flex align-items-center justify-content-between gap-1 event-questions">
                 <div
-                  className="event-question-child"
+                  className="event-question-child p-1"
                   style={{ color: "rgba(189, 189, 189, 1)" }}
                 >
                   {renderDate(previousDate)}
                 </div>
                 <div
-                  className="event-question-child"
+                  className="event-question-child p-1"
                   style={{
                     backgroundColor: "#3296D4",
                     boxShadow: "0px 0px 9.01263px rgba(47, 128, 237, 0.25)",
@@ -1062,7 +1062,7 @@ function EventDetails() {
                   {renderDate(currentDate)}
                 </div>
                 <div
-                  className="event-question-child"
+                  className="event-question-child p-1"
                   style={{
                     border: "1px solid #27AE60",
                     color: "#27AE60",
@@ -1072,7 +1072,7 @@ function EventDetails() {
                   {renderDate(nextDate)}
                 </div>
                 <div
-                  className="event-question-child"
+                  className="event-question-child p-1"
                   style={{
                     border: "1px solid #27AE60",
                     color: "#27AE60",
