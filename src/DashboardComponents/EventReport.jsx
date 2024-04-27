@@ -47,29 +47,36 @@ export default function EventReport({
     };
   }, []);
 
-  const handleDownload = (binaryData) => {
-    const blob = new Blob([binaryData], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "filename.xlsx"; // Change filename as needed
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   const handleGettingUserAttendance = async () => {
     if (eventDayId) {
       try {
         const response = await axios.get(
           `${BASE}/${GET_EVENT_DAY_ATTENDANCE}?eventDayId=${eventDayId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            responseType: "blob",
+          }
         );
-        handleDownload(response.data);
-        console.log(response);
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Create a URL for the Blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element to trigger the download
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "user_attendance.xlsx");
+
+        // Append the link to the document body and trigger the download
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up: remove the link and revoke the URL
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       } catch (error) {
         console.error("Error fetching user attendance:", error);
       }
