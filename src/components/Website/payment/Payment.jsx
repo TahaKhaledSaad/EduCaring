@@ -97,6 +97,12 @@ export default function Payment() {
   }, [eventDetails]);
   console.log(tickets);
 
+  // [6] compute subtotal
+  const subtotal = selectedDayIndices.reduce((total, selectedIndex) => {
+    const price = eventDetails?.eventDays[selectedIndex]?.price || 0;
+    return total + price;
+  }, 0);
+
   // [3] Fetch payment method link
   useEffect(() => {
     if (userEventDays.length > 0) {
@@ -107,7 +113,7 @@ export default function Payment() {
           {
             id: 0,
             userId: userId,
-            totalPrice: 400,
+            totalPrice: subtotal,
             priceAfterDiscount: 400,
             discount: 0,
             discountCode: "",
@@ -403,6 +409,40 @@ export default function Payment() {
             </div>
 
             <div className="w-75 mt-5 mx-auto">
+              <h4>{i18n.language === "en" ? "Summary" : "الفاتورة"}</h4>
+              <div className="border-bottom mt-4 mx-1">
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
+                  <span>
+                    {i18n.language === "en" ? "Subtotal" : "المجموع الفرعي"}{" "}
+                  </span>
+                  <span>{subtotal}</span>
+                </div>
+
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
+                  <span>{i18n.language === "en" ? "Fees" : "المصاريف"} </span>
+                  <span>00 {i18n.language === "en" ? "SAR" : "ريال"}</span>
+                </div>
+
+                <div
+                  className="d-flex justify-content-between my-2"
+                  style={{ color: "#747688" }}
+                >
+                  <span>{i18n.language === "en" ? "Discount" : "الخصم"}</span>
+                  <span>00 {i18n.language === "en" ? "SAR" : "ريال"}</span>
+                </div>
+              </div>
+              <div className="total fw-bold d-flex justify-content-between pt-3">
+                <span>
+                  {i18n.language === "en" ? "Total" : "المجموع الكلي"}{" "}
+                </span>
+                <span>{subtotal}</span>
+              </div>
               <Link
                 className="d-block text-center w-100 mt-5 p-3  text-white"
                 style={{ backgroundColor: "#3296D4", borderRadius: "12px" }}
