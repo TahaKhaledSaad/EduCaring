@@ -541,7 +541,7 @@ export default function SpeakerTicket({
               value={selectedOption}
               onChange={handleCalendarToggle}
               options={["Attendance", "Departure"]}
-              className="w-100  d-flex  align-items-center my-5 "
+              className="w-100  d-flex  align-items-center my-5 gap-3"
               itemTemplate={itemTemplate}
             />
           </div>

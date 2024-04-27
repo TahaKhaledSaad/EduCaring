@@ -416,8 +416,8 @@ export default function SpeakerQuestions({
           </div>
           <div className="d-flex gap-3 w-50 flex-wrap calendar question-container-box">
             <h2>{t("Question")}</h2>
-            <div className="w-100 d-flex" style={{ height: "170px" }}>
-              <FloatLabel className=" w-50">
+            <div className="w-100 d-flex gap-2" style={{ height: "170px" }}>
+              <FloatLabel className="w-50">
                 <InputTextarea
                   id="questionEn"
                   value={questionValue}
@@ -425,6 +425,7 @@ export default function SpeakerQuestions({
                   rows={5}
                   cols={15}
                   placeholder="Question in English"
+                  style={{ height: "100%", resize: "none" }}
                   variant={questionValue ? "filled" : "outlined"}
                 />
                 <label
@@ -443,6 +444,7 @@ export default function SpeakerQuestions({
                   rows={5}
                   cols={15}
                   placeholder="Question in Arabic"
+                  style={{ height: "100%", resize: "none" }}
                   variant={questionValueAr ? "filled" : "outlined"}
                 />
                 <label

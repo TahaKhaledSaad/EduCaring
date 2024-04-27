@@ -288,7 +288,9 @@ export default function Community() {
             })}
 
             <i
-              className="fa-regular fa-circle-xmark close-btn"
+              className={`fa-regular fa-circle-xmark close-btn ${
+                i18n.language === "en" ? "" : "close-btn-rtl"
+              }`}
               onClick={() => {
                 handleBackClick();
                 setSelectedChat(null);

@@ -153,6 +153,14 @@
   font-size: 20px;
   color: #a5a5a5;
 }
+.commuinty .chat-content .close-btn:hover {
+  color: #3296d4;
+  transition: 0.3s;
+}
+.commuinty .chat-content .close-btn-rtl {
+  left: 20px;
+  right: auto;
+}
 @media (max-width: 992px) {
   .hide {
     display: none;
