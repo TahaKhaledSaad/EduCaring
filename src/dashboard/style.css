@@ -1831,3 +1831,111 @@ body {
   background-color: #e2e5e7;
   color: #000;
 }
+.gender-btn .p-button.p-component {
+  padding: 0.75rem 1.25rem;
+}
+.admin-registration .pass-inp {
+  display: flex !important;
+  gap: 10px;
+  align-items: center;
+  position: relative;
+}
+.admin-registration .pass-inp svg {
+  cursor: pointer;
+  color: #4e46e5b4;
+  font-size: 20px;
+  top: 7px;
+  left: -10px;
+}
+.admin-registration .p-password-input {
+  width: 100%;
+  line-height: 2rem;
+  border: 1px solid #ced4da !important;
+}
+.admin-permissions .p-multiselect-label.p-placeholder {
+  line-height: 2rem;
+  padding: 0.5rem 0.75rem;
+}
+.admin-permissions {
+  max-width: 325px;
+}
+.admin-data-container {
+  gap: 3rem !important;
+}
+.admin-permissions .p-multiselect-label .p-multiselect-token {
+  padding: 0.25rem 0.5rem !important;
+  gap: 0.25rem;
+}
+
+.admin-registration .p-fileupload-buttonbar {
+  padding: 0.25rem 0.5rem;
+}
+.admin-registration .p-button.p-button-icon-only.p-button-rounded {
+  border-radius: 50% !important;
+}
+.admin-registration .p-progressbar.p-component.p-progressbar-determinate {
+  display: none !important;
+}
+.admin-registration .content-upload-files .p-fileupload-row {
+  padding: 0.5rem 0.75rem !important;
+}
+.admin-registration .content-upload-files .p-fileupload-row img {
+  width: 100px;
+}
+.admin-registration
+  .content-upload-files
+  .p-fileupload-row
+  .p-fileupload-file-badge {
+  display: none !important;
+}
+.event-report-body {
+  overflow: auto;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2.5rem 5rem;
+}
+.event-report-body .event-report-item {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+@media screen and (max-width: 767px) {
+  .admin-data-container {
+    flex-direction: column;
+    gap: 1.5rem !important;
+  }
+  .admin-registration {
+    width: 90vw;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  .admin-permissions {
+    max-width: max-content;
+  }
+  .admin-permissions .p-multiselect-label .p-multiselect-token {
+    padding: 0.12rem 0.25rem !important;
+  }
+  .admin-permissions
+    .p-multiselect-label
+    .p-multiselect-token
+    .p-multiselect-token-label {
+    font-size: 12px;
+  }
+  .event-report-body .event-report-item {
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4rem;
+    width: 100%;
+  }
+  .event-report-body {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 2rem 1rem;
+  }
+}

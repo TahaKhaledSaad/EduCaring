@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Collapse } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import './style.css';
-
+import "./style.css";
 
 function SideBar() {
   //
@@ -25,6 +24,10 @@ function SideBar() {
 
       <Collapse in={open} className="collapse border-bottom py-0 pb-1 mb-3">
         <div id="example-collapse-text">
+          <NavLink to="/dashboard/admins" className="link my-1">
+            <i className="fas fa-user-cog"></i>
+            <span>{t("Admins")}</span>
+          </NavLink>
           <NavLink to="/dashboard/users" className="link my-1">
             <i className="fas fa-user-friends"></i>
             <span>{t("Users")}</span>
