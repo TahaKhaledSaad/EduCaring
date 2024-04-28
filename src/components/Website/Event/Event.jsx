@@ -136,11 +136,7 @@ function EventDetails() {
           );
           setCityFrom(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
-<<<<<<< HEAD
-              ?.cityAttendFrom
-=======
-              ?.cityAttendFrom || ""
->>>>>>> 0918f5f43b906960aa91c784305a653e1e13b542
+              ?.cityAttendFrom?.cityAttendFrom || ""
           );
           setCityTOOld(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
