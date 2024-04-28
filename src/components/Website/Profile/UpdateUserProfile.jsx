@@ -151,6 +151,14 @@ export default function Profile() {
     useState(true);
 
   console.log(user);
+
+  const isValidImageUrl = (url) => {
+    return (
+      url &&
+      !url.toLowerCase().endsWith("/null") &&
+      url.toLowerCase().startsWith("http" || "https")
+    );
+  };
   return (
     <>
       {user && (
@@ -188,7 +196,7 @@ export default function Profile() {
             style={{ borderBottom: "1px solid #DCDCDC" }}
           >
             <div className="position-relative">
-              {user.displayProfileImage ? (
+              {isValidImageUrl(user.displayProfileImage) ? (
                 <img
                   src={
                     profileFile
@@ -226,28 +234,33 @@ export default function Profile() {
                 hidden
                 onChange={(e) => handleUploadChange(e, "ProfileImageFile")}
               />
-              <label htmlFor="img">
-                {user.displayProfileImage ? (
-                  <i
-                    className="fa-solid fa-camera p-2 text-white rounded-circle position-absolute bottom-0"
-                    style={{
-                      backgroundColor: "#3296D4",
-                      right: "5px",
-                      cursor: "pointer",
-                    }}
-                  ></i>
-                ) : (
-                  <i
-                    className="fa-solid fa-camera p-2 text-white rounded-circle position-absolute"
-                    style={{
-                      backgroundColor: "#3296D4",
-                      right: "10px",
-                      bottom: "25px",
-                      cursor: "pointer",
-                    }}
-                  ></i>
-                )}
-              </label>
+              {
+                isEditMode && (
+                  <label htmlFor="img">
+                  {isValidImageUrl(user.displayProfileImage) ? (
+                    <i
+                      className="fa-solid fa-camera p-2 text-white rounded-circle position-absolute bottom-0"
+                      style={{
+                        backgroundColor: "#3296D4",
+                        right: "5px",
+                        cursor: "pointer",
+                      }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="fa-solid fa-camera p-2 text-white rounded-circle position-absolute"
+                      style={{
+                        backgroundColor: "#3296D4",
+                        right: "10px",
+                        bottom: "25px",
+                        cursor: "pointer",
+                      }}
+                    ></i>
+                  )}
+                </label>
+                
+                )
+              }
             </div>
 
             <div className="text flex-grow-1">

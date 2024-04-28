@@ -101,8 +101,12 @@ const EventDayQuestionNotification = ({
   function togglePopup() {
     setPopupVisible((prevState) => !prevState);
   }
+  const { i18n } = useTranslation();
   return (
-    <div ref={questionsRef} className="question">
+    <div
+      ref={questionsRef}
+      className={`question ${i18n.language === "en" ? "" : "ques-rtl"}`}
+    >
       <Toast ref={toast} />
       <div className="notif-row" onClick={togglePopup}>
         <img src={logo} alt="notify-img" />
@@ -116,7 +120,9 @@ const EventDayQuestionNotification = ({
       <div
         className={`notif-questions-popup shadow-lg  ${
           popupVisible ? "show " : "slide-out"
-        }`}
+        }
+        ${i18n.language === "en" ? "" : "ques-rtl"}
+        `}
       >
         <div className="head">
           <h4>{t("Questions")}</h4>
@@ -124,7 +130,14 @@ const EventDayQuestionNotification = ({
         </div>
         <div className="body">
           <div className="form">
-            <div className="questions-body">
+            <div
+              className={`questions-body
+              ${i18n.language === "en" ? "" : "ques-rtl"}
+              `}
+              style={{
+                scrollbarWidth: "none",
+              }}
+            >
               {showScore ? (
                 <ScoreContainer>
                   <ChangingProgressProvider values={[Math.round(score)]}>
@@ -148,7 +161,7 @@ const EventDayQuestionNotification = ({
                     <h5>{question.question}</h5>
 
                     {question.eventDayQuestionAnswers.map((answer) => (
-                      <div className="answer" key={question.id + answer.id}>
+                      <div className={`answer`} key={question.id + answer.id}>
                         <Form.Check // prettier-ignore
                           type={"radio"}
                           id={`default-${question.id}-${answer.id}`}
@@ -158,7 +171,12 @@ const EventDayQuestionNotification = ({
                             handleAnswerChange(question.id, answer.id)
                           }
                           checked={selectedAnswers[question.id] === answer.id}
-                          className="question-answer-input"
+                          className={`question-answer-input
+                          
+                          ${
+                            i18n.language === "en" ? "" : "ans-rtl"
+                          }
+                          `}
                           name={`question-${question.id}`}
                         />
                       </div>

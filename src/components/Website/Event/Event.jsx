@@ -77,7 +77,14 @@ function EventDetails() {
       .catch((error) => {
         console.error("Error fetching event details:", error);
       });
-  }, [eventId, decodedToken.uid, decodedToken.roles, i18n.language, token, selectedDayIndex]);
+  }, [
+    eventId,
+    decodedToken.uid,
+    decodedToken.roles,
+    i18n.language,
+    token,
+    selectedDayIndex,
+  ]);
 
   // console.log(eventDetails);
 
@@ -124,8 +131,7 @@ function EventDetails() {
               ?.cityAttendTo
           );
           setCityFrom(
-            response.data.responseObject[0]
-            ?.eventDaySpeakerAttends[0]
+            response.data.responseObject[0]?.eventDaySpeakerAttends[0]
               ?.cityAttendFrom
           );
           setCityTOOld(

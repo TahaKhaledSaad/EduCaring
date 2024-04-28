@@ -140,7 +140,9 @@ export default function AttendanceReg() {
   const [genders, setGenders] = useState([]);
   useEffect(() => {
     axios
-      .get(`${BASE}/MainData/GetAllGender`)
+      .get(`${BASE}/MainData/GetAllGender`, {
+        headers: { language: i18n.language },
+      })
       .then((res) => {
         setGenders(res.data.responseObject);
       })
@@ -150,10 +152,11 @@ export default function AttendanceReg() {
   return (
     <>
       {!showVerify && (
-        <div className={style.container}
-        style={{
-          direction : i18n.language === "en" ? "" : "rtl"
-        }}
+        <div
+          className={style.container}
+          style={{
+            direction: i18n.language === "en" ? "" : "rtl",
+          }}
         >
           {/* Header */}
           <div className={style.header}>
@@ -307,7 +310,11 @@ export default function AttendanceReg() {
               <div>
                 <div
                   className={`${style.input} d-flex align-items-center p-0 ${
-                    userData.DateOfBirth ? "" : "datef"
+                    userData.DateOfBirth
+                      ? ""
+                      : i18n.language === "en"
+                      ? "datef"
+                      : "datea"
                   }`}
                 >
                   {/* <i className="fa-regular fa-calendar-days"></i> */}
@@ -487,6 +494,7 @@ export default function AttendanceReg() {
                     }
                     onChange={handleChange}
                     name="Password"
+                    style={{paddingRight:"30px"}}
                   />
                   <i
                     className={`fa-regular ${
@@ -517,6 +525,7 @@ export default function AttendanceReg() {
                     }
                     onChange={handleChange}
                     name="ConfirmPassword"
+                    style={{paddingRight:"30px"}}
                   />
                   <i
                     className={`fa-regular ${

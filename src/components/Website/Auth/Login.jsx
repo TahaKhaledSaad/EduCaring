@@ -54,14 +54,14 @@ export default function Login() {
       res.data.isSuccess
         ? setErrorMessage("")
         : setErrorMessage(res.data.responseText);
-      console.log(errorMessage);
+      // console.log(errorMessage);
 
       // Set Token
       res.data.responseObject.isVerified &&
         cookies.set("edu-caring", res.data.responseObject.token);
 
       const decodedToken = jwtDecode(res.data.responseObject.token);
-
+      console.log(decodedToken);
       // Set Navigation
       cookies.get("edu-caring") !== "" && res.data.responseObject.isVerified
         ? decodedToken.roles.includes("SuperAdmin")

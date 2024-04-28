@@ -332,7 +332,11 @@ export default function SpeakerReg() {
                 <div>
                   <div
                     className={`${style.input} d-flex align-items-center p-0 ${
-                      userData.DateOfBirth ? "" : "datef"
+                      userData.DateOfBirth
+                        ? ""
+                        : i18n.language === "en"
+                        ? "datef"
+                        : "datea"
                     }`}
                   >
                     {/* <i className="fa-regular fa-calendar-days"></i> */}
@@ -368,8 +372,12 @@ export default function SpeakerReg() {
                           ? "Select Gender"
                           : "إختر النوع"}
                       </option>
-                      <option value="1">Male</option>
-                      <option value="2">Female</option>
+                      <option value="1">
+                        {i18n.language === "en" ? "Male" : "ذكر"}
+                      </option>
+                      <option value="2">
+                      {i18n.language === "en" ? "Female" : "أنثى"}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -462,6 +470,7 @@ export default function SpeakerReg() {
                       }
                       onChange={handleChange}
                       name="Password"
+                      style={{paddingRight:"30px"}}
                     />
                     <i
                       className={`fa-regular ${
@@ -492,6 +501,7 @@ export default function SpeakerReg() {
                       }
                       onChange={handleChange}
                       name="ConfirmPassword"
+                      style={{paddingRight:"30px"}}
                     />
                     <i
                       className={`fa-regular ${
@@ -569,6 +579,7 @@ export default function SpeakerReg() {
                 className="w-100 rounded p-2 mb-2 mt-4"
                 placeholder={i18n.language === "en" ? "Bio" : "نبذه"}
                 onChange={handleChange}
+                style={{resize:"none"}}
               ></textarea>
               {showError2 && userData.Bio.length < 10 && (
                 <span className="m-0 my-0 mb-3 text-danger">

@@ -586,6 +586,9 @@ input {
     color: #000;
   }
 }
+.ques-rtl{
+  /* direction: rtl; */
+}
 .question h5 {
   margin-left: 15px;
   font-size: 20px;
@@ -594,6 +597,11 @@ input {
   font-size: 20px;
   color: #747688;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+.ans-rtl{
+  direction: rtl;
 }
 
 .question .answer input[type="radio"] {
@@ -628,8 +636,8 @@ input {
 }
 .send-question-btn {
   border: 1px solid transparent;
-  padding: 25px 90px 25px 90px;
-  height: 40px;
+  padding:  10px 20px;
+  /* height: 40px; */
   border-radius: 12px;
   font-size: 18px;
   font-weight: 500;
@@ -959,6 +967,21 @@ tr {
 .datef::before {
   content: "Date of birth";
   position: absolute;
+  width: 90%;
+  height: 100%;
+  padding-left: 10px;
+  background-color: #fff;
+  color: #dcdcdc;
+  display: flex;
+  align-items: center;
+}
+.datea{
+  position: relative;
+}
+.datea::before {
+  content: "تاريخ الميلاد";
+  position: absolute;
+  left: 0;
   width: 90%;
   height: 100%;
   padding-left: 10px;

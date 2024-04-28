@@ -95,7 +95,7 @@ export default function Payment() {
       setTickets(newTickets);
     }
   }, [eventDetails]);
-  console.log(tickets);
+  // console.log(tickets);
 
   // [6] compute subtotal
   const subtotal = selectedDayIndices.reduce((total, selectedIndex) => {
@@ -129,7 +129,7 @@ export default function Payment() {
           }
         )
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           setPaymentMethodLink(data.data.responseObject.url);
         })
         .catch((err) => console.log(err))
@@ -137,7 +137,7 @@ export default function Payment() {
     }
   }, [userEventDays, eventId, userId]);
 
-  console.log(paymentMethodLink);
+  // console.log(paymentMethodLink);
 
   // [4] continue button click handler
   const handleContinueClick = () => {

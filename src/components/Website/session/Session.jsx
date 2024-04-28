@@ -41,7 +41,7 @@ export default function Session() {
         })
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
-  }, [eventId, userId, i18n.language]);
+  }, [eventId, userId, i18n.language, decodedToken.uid, token, ]);
 
   const [videoUrl, setVideoUrl] = useState("");
   const [resources, setResources] = useState([]);

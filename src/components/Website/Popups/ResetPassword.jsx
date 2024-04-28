@@ -272,7 +272,9 @@ export default function ResetPassword({ userID, email }) {
                 boxShadow: "0 0 100px rgb(0,0,0)",
               }}
             >
-              May be you entered wrong password!
+              {i18n.language === "en"
+                ? "Wrong Password!"
+                : "كلمة المرور خاطئة!"}
             </div>
           )}
           {updatedSuccessfully && (
@@ -288,7 +290,9 @@ export default function ResetPassword({ userID, email }) {
                 boxShadow: "0 0 100px rgb(0,0,0)",
               }}
             >
-              Password updated successfully!
+              {i18n.language === "en"
+                ? "Password updated successfully!"
+                : "تم تحديث كلمة المرور بنجاح!"}
             </div>
           )}
         </div>

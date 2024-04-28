@@ -336,7 +336,11 @@ export default function MyEvents() {
                         : "")}
                   </p>
                   <div className="rate">
-                    <span>({event.numberOfReviews || 0} reviews)</span>
+                    <span>
+                      ({event.numberOfReviews || 0}
+                      {""}
+                      {i18n.language === "en" ? "reviews" : "تقييمات"})
+                    </span>
                     <span>
                       <i className="bi bi-star-fill"></i>
                       {(event.reviewRate || 0) === 0
