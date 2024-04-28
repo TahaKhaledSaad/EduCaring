@@ -96,10 +96,11 @@ export default function Admins() {
     formData.append("ConfirmPassword", confirmPassword);
     formData.append("GenderId", gender === "Male" ? 1 : 2);
     formData.append("ProfileImage", uploadedFiles[0]);
-    formData.append(
-      "Premissions",
-      JSON.stringify(selectedPermission.map((item) => item.type))
-    );
+
+    selectedPermission.forEach(permission => {
+      formData.append('Premissions', permission.type);
+    });
+
 
     // Make a POST request to your backend endpoint
     axios
