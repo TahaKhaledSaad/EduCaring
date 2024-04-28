@@ -468,6 +468,8 @@ export default function Admins() {
             style={{
               borderRadius: "12px",
               backgroundColor: "white",
+              overflowY: "auto",
+              scrollbarWidth:"none"
             }}
           >
             <div className="d-flex admin-data-container">

@@ -129,13 +129,13 @@ export default function LandingPageSpeakerActions({
         size="small"
         icon="pi pi-times"
         onClick={() => setCreateModalVisible(false)}
-        className="p-button-text p-button send-cancel-edit-landing"
+        className="p-button-text p-button send-cancel-edit-landing py-2 px-4 bg-danger text-white rounded mx-2"
       />
       <Button
         label={t("Save")}
         size="small"
         icon="pi pi-check"
-        className="p-button-info p-button send-cancel-edit-landing"
+        className="p-button-info p-button send-cancel-edit-landing py-2 px-4  text-white rounded mx-2"
         onClick={handleSubmit}
         autoFocus
       />
@@ -191,7 +191,7 @@ export default function LandingPageSpeakerActions({
               <InputText
                 type="text"
                 style={{ width: "70%" }}
-                className="p-inputtext-lg"
+                className="p-inputtext-lg border p-2"
                 placeholder={t("titleAr")}
                 value={createModalData.titleAr}
                 onChange={(e) =>
@@ -207,7 +207,7 @@ export default function LandingPageSpeakerActions({
                 <p style={{ margin: 0 }}>{t("titleEn")}</p>
                 <InputText
                   type="text"
-                  className="p-inputtext-lg"
+                  className="p-inputtext-lg border p-2"
                   style={{ width: "70%" }}
                   placeholder={t("titleEn")}
                   value={createModalData.titleEn}
@@ -225,7 +225,7 @@ export default function LandingPageSpeakerActions({
                 <p style={{ margin: 0 }}>{t("nameAr")}</p>
                 <InputText
                   type="text"
-                  className="p-inputtext-lg"
+                  className="p-inputtext-lg border p-2"
                   style={{ width: "70%" }}
                   placeholder={t("nameAr")}
                   value={createModalData.nameAr}
@@ -241,7 +241,7 @@ export default function LandingPageSpeakerActions({
                 <p style={{ margin: 0 }}>{t("nameEn")}</p>
                 <InputText
                   type="text"
-                  className="p-inputtext-lg"
+                  className="p-inputtext-lg  border p-2"
                   style={{ width: "70%" }}
                   placeholder={t("nameEn")}
                   value={createModalData.nameEn}

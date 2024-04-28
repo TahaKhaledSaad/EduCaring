@@ -58,13 +58,13 @@ export default function LandingPageAboutUsActions({
         size="small"
         icon="pi pi-times"
         onClick={() => setCreateModalVisible(false)}
-        className="p-button-text p-button send-cancel-edit-landing"
+        className="p-button-text p-button send-cancel-edit-landing py-2 px-4 bg-danger text-white rounded mx-2"
       />
       <Button
         label={t("Save")}
         size="small"
         icon="pi pi-check"
-        className="p-button-info p-button send-cancel-edit-landing"
+        className="p-button-info p-button send-cancel-edit-landing py-2 px-4  text-white rounded mx-2"
         onClick={handleSubmit}
         autoFocus
       />

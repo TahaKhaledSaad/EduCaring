@@ -115,13 +115,13 @@ export default function LandingPageSponserActions({
         size="small"
         icon="pi pi-times"
         onClick={() => setCreateModalVisible(false)}
-        className="p-button-text p-button send-cancel-edit-landing"
+        className="p-button-text p-button send-cancel-edit-landing py-2 px-4 bg-danger text-white rounded mx-2"
       />
       <Button
         label={t("Save")}
         size="small"
         icon="pi pi-check"
-        className="p-button-info p-button send-cancel-edit-landing"
+        className="p-button-info p-button send-cancel-edit-landing py-2 px-4  text-white rounded mx-2"
         onClick={handleSubmit}
         autoFocus
       />
@@ -176,7 +176,7 @@ export default function LandingPageSponserActions({
               <InputText
                 type="text"
                 style={{ width: "70%" }}
-                className="p-inputtext-lg"
+                className="p-inputtext-lg border p-2"
                 placeholder={t("title")}
                 value={createModalData.title}
                 onChange={(e) =>
