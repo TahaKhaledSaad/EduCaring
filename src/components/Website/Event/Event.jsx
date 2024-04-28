@@ -119,13 +119,13 @@ function EventDetails() {
           setSpeakerQuestions(
             response.data.responseObject[0]?.SpeakerQuestions
           );
-          setSpeakerNewAttends(speakerAttends.length > 0 ? speakerAttends : []);
+          setSpeakerNewAttends((speakerAttends!=undefined&& speakerAttends.length > 0 ) ? speakerAttends : []);
           setSpeakerNewDepartures(
             speakerDepartures?.length > 0 ? speakerDepartures : []
           );
-          setSpeakerAttends(speakerAttends.length > 0 ? speakerAttends : []);
+          setSpeakerAttends((speakerAttends!=undefined && speakerAttends.length > 0) ? speakerAttends : []);
           setSpeakerDepartures(
-            speakerDepartures.length > 0 ? speakerDepartures : []
+            (speakerDepartures!=undefined&& speakerDepartures.length > 0) ? speakerDepartures : []
           );
           setSpeakerQuestions(
             response.data.responseObject[0]?.speakerQuestions
@@ -136,7 +136,7 @@ function EventDetails() {
           );
           setCityFrom(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
-              ?.cityAttendFrom?.cityAttendFrom || ""
+              ?.cityAttendFrom || ""
           );
           setCityTOOld(
             response.data.responseObject[0]?.eventDaySpeakerAttends[0]
@@ -333,7 +333,7 @@ function EventDetails() {
   console.log(
     eventDetails.eventDays[selectedDayIndex].eventDaySpeakers.find(
       (speaker) => speaker.speakerId === decodedToken.uid
-    ).id,
+    ),
     selectedDayIndex,
     selectedDayIndex,
     selectedDayIndex
