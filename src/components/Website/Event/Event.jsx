@@ -33,6 +33,8 @@ function EventDetails() {
   const [eventDetails, setEventDetails] = useState(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
+  const [speakerResourses, setSpeakerResourses] = useState([]);
+
   const [getSpeakerDetails, setGetSpeakerDetails] = useState(0);
   const [speakerQuestions, setSpeakerQuestions] = useState([]);
   const [speakerAttends, setSpeakerAttends] = useState([]);
@@ -86,10 +88,15 @@ function EventDetails() {
     selectedDayIndex,
   ]);
 
-  console.log(eventDetails?.eventDays[selectedDayIndex]?.id);
-
+  console.log(
+    eventDetails?.eventDays[selectedDayIndex]?.id,
+    eventDetails?.eventDays[selectedDayIndex],
+    selectedDayIndex,
+    "eventDetails?.eventDays[selectedDayIndex]?.id"
+  );
+  // Effect to get resources of the speaker
   useEffect(() => {
-    if (eventDetails) {
+    if (eventDetails && decodedToken.roles.includes("Speaker")) {
       axios
         .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
           params: {
@@ -101,7 +108,6 @@ function EventDetails() {
           },
         })
         .then((response) => {
-          console.log(response.data.responseObject);
           const speakerDepartures =
             response.data.responseObject[0]?.eventDaySpeakerDepartures
               .filter((item) => item.speakerId === decodedToken.uid)
@@ -119,13 +125,23 @@ function EventDetails() {
           setSpeakerQuestions(
             response.data.responseObject[0]?.SpeakerQuestions
           );
-          setSpeakerNewAttends((speakerAttends!=undefined&& speakerAttends.length > 0 ) ? speakerAttends : []);
+          setSpeakerNewAttends(
+            speakerAttends != undefined && speakerAttends.length > 0
+              ? speakerAttends
+              : []
+          );
           setSpeakerNewDepartures(
             speakerDepartures?.length > 0 ? speakerDepartures : []
           );
-          setSpeakerAttends((speakerAttends!=undefined && speakerAttends.length > 0) ? speakerAttends : []);
+          setSpeakerAttends(
+            speakerAttends != undefined && speakerAttends.length > 0
+              ? speakerAttends
+              : []
+          );
           setSpeakerDepartures(
-            (speakerDepartures!=undefined&& speakerDepartures.length > 0) ? speakerDepartures : []
+            speakerDepartures != undefined && speakerDepartures.length > 0
+              ? speakerDepartures
+              : []
           );
           setSpeakerQuestions(
             response.data.responseObject[0]?.speakerQuestions
@@ -162,6 +178,11 @@ function EventDetails() {
             response.data.responseObject[0]?.eventDaySpeakerDepartures[0]
               ?.cityDepartureFrom || ""
           );
+          setSpeakerResourses(
+            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
+              (item) => item.speakerId === decodedToken.uid
+            )
+          );
         });
     }
   }, [
@@ -171,6 +192,7 @@ function EventDetails() {
     getSpeakerDetails,
     regetSpeakerDetails,
     i18n.language,
+    decodedToken.roles,
   ]);
   if (!eventDetails) {
     return (
@@ -330,14 +352,7 @@ function EventDetails() {
       </>
     );
   }
-  console.log(
-    eventDetails.eventDays[selectedDayIndex].eventDaySpeakers.find(
-      (speaker) => speaker.speakerId === decodedToken.uid
-    ),
-    selectedDayIndex,
-    selectedDayIndex,
-    selectedDayIndex
-  );
+
   // Function to pad single digit numbers with zero
   function padZero(num) {
     return num < 10 ? "0" + num : num;
@@ -673,7 +688,6 @@ function EventDetails() {
                     <div className="d-flex flex-wrap gap-3 justify-content-center">
                       {eventDetails.eventDays.map((d) =>
                         d.eventDaySpeakers.map((s) => {
-                          // console.log(s.speaker.displayProfileImage);
                           const speakerKey = `${s.speaker.id}`;
                           if (!uniqueSpeakers[speakerKey]) {
                             uniqueSpeakers[speakerKey] = true; // Mark the speaker as encountered
@@ -1028,10 +1042,17 @@ function EventDetails() {
               <Resources
                 eventId={eventId}
                 eventDayId={eventDetails.eventDays[selectedDayIndex].id}
+                speakerResourses={speakerResourses}
                 userId={decodedToken.uid}
                 addResourcesSpeaker={addResourcesSpeaker}
-                eventDaySpeakerId={eventDaySpeakerId}
-                sendId={sendId ? sendId : ""}
+                eventDaySpeakerId={eventDetails.eventDays[selectedDayIndex].id}
+                sendId={
+                  eventDetails.eventDays[
+                    selectedDayIndex
+                  ].eventDaySpeakers.find(
+                    (speaker) => speaker.speakerId === decodedToken.uid
+                  ).id
+                }
               />
             </div>
             <div

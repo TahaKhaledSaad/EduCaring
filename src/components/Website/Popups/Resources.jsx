@@ -18,13 +18,14 @@ export default function Resources({
   addResourcesSpeaker,
   eventDaySpeakerId,
   sendId,
+  speakerResourses,
 }) {
   // [0] State Variables
   const { i18n } = useTranslation();
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
   const decodedToken = token ? jwtDecode(token) : {};
-  const [speakerResourses, setSpeakerResourses] = useState([]);
+
   const [link, setLink] = useState("");
   const [flag, setFlag] = useState(false);
   const [resources, setResources] = useState([]);
@@ -33,43 +34,6 @@ export default function Resources({
   // console.log(userId);
 
   // [13] Function to get resources of the speaker
-  useEffect(() => {
-    if (addResourcesSpeaker) {
-      axios
-        .get(`${BASE}/EventDaySpeaker/GetEventDaySpeakerData`, {
-          params: {
-            eventDayId: eventDaySpeakerId,
-          },
-          headers: {
-            UserId: userId,
-            Language: i18n.language,
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          // console.log(response);
-          console.log(
-            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-              (item) => item.speakerId === decodedToken.uid
-            )
-          );
-          setSpeakerResourses(
-            response.data.responseObject[0]?.eventDaySpeakerResorses.filter(
-              (item) => item.speakerId === decodedToken.uid
-            )
-          );
-        });
-    }
-  }, [
-    eventDayId,
-    userId,
-    i18n.language,
-    decodedToken.uid,
-    eventDaySpeakerId,
-    addResourcesSpeaker,
-    flag,
-    token,
-  ]);
 
   // [13] Function to get resources of the user
   useEffect(() => {
@@ -430,9 +394,9 @@ export default function Resources({
     linksNumber = links.length;
   }, [files, imgs, links]);
 
-  function deleteResource(url) {
-    console.log(url);
-    speakerResourses.forEach((speakerResourse) => {
+  function deleteResource(url, type) {
+    console.log(url, type);
+    speakerResourses?.forEach((speakerResourse) => {
       if (
         (speakerResourse.resorsesURL === url &&
           speakerResourse.link === null) ||
@@ -659,7 +623,7 @@ export default function Resources({
                     target="blank"
                     rel="noopener noreferrer"
                   >
-                    {getFileIcon(file)}
+                    {/* {getFileIcon(file)} */}
                     {i18n.language === "en" ? "file" : "ملف"} {index + 1}
                   </a>
                   {addResourcesSpeaker && (
