@@ -402,9 +402,9 @@ export default function Admins() {
             }}
             sortable
             body={(rowData) => {
-              return rowData.premissions.length > 0 &&
-                rowData.premissions[0].length > 0 ? (
-                rowData.premissions[0].split(",").map((premission) => {
+              return rowData.premissions.length > 0 
+                 ? (
+                rowData.premissions.map((premission) => {
                   {
                     if (premission.length > 0) {
                       return (
