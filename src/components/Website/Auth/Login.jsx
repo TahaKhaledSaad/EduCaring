@@ -11,6 +11,7 @@ import verifyStyle from "./../verfiy-number/Verfication.module.css";
 import Verfication from "../verfiy-number/Verfication";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
+import Revision from "../Popups/Revision";
 
 export default function Login() {
   const { i18n } = useTranslation();
@@ -32,6 +33,7 @@ export default function Login() {
   const [passesEquals, setPassesEquals] = useState(false);
   const [showForgetErrors, setShowForgetErrors] = useState(false);
   const [showVerify, setShowVerify] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   useEffect(() => {
     newPassword === confirmNewPass
@@ -56,12 +58,14 @@ export default function Login() {
         : setErrorMessage(res.data.responseText);
       // console.log(errorMessage);
 
+      // Set Blocked
+      setIsBlocked(res.data.responseObject.isBlocked);
+
       // Set Token
       res.data.responseObject.isVerified &&
         cookies.set("edu-caring", res.data.responseObject.token);
 
       const decodedToken = jwtDecode(res.data.responseObject.token);
-      console.log(decodedToken);
       // Set Navigation
       cookies.get("edu-caring") !== "" && res.data.responseObject.isVerified
         ? decodedToken.roles.includes("SuperAdmin")
@@ -97,6 +101,7 @@ export default function Login() {
       console.log(error);
     }
   }
+  console.log(isBlocked);
 
   async function resetPass() {
     try {
@@ -144,11 +149,16 @@ export default function Login() {
   return (
     <>
       {!showVerify && (
-        <div className={style.container}
-        style={{
-          direction : i18n.language === "en" ? "" : "rtl"
-        }}
+        <div
+          className={style.container}
+          style={{
+            direction: i18n.language === "en" ? "" : "rtl",
+          }}
         >
+          <Revision
+            isBlocked={isBlocked}
+            setIsBlocked={setIsBlocked}
+          ></Revision>
           <form className={style.form} onSubmit={handleFormSubmit}>
             <img src={logo} alt="logo" />
 
