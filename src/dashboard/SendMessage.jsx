@@ -204,7 +204,7 @@ export default function SendMessage() {
     return (
       <div className="flex align-items-center flex-column">
         <i
-          className="pi pi-image mt-3 p-5"
+          className="far fa-images mt-3 p-5"
           style={{
             fontSize: "5em",
             borderRadius: "50%",

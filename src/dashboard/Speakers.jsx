@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { BASE, GET_SPEAKERS } from "../API/Api";
+import { useEffect, useRef, useState } from "react";
+import { BASE, BLOCK_USER, GET_SPEAKERS, UNBLOCK_USER } from "../API/Api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MessageModal from "../DashboardComponents/MessageModal";
 import { useTranslation } from "react-i18next";
 import "./style.css";
+import { Toast } from "primereact/toast";
+import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 
 export default function Speakers({
   speakers,
@@ -17,7 +19,52 @@ export default function Speakers({
   const [modalVisible, setModalVisible] = useState(false);
   const [messageRecivier, setMessageRecivier] = useState("");
   const { t } = useTranslation();
+  const toast = useRef(null);
+  const targetRef = useRef(null);
+  const [runUseEffect, setRunUseEffect] = useState(0);
+  const [confirmVisible, setConfirmVisible] = useState(false); // State to manage confirmation dialog visibility
+  const [confirmMessage, setConfirmMessage] = useState(""); // State to manage
 
+  const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
+  const showConfirmDialog = (message, callback, ref) => {
+    setConfirmMessage(message);
+    setConfirmCallback(() => callback);
+    setConfirmVisible(true);
+    targetRef.current = ref;
+  };
+  const confirmAccept = () => {
+    confirmCallback(); // Execute the callback function
+    setConfirmVisible(false); // Hide the confirmation dialog
+  };
+  const accept = (text) => {
+    text === "User UnBlocked Successfuly"
+      ? toast.current.show({
+          severity: "success",
+          summary: t("Confirmed"),
+          detail: t("UserUnBlocked"),
+          life: 3000,
+        })
+      : toast.current.show({
+          severity: "warn",
+          summary: t("Confirmed"),
+          detail: t("UserBlocked"),
+          life: 3000,
+        });
+  };
+  const confirmReject = () => {
+    setConfirmVisible(false); // Hide the confirmation dialog
+
+    // Show warning toast
+    reject();
+  };
+  const reject = () => {
+    toast.current.show({
+      severity: "warn",
+      summary: t("rejectRemoving"),
+      detail: t("rejectBlockChange"),
+      life: 3000,
+    });
+  };
   // Get all speakers
   useEffect(() => {
     setLoading(true);
@@ -33,11 +80,40 @@ export default function Speakers({
         setLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [setSpeakers, setLoading]);
+  }, [setSpeakers, setLoading, runUseEffect]);
 
   const handleMessageModal = (messageRecivier) => {
     setModalVisible(true);
     setMessageRecivier(messageRecivier);
+  };
+
+  const blockUser = async (userId, isBlocked) => {
+    try {
+      if (isBlocked) {
+        let result = await axios.post(
+          `${BASE}/${UNBLOCK_USER}?userId=${userId}`
+        );
+        if (result.status === 200) {
+          // If deletion is successful, trigger a re-fetch of events
+          setRunUseEffect((prev) => prev + 1);
+          accept(result.data.responseText);
+        }
+      } else if (!isBlocked) {
+        let result = await axios.post(`${BASE}/${BLOCK_USER}?userId=${userId}`);
+        if (result.status === 200) {
+          // If deletion is successful, trigger a re-fetch of events
+          accept();
+          setRunUseEffect((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: t("Error"),
+        detail: error.response.data.message,
+        life: 3000,
+      });
+    }
   };
   return (
     <div className="h-100">
@@ -47,7 +123,16 @@ export default function Speakers({
           {t("AllRegisteredAsSpeakers")}
         </small>
       </h2>
-
+      <Toast ref={toast} />
+      <ConfirmCheck
+        visible={confirmVisible}
+        onHide={() => setConfirmVisible(false)}
+        message={confirmMessage}
+        target={targetRef.current}
+        icon="pi pi-exclamation-triangle"
+        accept={confirmAccept}
+        reject={confirmReject}
+      />
       <div style={{ overflowX: "auto" }}>
         <DataTable
           dataKey="id"
@@ -101,10 +186,32 @@ export default function Speakers({
             style={{ width: "10rem" }}
             body={(rowData) => {
               return (
-                <i
-                  onClick={() => handleMessageModal(rowData)}
-                  className="fas center fa-paper-plane update"
-                ></i>
+                <div className="d-flex justify-content-center align-items-center">
+                  <i
+                    onClick={() => handleMessageModal(rowData)}
+                    className="fas center fa-paper-plane update"
+                  ></i>
+                  <i
+                    onClick={(e) =>
+                      showConfirmDialog(
+                        rowData.isBlocked
+                          ? t("ConfirmationMessages.unBlockUser")
+                          : t("ConfirmationMessages.blockUser"),
+                        () => blockUser(rowData.id, rowData.isBlocked),
+                        e.target, // Pass the button reference, so that we can focus it later
+                        rowData.isBlocked
+                      )
+                    }
+                    className={`fas center fa-${
+                      !rowData.isBlocked
+                        ? "fas fa-lock-open update"
+                        : "fas fa-lock update"
+                    } update d-flex justify-content-center align-items-center`}
+                    style={{
+                      color: rowData.isBlocked ? "#22c55e" : "#dc3545",
+                    }}
+                  ></i>
+                </div>
               );
             }}
           />

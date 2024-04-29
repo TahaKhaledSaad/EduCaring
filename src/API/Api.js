@@ -18,6 +18,8 @@ export const GET_SPEAKERS = "Dashboard/GetAllSpeakers";
 export const GET_ADMINS = "Dashboard/GetAllSuperAdmin";
 export const GET_NIGHT_USERS = "Dashboard/GetNightEventUsers";
 export const GET_USERS_FOR_EVENTDAY = "Dashboard/GetUsersForEventDay";
+export const GET_EVENTDAY_REVIEW = "Dashboard/GetEventDayReview";
+export const DELETE_USER = "Auth/DeleteUser";
 export const ADD_SUPER_ADMIN = "Auth/SuperAdminRegister";
 
 // Upload

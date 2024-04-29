@@ -152,7 +152,7 @@ export default function MessageModal({
         className="flex align-items-center  justify-content-center"
       >
         <i
-          className="pi pi-image mt-3 p-4 m-auto"
+          className="far fa-images mt-3 p-4 m-auto"
           style={{
             fontSize: "2.5em",
             borderRadius: "50%",

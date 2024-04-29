@@ -4,6 +4,7 @@ import {
   ADD_SUPER_ADMIN,
   BASE,
   BLOCK_USER,
+  DELETE_USER,
   GET_ADMINS,
   UNBLOCK_USER,
 } from "../API/Api";
@@ -24,7 +25,7 @@ import { MultiSelect } from "primereact/multiselect";
 import { FileUpload } from "primereact/fileupload";
 import { Chip } from "primereact/chip";
 import { Tag } from "primereact/tag";
-
+import Cookie from "cookie-universal";
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,6 +41,8 @@ export default function Admins() {
   const fileUploadRef = useRef(null);
   const [fetchAdminsList, setFetchAdminsList] = useState(false);
 
+  const cookie = new Cookie();
+  const token = cookie.get("edu-caring");
   //register new Admin
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
@@ -97,10 +100,9 @@ export default function Admins() {
     formData.append("GenderId", gender === "Male" ? 1 : 2);
     formData.append("ProfileImage", uploadedFiles[0]);
 
-    selectedPermission.forEach(permission => {
-      formData.append('Premissions', permission.type);
+    selectedPermission.forEach((permission) => {
+      formData.append("Premissions", permission.type);
     });
-
 
     // Make a POST request to your backend endpoint
     axios
@@ -191,6 +193,28 @@ export default function Admins() {
         }
       }
     } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: t("Error"),
+        detail: error.response.data.message,
+        life: 3000,
+      });
+    }
+  };
+
+  // delete Admin
+  const deleteAdmin = async (userId) => {
+    try {
+      let result = await axios.delete(`${BASE}/${DELETE_USER}?id=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (result.status === 200) {
+        // If deletion is successful, trigger a re-fetch of events
+        setRunUseEffect((prev) => prev + 1);
+        accept();
+      }
+    } catch (error) {
+      console.log(error);
       toast.current.show({
         severity: "error",
         summary: t("Error"),
@@ -402,8 +426,7 @@ export default function Admins() {
             }}
             sortable
             body={(rowData) => {
-              return rowData.premissions.length > 0 
-                 ? (
+              return rowData.premissions.length > 0 ? (
                 rowData.premissions.map((premission) => {
                   {
                     if (premission.length > 0) {
@@ -427,6 +450,7 @@ export default function Admins() {
             header={t("Actions")}
             dataType="boolean"
             style={{ width: "10rem" }}
+            className="d-flex justify-content-center align-items-center"
             body={(rowData) => {
               return (
                 <>
@@ -449,6 +473,16 @@ export default function Admins() {
                     style={{
                       color: rowData.isBlocked ? "#22c55e" : "#dc3545",
                     }}
+                  ></i>
+                  <i
+                    className="fas fa-trash delete d-flex justify-content-center align-items-center"
+                    onClick={() =>
+                      showConfirmDialog(
+                        t("ConfirmationMessages.delete"),
+                        () => deleteAdmin(rowData.id),
+                        targetRef.current
+                      )
+                    }
                   ></i>
                 </>
               );

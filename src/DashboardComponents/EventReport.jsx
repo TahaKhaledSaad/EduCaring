@@ -1,18 +1,21 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Divider } from "primereact/divider";
-import { DataView } from "primereact/dataview";
+import { Rating } from "primereact/rating";
 import { Avatar } from "primereact/avatar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Cookie from "cookie-universal";
 import {
   BASE,
+  GET_EVENTDAY_REVIEW,
   GET_EVENT_DAY_ATTENDANCE,
   GET_NIGHT_USERS,
   GET_USERS_FOR_EVENTDAY,
 } from "../API/Api";
 import axios from "axios";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 export default function EventReport({
   eventDayId,
   modalEventReportVisible,
@@ -22,8 +25,11 @@ export default function EventReport({
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [nightEventUsers, setNightEventUsers] = useState([]);
   const [usersForEventDay, setUsersForEventDay] = useState([]);
+  const [usersEventDayReview, setUsersEventDayReview] = useState([]);
   const [modalNightEventVisible, setModalNightEventVisible] = useState(false);
   const [modalWhoBoughtVisible, setModalWhoBoughtVisible] = useState(false);
+  const [modalEventDayReviewVisible, setModalEventDayReviewVisible] =
+    useState(false);
   const { t } = useTranslation();
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
@@ -120,7 +126,21 @@ export default function EventReport({
       }
     }
   };
-
+  const handleGettingEventDayReview = async () => {
+    if (eventDayId) {
+      try {
+        const response = await axios.get(
+          `${BASE}/${GET_EVENTDAY_REVIEW}?eventDayId=${eventDayId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log(response.data.responseObject);
+        setUsersEventDayReview(response.data.responseObject);
+        setModalEventDayReviewVisible(true);
+      } catch (error) {
+        console.error("Error fetching user attendance:", error);
+      }
+    }
+  };
   const itemNightUserTemplate = (user, index) => {
     return (
       <div>
@@ -219,11 +239,11 @@ export default function EventReport({
     );
   };
   function truncateEmail(email) {
-    const maxLength = 15;
+    const maxLength = 10;
     const atIndex = email.indexOf("@");
 
     if (atIndex !== -1 && atIndex > maxLength) {
-      const truncatedPrefix = email.slice(0, maxLength - 12) + "...";
+      const truncatedPrefix = email.slice(0, maxLength - 7) + "...";
       const domain = email.slice(atIndex);
       return truncatedPrefix + domain;
     } else {
@@ -318,6 +338,28 @@ export default function EventReport({
                   onClick={handleGettingNightUsers}
                 />
               </div>
+              <div
+                style={{
+                  width: isLargeScreen ? "1px" : "5rem",
+                  minHeight: isLargeScreen ? "3rem" : "1px",
+                  backgroundColor: "#e5e7eb",
+                  marginBlock: isLargeScreen ? "" : "0.3rem",
+                }}
+              />
+              <div className="d-flex event-report-item">
+                <div className="fs-4 ">{t("eventDayReview")}</div>
+                <Button
+                  icon={
+                    isLargeScreen ? "fas fa-caret-down" : "fas fa-caret-right"
+                  }
+                  rounded
+                  text
+                  aria-label="Filter"
+                  className="fs-3 rounded-4"
+                  raised
+                  onClick={handleGettingEventDayReview}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -325,72 +367,193 @@ export default function EventReport({
       <Dialog
         visible={modalNightEventVisible}
         onHide={() => setModalNightEventVisible(false)}
-        style={{ maxWidth: "90%" }}
+        style={{ maxWidth: "90%", height: "300px" }}
         className="card"
-        content={({ hide }) => (
-          <DataView
-            value={nightEventUsers}
-            listTemplate={listNightUsersTemplate}
-            header={
-              <div className="d-flex align-items-center justify-content-between gap-5 m-2">
-                <div className="font-bold text-2xl fs-2">
-                  {t("NightEventUsers")}
-                </div>
-                <Button
-                  icon="fas fa-times"
-                  className="p-button-danger p-button-rounded p-button-outlined "
-                  style={{
-                    borderRadius: "50%",
-                    borderColor: "transparent",
-                    fontSize: "2rem",
-                    fontWeight: "900",
-                  }}
-                  rounded
-                  outlined
-                  severity="danger"
-                  aria-label="Cancel"
-                  onClick={hide}
+        contentStyle={{ height: "300px" }}
+        header={
+          <div className="d-flex align-items-center justify-content-between gap-5 m-2">
+            <div className="font-bold text-2xl fs-2">
+              {t("NightEventUsers")}
+            </div>
+          </div>
+        }
+      >
+        <DataTable
+          value={nightEventUsers}
+          scrollable
+          scrollHeight="flex"
+          tableStyle={{ minWidth: "25rem" }}
+          emptyMessage={t("NoUsersFound")}
+          className="p-1"
+          rowClassName="border-bottom mt-2 mb-1"
+        >
+          <Column
+            body={(rowData, index) => index.rowIndex + 1}
+            header="ID"
+            style={{ width: isLargeScreen ? "rem" : "1.5rem" }}
+          ></Column>
+          <Column
+            body={(rowData) => {
+              return rowData.user.displayProfileImage ? (
+                <Avatar
+                  image={rowData.user.displayProfileImage}
+                  size="large"
+                  shape="circle"
+                  className="m-2"
                 />
-              </div>
-            }
-          />
-        )}
-      />
+              ) : (
+                <Avatar
+                  icon="far fa-user"
+                  size="large"
+                  style={{ backgroundColor: "#2196F3", color: "#ffffff" }}
+                  shape="circle"
+                  className="m-2"
+                />
+              );
+            }}
+            header="Avatar"
+          ></Column>
+          <Column
+            field="user.name"
+            header="Name"
+            className={`font-bold text-2xl ${
+              isLargeScreen ? "fs-4" : "fs-5"
+            } me-auto`}
+          ></Column>
+          {isLargeScreen && <Column field="user.email" header="Email"></Column>}
+          <Column field="user.phoneNumber" header="Phone"></Column>
+        </DataTable>
+      </Dialog>
 
       <Dialog
         visible={modalWhoBoughtVisible}
         onHide={() => setModalWhoBoughtVisible(false)}
         style={{ maxWidth: "90%" }}
         className="card"
-        content={({ hide }) => (
-          <DataView
-            value={usersForEventDay}
-            listTemplate={listWhoBoughtTemplate}
-            header={
-              <div className="d-flex align-items-center justify-content-between m-2 gap-5">
-                <div className="font-bold text-2xl fs-2">
-                  {t("WhoBoughtThisEvent")}
-                </div>
-                <Button
-                  icon="fas fa-times"
-                  className="p-button-danger p-button-rounded p-button-outlined "
-                  style={{
-                    borderRadius: "50%",
-                    borderColor: "transparent",
-                    fontSize: "2rem",
-                    fontWeight: "900",
-                  }}
-                  rounded
-                  outlined
-                  severity="danger"
-                  aria-label="Cancel"
-                  onClick={hide}
+        header={
+          <div className="d-flex align-items-center justify-content-between m-2 gap-5">
+            <div className="font-bold text-2xl fs-2">
+              {t("WhoBoughtThisEvent")}
+            </div>
+          </div>
+        }
+      >
+        <DataTable
+          value={usersForEventDay}
+          scrollable
+          scrollHeight="flex"
+          tableStyle={{ minWidth: "25rem" }}
+          emptyMessage={t("NoUsersFound")}
+          className="p-1"
+          rowClassName="border-bottom mt-2 mb-1"
+        >
+          <Column
+            body={(rowData, index) => index.rowIndex + 1}
+            header="ID"
+            style={{ width: isLargeScreen ? "rem" : "1.5rem" }}
+          ></Column>
+          <Column
+            body={(rowData) => {
+              return rowData.displayProfileImage ? (
+                <Avatar
+                  image={rowData.displayProfileImage}
+                  size="large"
+                  shape="circle"
+                  className="m-2"
                 />
-              </div>
-            }
-          />
-        )}
-      />
+              ) : (
+                <Avatar
+                  icon="far fa-user"
+                  size="large"
+                  style={{ backgroundColor: "#2196F3", color: "#ffffff" }}
+                  shape="circle"
+                  className="m-2"
+                />
+              );
+            }}
+            header="Avatar"
+          ></Column>
+          <Column
+            field="name"
+            header="Name"
+            className={`font-bold text-2xl ${
+              isLargeScreen ? "fs-4" : "fs-5"
+            } me-auto`}
+          ></Column>
+          {isLargeScreen && <Column field="email" header="Email"></Column>}
+          <Column field="phoneNumber" header="Phone"></Column>
+        </DataTable>
+      </Dialog>
+      <Dialog
+        visible={modalEventDayReviewVisible}
+        onHide={() => setModalEventDayReviewVisible(false)}
+        style={{ maxWidth: "90%" }}
+        className="card"
+        header={
+          <div className="d-flex align-items-center justify-content-between m-2 gap-5">
+            <div className="font-bold text-2xl fs-2">{t("EventDayReview")}</div>
+          </div>
+        }
+      >
+        <DataTable
+          value={usersEventDayReview}
+          scrollable
+          scrollHeight="flex"
+          tableStyle={{ minWidth: isLargeScreen ? "50rem" : "25rem" }}
+          emptyMessage={t("NoUsersFound")}
+          className="p-1"
+          rowClassName="border-bottom mt-2 mb-1"
+        >
+          <Column
+            body={(rowData, index) => index.rowIndex + 1}
+            header="ID"
+            style={{ width: isLargeScreen ? "rem" : "1.5rem" }}
+          ></Column>
+          <Column
+            body={(rowData) => {
+              return rowData.user.displayProfileImage ? (
+                <Avatar
+                  image={rowData.user.displayProfileImage}
+                  size="large"
+                  shape="circle"
+                  className="m-2"
+                />
+              ) : (
+                <Avatar
+                  icon="far fa-user"
+                  size="large"
+                  style={{ backgroundColor: "#2196F3", color: "#ffffff" }}
+                  shape="circle"
+                  className="m-2"
+                />
+              );
+            }}
+            header="Avatar"
+          ></Column>
+          <Column
+            field="user.name"
+            header="Name"
+            className={`font-bold text-2xl ${
+              isLargeScreen ? "fs-4" : "fs-5"
+            } me-auto`}
+          ></Column>
+          {isLargeScreen && (
+            <Column
+              body={(rowData) => truncateEmail(rowData.user.email)}
+              header="Email"
+            ></Column>
+          )}
+          {isLargeScreen && (
+            <Column field="user.phoneNumber" header="Phone"></Column>
+          )}
+          <Column
+            body={(rowData) => (
+              <Rating value={rowData.rate} readOnly cancel={false}></Rating>
+            )}
+            header="Rating"
+          ></Column>
+        </DataTable>
+      </Dialog>
     </div>
   );
 }
