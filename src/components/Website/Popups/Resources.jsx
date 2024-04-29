@@ -30,13 +30,12 @@ export default function Resources({
   const [flag, setFlag] = useState(false);
   const [resources, setResources] = useState([]);
 
-  // console.log(eventDaySpeakerId, sendId);
-  // console.log(userId);
-
   // [13] Function to get resources of the speaker
 
   // [13] Function to get resources of the user
   useEffect(() => {
+    console.log(flag);
+    console.log(addResourcesSpeaker);
     if (!addResourcesSpeaker) {
       axios
         .get(`${BASE}/Event/GetEventResoresesForUser`, {
@@ -50,22 +49,10 @@ export default function Resources({
           },
         })
         .then((response) => {
-          // console.log(response);
           setResources(response.data.responseObject);
         });
     }
-  }, [
-    eventDayId,
-    userId,
-    i18n.language,
-    decodedToken.uid,
-    eventDaySpeakerId,
-    addResourcesSpeaker,
-    flag,
-    token,
-  ]);
-
-  // console.log(resources);
+  }, [flag, eventDayId, userId, addResourcesSpeaker, i18n.language, token]);
 
   // [6] File Icon
   const [files, setFiles] = useState([]);
@@ -126,11 +113,7 @@ export default function Resources({
     setFiles(files);
     setImgs(imgs);
     setLinks(links);
-  }, [resources, speakerResourses, addResourcesSpeaker]);
-
-  // console.log(files);
-  // console.log(imgs);
-  // console.log(links);
+  }, [resources, speakerResourses, addResourcesSpeaker, flag]);
 
   // [8] Handle Option Change
   const [selectedOption, setSelectedOption] = useState("files");
@@ -334,13 +317,12 @@ export default function Resources({
         },
       })
       .then((response) => {
-        console.log(response.data);
-        setFlag(!flag);
+        setFlag((prev) => !prev);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
       });
-    setFlag(!flag);
+    setFlag((prev) => !prev);
   };
 
   // [12] Function to select files and send them to the server
@@ -367,7 +349,6 @@ export default function Resources({
     formData.append("Title", null);
     // formData.append("ResorsesFile", imgFormData);
 
-    console.log(object);
     for (let i = 0; i < files.length; i++) {
       arrOfImgs.push(files[i]);
       formData.append("ResorsesFile", files[i]);
@@ -380,8 +361,7 @@ export default function Resources({
         },
       })
       .then((response) => {
-        console.log(response.data);
-        setFlag(!flag);
+        setFlag((prev) => !prev);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
@@ -392,27 +372,29 @@ export default function Resources({
     filesNumber = files.length;
     imgsNumber = imgs.length;
     linksNumber = links.length;
-  }, [files, imgs, links]);
+  }, [files, imgs, links, flag]);
 
   function deleteResource(url, type) {
-    console.log(url, type);
     speakerResourses?.forEach((speakerResourse) => {
-      if (
-        (speakerResourse.resorsesURL === url &&
-          speakerResourse.link === null) ||
-        (speakerResourse.link === url && speakerResourse.resorsesURL === null)
-      ) {
-        axios
-          .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
-          .then((response) => {
-            console.log(response);
-            setFlag(!flag);
-          });
+      if (type === "image" || type === "file") {
+        if (speakerResourse.resorsesURL === url) {
+          axios
+            .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
+            .then((response) => {
+              setFlag((prev) => !prev);
+            });
+        }
+      } else if (type === "link") {
+        if (speakerResourse.link === url) {
+          axios
+            .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
+            .then((response) => {
+              setFlag((prev) => !prev);
+            });
+        }
       }
     });
   }
-
-  // console.log(links);
 
   return (
     <>
@@ -658,7 +640,7 @@ export default function Resources({
                       <i
                         className="fas fa-trash-alt text-white"
                         style={{ cursor: "pointer" }}
-                        onClick={() => deleteResource(img)}
+                        onClick={() => deleteResource(img, "image")}
                       ></i>
                     )}
                   </div>
@@ -720,7 +702,7 @@ export default function Resources({
                     <i
                       className="fas fa-trash-alt text-danger fs-5 p-3"
                       style={{ cursor: "pointer" }}
-                      onClick={() => deleteResource(link)}
+                      onClick={() => deleteResource(link, "link")}
                     ></i>
                   )}
                 </div>

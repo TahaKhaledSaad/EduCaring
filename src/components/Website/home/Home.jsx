@@ -49,7 +49,7 @@ export default function Home() {
       .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid, token]);
 
-  // console.log(events);
+
 
   const [recommendEvents, setrecommendEvents] = useState([]);
 

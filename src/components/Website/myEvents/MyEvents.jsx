@@ -37,7 +37,7 @@ export default function MyEvents() {
         })
         .then((data) => {
           setUserEvents(data.data.responseObject);
-          console.log(data);
+       
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched

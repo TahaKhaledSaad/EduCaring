@@ -88,12 +88,12 @@ function EventDetails() {
     selectedDayIndex,
   ]);
 
-  console.log(
-    eventDetails?.eventDays[selectedDayIndex]?.id,
-    eventDetails?.eventDays[selectedDayIndex],
-    selectedDayIndex,
-    "eventDetails?.eventDays[selectedDayIndex]?.id"
-  );
+  // console.log(
+  //   eventDetails?.eventDays[selectedDayIndex]?.id,
+  //   eventDetails?.eventDays[selectedDayIndex],
+  //   selectedDayIndex,
+  //   "eventDetails?.eventDays[selectedDayIndex]?.id"
+  // );
   // Effect to get resources of the speaker
   useEffect(() => {
     if (eventDetails && decodedToken.roles.includes("Speaker")) {
