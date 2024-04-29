@@ -47,7 +47,7 @@ export default function Home() {
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false)); // Set loading to false when the data is fetched
-  }, [i18n.language, decodedToken.uid]);
+  }, [i18n.language, decodedToken.uid, token]);
 
   // console.log(events);
 
