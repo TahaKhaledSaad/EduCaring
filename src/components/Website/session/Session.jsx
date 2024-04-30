@@ -41,7 +41,7 @@ export default function Session() {
         })
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
-  }, [eventId, userId, i18n.language, decodedToken.uid, token, ]);
+  }, [eventId, userId, i18n.language, decodedToken.uid, token, setUserId, i18n, cookie, setLoading]);
 
   const [videoUrl, setVideoUrl] = useState("");
   const [resources, setResources] = useState([]);
@@ -298,7 +298,7 @@ export default function Session() {
             fontWeight="none"
             fontSize="none"
             textAnchor="none"
-            style="mix-blend-mode: normal"
+            style={{ mixBlendMode: "normal" }}
           >
             <g transform="scale(5.33333,5.33333)">
               <path d="M40,45h-32v-42h22l10,10z" fill="#008dff"></path>

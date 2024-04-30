@@ -95,6 +95,8 @@ function EventDetails() {
   //   "eventDetails?.eventDays[selectedDayIndex]?.id"
   // );
   // Effect to get resources of the speaker
+
+  const [flag, setFlag] = useState(false);
   useEffect(() => {
     if (eventDetails && decodedToken.roles.includes("Speaker")) {
       axios
@@ -193,6 +195,7 @@ function EventDetails() {
     regetSpeakerDetails,
     i18n.language,
     decodedToken.roles,
+    flag,
   ]);
   if (!eventDetails) {
     return (
@@ -1043,6 +1046,8 @@ function EventDetails() {
                 eventId={eventId}
                 eventDayId={eventDetails.eventDays[selectedDayIndex].id}
                 speakerResourses={speakerResourses}
+                flag={flag}
+                setFlag={setFlag}
                 userId={decodedToken.uid}
                 addResourcesSpeaker={addResourcesSpeaker}
                 eventDaySpeakerId={eventDetails.eventDays[selectedDayIndex].id}

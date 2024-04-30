@@ -19,6 +19,8 @@ export default function Resources({
   eventDaySpeakerId,
   sendId,
   speakerResourses,
+  flag,
+  setFlag,
 }) {
   // [0] State Variables
   const { i18n } = useTranslation();
@@ -27,10 +29,8 @@ export default function Resources({
   const decodedToken = token ? jwtDecode(token) : {};
 
   const [link, setLink] = useState("");
-  const [flag, setFlag] = useState(false);
+  // const [flag, setFlag] = useState(false);
   const [resources, setResources] = useState([]);
-
-  // [13] Function to get resources of the speaker
 
   // [13] Function to get resources of the user
   useEffect(() => {
@@ -49,10 +49,11 @@ export default function Resources({
           },
         })
         .then((response) => {
+          console.log(response);
           setResources(response.data.responseObject);
         });
     }
-  }, [flag, eventDayId, userId, addResourcesSpeaker, i18n.language, token]);
+  }, [eventDayId, userId, i18n.language, token]);
 
   // [6] File Icon
   const [files, setFiles] = useState([]);
@@ -272,7 +273,7 @@ export default function Resources({
             fontWeight="none"
             fontSize="none"
             textAnchor="none"
-            style="mix-blend-mode: normal"
+            style={{ mixBlendMode: "normal" }}
           >
             <g transform="scale(5.33333,5.33333)">
               <path d="M40,45h-32v-42h22l10,10z" fill="#008dff"></path>
@@ -316,13 +317,13 @@ export default function Resources({
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
-        setFlag((prev) => !prev);
+      .then(() => {
+        setFlag(!flag);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
       });
-    setFlag((prev) => !prev);
+    // setFlag((prev) => !prev);
   };
 
   // [12] Function to select files and send them to the server
@@ -360,8 +361,8 @@ export default function Resources({
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
-        setFlag((prev) => !prev);
+      .then(() => {
+        setFlag(!flag);
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
@@ -381,20 +382,37 @@ export default function Resources({
           axios
             .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
             .then((response) => {
-              setFlag((prev) => !prev);
+              console.log(response);
+              setFlag(!flag);
             });
         }
       } else if (type === "link") {
         if (speakerResourse.link === url) {
           axios
             .delete(`${BASE}/SpeakerResors/${speakerResourse.id}`)
-            .then((response) => {
-              setFlag((prev) => !prev);
+            .then(() => {
+              setFlag(!flag);
             });
         }
       }
     });
   }
+
+  // Image Popup
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  // function to open image popup
+  const openPopup = (image) => {
+    setSelectedImage(image);
+    setPopupVisible(true);
+  };
+
+  // function to close image popup
+  const closePopup = () => {
+    setSelectedImage(null);
+    setPopupVisible(false);
+  };
 
   return (
     <>
@@ -605,7 +623,7 @@ export default function Resources({
                     target="blank"
                     rel="noopener noreferrer"
                   >
-                    {/* {getFileIcon(file)} */}
+                    {getFileIcon(file)}
                     {i18n.language === "en" ? "file" : "ملف"} {index + 1}
                   </a>
                   {addResourcesSpeaker && (
@@ -634,7 +652,8 @@ export default function Resources({
                       alt={`Image ${index}`}
                       className="rounded w-100"
                       height={80}
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "cover", cursor: "pointer" }}
+                      onClick={() => openPopup(img)}
                     />
                     {addResourcesSpeaker && (
                       <i
@@ -710,6 +729,47 @@ export default function Resources({
           </div>
         </div>
       </div>
+      {/* popup for selected image */}
+      {popupVisible && (
+        <div
+          className="custom-popup bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
+          style={{
+            transform: showPopup
+              ? "translate(300%,-50%)"
+              : "translate(-50%, -50%)",
+            transition: "0.5s",
+            zIndex: "1000000",
+            height: "90vh",
+            scrollbarWidth: "none",
+            boxShadow: "0px 0px 30px #666",
+            width: "60%",
+          }}
+        >
+          <div className="popup-content">
+            <div
+              className="d-flex justify-content-between align-items-center py-2 px-3"
+              style={{ backgroundColor: "#F2F2F2" }}
+            >
+              <h3>
+                {i18n.language === "en" ? "Zoomed Image" : "الصورة المكبرة"}
+              </h3>
+              <i
+                className="fa-solid fa-x"
+                style={{ cursor: "pointer" }}
+                onClick={closePopup}
+              ></i>
+            </div>
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt="image"
+                className="rounded-3 d-block"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

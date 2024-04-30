@@ -331,8 +331,8 @@ export default function SpeakerProfile() {
               <div>
                 {showAlert && (
                   <div
-                    className="alert alert-danger w-25 fw-bold position-absolute d-flex justify-content-between align-items-center"
-                    style={{ right: "30%" }}
+                    className="alert alert-danger w-50 fw-bold position-absolute d-flex justify-content-between align-items-center"
+                    style={{ right: "12%" }}
                     role="alert"
                   >
                     {i18n.language === "en"
