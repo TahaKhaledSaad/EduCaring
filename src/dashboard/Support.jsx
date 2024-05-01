@@ -63,7 +63,13 @@ export default function Support() {
       user.user.displayProfileImage &&
       !user.user.displayProfileImage.endsWith("null")
     ) {
-      return <img src={user.user.displayProfileImage} alt={user.user.name} />;
+      return (
+        <img
+          src={user.user.displayProfileImage}
+          style={{ maxWidth: "50px" }}
+          alt={user.user.name}
+        />
+      );
     } else {
       return (
         <div className="profile_letters">
@@ -77,7 +83,10 @@ export default function Support() {
   const renderOldMessages = (oldMessages) => {
     if (oldMessages?.length > 0) {
       return (
-        <div className="old-messages message-footer-content">
+        <div
+          className="old-messages message-footer-content"
+          style={{ maxHeight: "300px", overflow: "auto" }}
+        >
           <div className="container">
             <div className="card">
               <div className="card-body">
@@ -143,11 +152,13 @@ export default function Support() {
 
   const header = function (messageRecivier) {
     return (
-      <div className="user-profile p-3  border-bottom">
+      <div className="user-profile p-3 d-flex justify-content-between align-items-center  border-bottom gap-3">
         {renderProfileImage(messageRecivier)}
         <div className="user-details">
           <span className="user-name">{messageRecivier.user.nameEn}</span>
-          <span className="user-email">{messageRecivier.user.email}</span>
+          <span className="user-email px-2">
+            {messageRecivier.user.phoneNumber}
+          </span>
         </div>
         <i
           onClick={() => handleMessageModal(messageRecivier)}
@@ -201,7 +212,7 @@ export default function Support() {
   };
 
   return (
-    <div className="h-100">
+    <div className="h-100 only-dashboard">
       <h2 className="main-title fw-bold text-muted">
         {t("Support")} {"  "}
         <small className="text-muted mt-3 fw-light fst-italic ">
@@ -305,6 +316,7 @@ export default function Support() {
           }}
           footer={messageRecivier ? footer(messageRecivier) : null}
           header={messageRecivier ? header(messageRecivier) : null}
+          style={{ maxWidth: "80vw", width: " 450px" }}
         >
           <h2 className="p-3 " style={{ fontSize: "1.5rem" }}>
             {messageRecivier && <strong>{messageRecivier.title}</strong>}

@@ -120,7 +120,7 @@ export default function DeclarativeConfirmDialog({
   };
 
   const header = (
-    <div className="d-flex justify-content-center gap-3">
+    <div className="d-flex justify-content-center gap-3 only-dashboard">
       <MultiSelect
         value={selectedSpeakers}
         onChange={(e) => setSelectedSpeakers(e.value)}
@@ -156,6 +156,7 @@ export default function DeclarativeConfirmDialog({
       <ConfirmDialog
         key={eventDayId}
         group="declarative"
+        className=" only-dashboard"
         visible={confirmDialogVisible}
         headerClassName="confirmdialog-header"
         contentClassName="confirmdialog-content"

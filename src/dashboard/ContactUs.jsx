@@ -101,20 +101,20 @@ export default function ContactUs() {
           visible={modalVisible}
           modal
           style={{ maxWidth: "80vw", width: " 450px" }}
-          headerClassName="p-1 "
+          headerClassName="p-1 only-dashboard "
           draggable
-          className="p-0 border-bottom border-secondary-subtle supp-dialog card border-1 border shadow"
+          showHeader
+          className=" only-dashboard p-0 border-bottom border-secondary-subtle supp-dialog card border-1 border shadow contactUU"
+          headerStyle={{ fontSize: "1.5rem" }}
           onHide={() => {
             setModalVisible(false);
             setMessageRecivier(null);
           }}
           header={
             messageRecivier ? (
-              <div className="user-profile p-3 border-bottom">
-                <div className="user-details">
-                  <span className="user-name"></span>
-                  <span className="user-email">{messageRecivier.email}</span>
-                </div>
+              <div className="d-flex justify-content-between align-items-center px-4">
+                <span className="user-email">{messageRecivier.email}</span>
+                <span className="user-email">{messageRecivier.phone}</span>
               </div>
             ) : null
           }

@@ -29,7 +29,7 @@ export default function SpeakerCard({
   return (
     <Dialog
       visible={visible}
-      headerClassName="messages-header p-3 mb-0"
+      headerClassName="messages-header p-3 mb-0 only-dashboard"
       style={{
         maxWidth: "100rem",
         overflowY: "auto",
@@ -37,6 +37,7 @@ export default function SpeakerCard({
         direction: isEnglish ? "ltr" : "rtl",
       }}
       onHide={() => setVisible(false)}
+      className="only-dashboard"
     >
       <div className="card flex justify-content-center">
         {speakerData.map((speakerItem, index) => (

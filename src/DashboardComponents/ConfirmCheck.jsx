@@ -28,7 +28,7 @@ function ConfirmCheck({
       icon={icon}
       style={{ width: "fit-content" }}
       acceptClassName=" p-button-danger"
-      className="d-flex justify-content-center flex-column align-items-center gap-3"
+      className="d-flex justify-content-center flex-column align-items-center gap-3 only-dashboard"
       accept={handleAccept} // Use the local handleAccept function
       reject={handleReject} // Use the local handleReject function
       target={target}

@@ -26,6 +26,7 @@ import { FileUpload } from "primereact/fileupload";
 import { Chip } from "primereact/chip";
 import { Tag } from "primereact/tag";
 import Cookie from "cookie-universal";
+import { ScrollPanel } from "primereact/scrollpanel";
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -420,29 +421,34 @@ export default function Admins() {
             dataType="boolean"
             style={{
               textAlign: "center",
-              overflow: "auto",
+
               whiteSpace: "nowrap",
               textOverflow: "clip",
             }}
             sortable
-            body={(rowData) => {
-              return rowData.premissions.length > 0 ? (
-                rowData.premissions.map((premission) => {
-                  {
-                    if (premission.length > 0) {
-                      return (
-                        <Tag
-                          security="Contrast"
-                          value={premission}
-                          className="p-2 me-1"
-                          rounded
-                        ></Tag>
-                      );
-                    }
-                  }
-                })
-              ) : (
-                <Chip className="p-2" label={t("NoPremissions")} />
+            body={(rowData, index) => {
+              return (
+                <ScrollPanel style={{ width: "100%", height: "3rem" }}>
+                  {rowData.premissions.length > 0 ? (
+                    rowData.premissions.map((premission, index) => {
+                      {
+                        if (premission.length > 0) {
+                          return (
+                            <Tag
+                              security="Contrast"
+                              value={premission}
+                              className="p-2 me-1"
+                              rounded
+                              key={index}
+                            ></Tag>
+                          );
+                        }
+                      }
+                    })
+                  ) : (
+                    <Chip className="p-2" label={t("NoPremissions")} />
+                  )}
+                </ScrollPanel>
               );
             }}
           />
@@ -458,8 +464,8 @@ export default function Admins() {
                     onClick={(e) =>
                       showConfirmDialog(
                         rowData.isBlocked
-                          ? t("ConfirmationMessages.blockUser")
-                          : t("ConfirmationMessages.unBlockUser"),
+                          ? t("ConfirmationMessages.unBlockUserblockUser")
+                          : t("ConfirmationMessages.blockUser"),
                         () => blockAdmin(rowData.id, rowData.isBlocked),
                         e.target, // Pass the button reference, so that we can focus it later
                         rowData.isBlocked
@@ -476,11 +482,11 @@ export default function Admins() {
                   ></i>
                   <i
                     className="fas fa-trash delete d-flex justify-content-center align-items-center"
-                    onClick={() =>
+                    onClick={(e) =>
                       showConfirmDialog(
                         t("ConfirmationMessages.delete"),
                         () => deleteAdmin(rowData.id),
-                        targetRef.current
+                        e.target
                       )
                     }
                   ></i>
@@ -503,7 +509,7 @@ export default function Admins() {
               borderRadius: "12px",
               backgroundColor: "white",
               overflowY: "auto",
-              scrollbarWidth:"none"
+              scrollbarWidth: "none",
             }}
           >
             <div className="d-flex admin-data-container">

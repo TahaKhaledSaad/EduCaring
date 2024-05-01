@@ -321,9 +321,9 @@ export default function MessageModal({
               borderRadius: "10px",
             }
       }
-      className="message-modal"
+      className="message-modal only-dashboard"
       visible={visible}
-      headerClassName="messages-header p-3"
+      headerClassName="messages-header p-3 only-dashboard"
       modal
       maximizable
       maskStyle={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}
@@ -409,7 +409,7 @@ export default function MessageModal({
           </div>
         )}
       </div>
-      <div className=" container mt-5" style={uploadStyle}>
+      <div className=" container mt-5 only-dashboard" style={uploadStyle}>
         <div className="custom-upload-modal">
           <Toast ref={toast}></Toast>
 

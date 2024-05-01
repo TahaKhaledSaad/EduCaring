@@ -1365,16 +1365,7 @@ body {
   margin-right: 0;
 }
 
-.only-dashboard .p-dialog .p-dialog-header .p-dialog-header-icon {
-  width: 2rem;
-  height: 2rem;
-  color: #6b7280;
-  border: 0 none;
-
-  border-radius: 50%;
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.only-dashboard .p-dialog .p-dialog-footer {
+.p-dialog .p-dialog-footer {
   border-top: 0 none;
   background: #ffffff;
   color: #4b5563;
@@ -1627,11 +1618,11 @@ body {
 }
 /* Styles for different rankings */
 .only-dashboard .first-place {
-  background-color: #f8f2d7; /* Light red */
+  background-color: #d7ddf8; /* Light red */
 }
 
 .only-dashboard .second-place {
-  background-color: #d1e7dd; /* Light blue */
+  background-color: #e4e7d1; /* Light blue */
 }
 
 .only-dashboard .third-place {
@@ -1938,4 +1929,25 @@ body {
     justify-content: space-between !important;
     padding: 2rem 1rem;
   }
+}
+.contactUU.only-dashboard .p-dialog-header .p-dialog-header-icons button {
+  border-radius: 50%;
+  padding: 0.5rem;
+
+  width: 40px;
+}
+.p-scrollpanel-bar-x {
+  background-color: #4e46e5b4 !important;
+}
+
+.only-dashboard
+  > div.p-dialog-header.confirmdialog-header
+  > div.p-dialog-header-icons
+  > button.p-dialog-header-icon {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s !important;
+  color: #6b7280;
+  border: 0 none;
 }

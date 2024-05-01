@@ -71,7 +71,7 @@ export default function LandingPageAboutUsActions({
     </div>
   );
   return (
-    <div className=" flex justify-content-center ">
+    <div className=" flex justify-content-center only-dashboard">
       {!loading && (
         <Dialog
           header={t("EditText")}

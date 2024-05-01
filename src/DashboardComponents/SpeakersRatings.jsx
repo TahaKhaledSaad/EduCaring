@@ -5,6 +5,7 @@ import axios from "axios";
 import { Dialog } from "primereact/dialog";
 import { BASE, BEST_SPEAKERS } from "../API/Api";
 import "./style.css";
+import { Badge } from "primereact/badge";
 
 export default function SpeakersRatings({
   isBestSpeakersModalOpen = false,
@@ -42,7 +43,7 @@ export default function SpeakersRatings({
       );
     } else {
       return (
-        <div className="profile_letters">
+        <div className="profile_letters ">
           <p className="text-center rounded-circle text-white d-flex align-items-center justify-content-center m-auto">
             {speaker.speaker.name.slice(0, 2).toUpperCase()}
           </p>
@@ -75,9 +76,15 @@ export default function SpeakersRatings({
           borderRadius: "8px",
           boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
           margin: "10px 0px",
+          position: "relative",
         }}
       >
-        <div className="speaker-card">
+        <div className="speaker-card only-dashboard">
+          <Badge
+            value={index + 1}
+            severity={index === 0 ? "info" : "warning"}
+            style={{ position: "absolute", top: "10px", right: "10px" }}
+          />
           <div className="profile-image">{renderProfileImage(speaker)}</div>
           <div className="speaker-details">
             <div className="d-flex justify-content-between">
@@ -90,7 +97,7 @@ export default function SpeakersRatings({
                   color: "#f59e0b",
                 }}
               >
-                {speaker.ratePercentage}%
+                {Math.floor(speaker.ratePercentage)}%
               </span>
             </div>
             <div className="rating gap-2">
@@ -155,6 +162,7 @@ export default function SpeakersRatings({
       }}
       visible={isBestSpeakersModalOpen}
       headerClassName="messages-header p-3"
+      className="only-dashboard"
       modal
       maskStyle={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}
       onHide={() => setIsBestSpeakersModalOpen(false)}
