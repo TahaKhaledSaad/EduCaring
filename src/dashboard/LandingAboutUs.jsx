@@ -6,8 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { BASE, LANDING_ABOUT_US } from "../API/Api";
 import LandingPageAboutUsActions from "../DashboardComponents/LandingPageAboutUsActions";
-import './style.css';
-
+import "./style.css";
 
 export default function LandingAboutUs() {
   const [texts, setTexts] = useState([]);

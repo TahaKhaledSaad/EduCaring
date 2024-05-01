@@ -82,7 +82,7 @@ export default function LandingPageAboutUsActions({
           }}
           onHide={() => setCreateModalVisible(false)}
           footer={footerContent}
-          className="d-flex justify-content-center flex-column  gap-5 p-3  border border-2 border-gray-300 dialog-landig-text-actions dialog-landig-page-actions "
+          className="d-flex justify-content-center flex-column  gap-5 p-3  border border-2 border-gray-300 dialog-landig-text-actions dialog-landig-page-actions col-md-6"
           footerClassName="footer-edit-landing-page"
         >
           {/* Text upload input */}

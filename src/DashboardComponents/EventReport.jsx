@@ -258,7 +258,7 @@ export default function EventReport({
         content={({ hide }) => (
           <div
             className="event-report-container p-3 card"
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: "white", height: "fit-content"}}
           >
             <div className="d-flex align-items-center justify-content-between">
               <div className="font-bold text-2xl fs-2">{t("EventReports")}</div>
@@ -367,7 +367,7 @@ export default function EventReport({
       <Dialog
         visible={modalNightEventVisible}
         onHide={() => setModalNightEventVisible(false)}
-        style={{ maxWidth: "90%", height: "300px" }}
+        style={{ width: "90%", height: "80vh"}}
         className="card"
         contentStyle={{ height: "300px" }}
         header={
@@ -428,7 +428,7 @@ export default function EventReport({
       <Dialog
         visible={modalWhoBoughtVisible}
         onHide={() => setModalWhoBoughtVisible(false)}
-        style={{ maxWidth: "90%" }}
+        style={{ width: "90%", height: "80vh"}}
         className="card"
         header={
           <div className="d-flex align-items-center justify-content-between m-2 gap-5">
@@ -487,7 +487,7 @@ export default function EventReport({
       <Dialog
         visible={modalEventDayReviewVisible}
         onHide={() => setModalEventDayReviewVisible(false)}
-        style={{ maxWidth: "90%" }}
+        style={{ width: "90%", height: "80vh"}}
         className="card"
         header={
           <div className="d-flex align-items-center justify-content-between m-2 gap-5">

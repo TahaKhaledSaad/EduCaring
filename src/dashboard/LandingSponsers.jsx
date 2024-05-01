@@ -8,8 +8,7 @@ import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
 import { BASE, LANDING_SPONSERS, LANDING_SPONSER_DELETE } from "../API/Api";
 import LandingPageSponserActions from "../DashboardComponents/LandingPageSponserActions";
-import './style.css';
-
+import "./style.css";
 
 export default function LandingSponsers() {
   // States
