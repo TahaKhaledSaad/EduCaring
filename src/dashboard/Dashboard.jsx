@@ -6,7 +6,6 @@ import "./style.css";
 ////
 
 export default function Dashboard({ isEnglish, setIsEnglish }) {
-  console.log("Dashboard");
   return (
     <div
       style={{ direction: isEnglish ? "" : "rtl" }}
