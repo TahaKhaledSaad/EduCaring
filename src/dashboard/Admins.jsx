@@ -29,7 +29,7 @@ import Cookie from "cookie-universal";
 import { ScrollPanel } from "primereact/scrollpanel";
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [runUseEffect, setRunUseEffect] = useState(0);
@@ -40,7 +40,7 @@ export default function Admins() {
   const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
   const toast = useRef(null);
   const fileUploadRef = useRef(null);
-  const [fetchAdminsList, setFetchAdminsList] = useState(false);
+  const [fetchAdminsList, setFetchAdminsList] = useState(true);
 
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
@@ -56,21 +56,23 @@ export default function Admins() {
 
   // Get all events
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${BASE}/${GET_ADMINS}`, {
-        params: {
-          limite: 1000,
-          skip: 0,
-        },
-      })
-      .then((data) => {
-        setAdmins(data.data.responseObject);
-
-        setLoading(false);
-      })
-      .catch((err) => console.error(err));
-  }, [runUseEffect, fetchAdminsList]);
+    if (admins.length === 0 && fetchAdminsList === true) {
+      setFetchAdminsList(false);
+      axios
+        .get(`${BASE}/${GET_ADMINS}`, {
+          params: {
+            limite: 1000,
+            skip: 0,
+          },
+        })
+        .then((data) => {
+          setAdmins(data.data.responseObject);
+          setLoading(false);
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setFetchAdminsList(false));
+    }
+  }, [runUseEffect, fetchAdminsList, runUseEffect, admins]);
 
   // Handle upload data
   const handleSubmit = () => {
@@ -110,7 +112,6 @@ export default function Admins() {
     selectedPermission.forEach((permission) => {
       formData.append("Premissions", permission.type);
     });
-    console.log(formData);
 
     // Make a POST request to your backend endpoint
     axios
@@ -218,6 +219,7 @@ export default function Admins() {
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
           setRunUseEffect((prev) => prev + 1);
+          setFetchAdminsList(true);
           accept(result.data.responseText);
         }
       } else if (!isBlocked) {
@@ -247,7 +249,8 @@ export default function Admins() {
       if (result.status === 200) {
         // If deletion is successful, trigger a re-fetch of events
         setRunUseEffect((prev) => prev + 1);
-        accept();
+        setFetchAdminsList(true);
+        accept(result.data.responseText);
       }
     } catch (error) {
       toast.current.show({
