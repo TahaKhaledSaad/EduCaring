@@ -295,10 +295,16 @@ i18n
           phone: "Phone",
           Permissions: "Permissions",
           EventReport: "Event Report",
+          AdminDeletedSucc: "Admin has been deleted successfully",
+          Error: "Error",
+          fillAllFields: "Please fill all fields",
         },
       },
       ar: {
         translation: {
+          fillAllFields: "يرجى ملء جميع الحقول",
+          Error: "خطأ",
+          AdminDeletedSucc: "المشرف تم حذفه بنجاح",
           Cancel: "الغاء",
           LandingAboutUs: "من نحن",
           descriptionAr: "وصف بالعربي",

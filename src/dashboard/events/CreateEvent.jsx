@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./createEvent.css";
 import {
   ADD_EVENT,
   BASE,
   EVENT_GALLERY_RESORSES,
   EVENT_RESORSES,
+  GET_SPEAKERS,
   UPLOAD,
 } from "../../API/Api";
 import { Accordion } from "react-bootstrap";
@@ -15,10 +16,27 @@ import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
 
-const CreateEvent = ({ speakers }) => {
+const CreateEvent = () => {
   const nav = useNavigate();
   const toast = useRef(null);
   //
+
+  const [speakers, setSpeakers] = useState([]);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${BASE}/${GET_SPEAKERS}`, {
+        params: {
+          limite: 1000,
+          skip: 0,
+        },
+      })
+      .then((data) => {
+        setSpeakers(data.data.responseObject);
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const { t } = useTranslation();
   // TODO Main Data
   const questionObj = {

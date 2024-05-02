@@ -9,12 +9,7 @@ import "./style.css";
 import { Toast } from "primereact/toast";
 import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 
-export default function Speakers({
-  speakers,
-  setSpeakers,
-  loading,
-  setLoading,
-}) {
+export default function Speakers() {
   // States
   const [modalVisible, setModalVisible] = useState(false);
   const [messageRecivier, setMessageRecivier] = useState("");
@@ -26,6 +21,9 @@ export default function Speakers({
   const [confirmMessage, setConfirmMessage] = useState(""); // State to manage
 
   const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
+  const [loading, setLoading] = useState(false);
+  const [speakers, setSpeakers] = useState([]);
+
   const showConfirmDialog = (message, callback, ref) => {
     setConfirmMessage(message);
     setConfirmCallback(() => callback);

@@ -23,7 +23,7 @@ import { Toast } from "primereact/toast";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import EventReport from "../../DashboardComponents/EventReport";
 
-const UpdateEvent = ({ speakers, isEnglish }) => {
+const UpdateEvent = ({ isEnglish }) => {
   //
   // *********************************
   // *********************************
@@ -72,6 +72,23 @@ const UpdateEvent = ({ speakers, isEnglish }) => {
         setGetLoading(false);
       });
   }, [eventId]);
+
+  const [speakers, setSpeakers] = useState([]);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${BASE}/${GET_SPEAKERS}`, {
+        params: {
+          limite: 1000,
+          skip: 0,
+        },
+      })
+      .then((data) => {
+        setSpeakers(data.data.responseObject);
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   // *********************************
   // *********************************

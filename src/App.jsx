@@ -17,11 +17,10 @@ import Users from "./dashboard/Users.jsx";
 import Admins from "./dashboard/Admins.jsx";
 import Speakers from "./dashboard/Speakers.jsx";
 import { PrimeReactProvider } from "primereact/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SendMessage from "./dashboard/SendMessage.jsx";
-import axios from "axios";
-import { BASE, GET_SPEAKERS } from "./API/Api.js";
+
 import ContactUs from "./dashboard/ContactUs.jsx";
 import Support from "./dashboard/Support.jsx";
 import LandingSponsers from "./dashboard/LandingSponsers.jsx";
@@ -61,23 +60,7 @@ import Recommendations from "./components/Website/recommendations/Recommendation
 function App() {
   const { i18n } = useTranslation();
   const [isEnglish, setIsEnglish] = useState(i18n.language === "en");
-  const [loading, setLoading] = useState(false);
-  const [speakers, setSpeakers] = useState([]);
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${BASE}/${GET_SPEAKERS}`, {
-        params: {
-          limite: 1000,
-          skip: 0,
-        },
-      })
-      .then((data) => {
-        setSpeakers(data.data.responseObject);
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+
   return (
     <PrimeReactProvider>
       <Routes>
@@ -130,14 +113,14 @@ function App() {
             <Route path="events" element={<Events isEnglish={isEnglish} />} />
             <Route
               path="event/create"
-              element={<CreateEvent isEnglish={isEnglish} speakers={speakers} />}
+              element={<CreateEvent isEnglish={isEnglish} />}
             />
             <Route path="messages" element={<SendMessage />} />
             <Route path="contactus" element={<ContactUs />} />
             <Route path="support" element={<Support />} />
             <Route
               path="events/:id"
-              element={<UpdateEvent isEnglish={isEnglish} speakers={speakers} />}
+              element={<UpdateEvent isEnglish={isEnglish} />}
             />
             <Route path="users" element={<Users isEnglish={isEnglish} />} />
             <Route path="admins" element={<Admins isEnglish={isEnglish} />} />
@@ -159,15 +142,7 @@ function App() {
             />
             <Route
               path="speakers"
-              element={
-                <Speakers
-                  isEnglish={isEnglish}
-                  speakers={speakers}
-                  setSpeakers={setSpeakers}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              }
+              element={<Speakers isEnglish={isEnglish} />}
             />
           </Route>
         </Route>

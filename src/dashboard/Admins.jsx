@@ -77,16 +77,22 @@ export default function Admins() {
     //the uploaded files using the ref of the FileUpload component
     const uploadedFiles = fileUploadRef.current.getFiles();
     if (
-      selectedPermission.length === 0 ||
+      selectedPermission?.length === 0 ||
       !nameAr ||
       !nameEn ||
       !email ||
       !phone ||
-      phone.length < 10 ||
+      phone?.length < 10 ||
       !password ||
       !confirmPassword ||
       !gender
     ) {
+      toast.current.show({
+        severity: "warn",
+        summary: t("Error"),
+        detail: t("fillAllFields"),
+        life: 3000,
+      });
       return;
     }
 
@@ -104,6 +110,7 @@ export default function Admins() {
     selectedPermission.forEach((permission) => {
       formData.append("Premissions", permission.type);
     });
+    console.log(formData);
 
     // Make a POST request to your backend endpoint
     axios
@@ -127,7 +134,28 @@ export default function Admins() {
         }
       })
       .catch((error) => {
+        const messages = [];
+        for (const key in error.response.data.errors) {
+          if (
+            Object.prototype.hasOwnProperty.call(
+              error.response.data.errors,
+              key
+            )
+          ) {
+            const errorMessages = error.response.data.errors[key];
+            errorMessages.forEach((message, index) => {
+              const life = 3000 + index * 50; // Increment life for each message
+              messages.push({
+                severity: "error",
+                summary: t("Error"),
+                detail: `${key}: ${message}`,
+                life,
+              });
+            });
+          }
+        }
         console.error("Error during sending:", error);
+        toast.current.show(messages);
       });
   };
   const showConfirmDialog = (message, callback, ref) => {
@@ -147,6 +175,13 @@ export default function Admins() {
           severity: "success",
           summary: t("Confirmed"),
           detail: t("UserUnBlocked"),
+          life: 3000,
+        })
+      : text === "User deleted successfully"
+      ? toast.current.show({
+          severity: "success",
+          summary: t("Confirmed"),
+          detail: t("AdminDeletedSucc"),
           life: 3000,
         })
       : toast.current.show({
@@ -215,7 +250,6 @@ export default function Admins() {
         accept();
       }
     } catch (error) {
-      console.log(error);
       toast.current.show({
         severity: "error",
         summary: t("Error"),
