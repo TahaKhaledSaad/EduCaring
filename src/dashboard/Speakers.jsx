@@ -8,8 +8,11 @@ import { useTranslation } from "react-i18next";
 import "./style.css";
 import { Toast } from "primereact/toast";
 import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
+import Cookies from "universal-cookie";
 
 export default function Speakers() {
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   // States
   const [modalVisible, setModalVisible] = useState(false);
   const [messageRecivier, setMessageRecivier] = useState("");
@@ -72,6 +75,9 @@ export default function Speakers() {
           limite: 1000,
           skip: 0,
         },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((data) => {
         setSpeakers(data.data.responseObject);
@@ -89,7 +95,12 @@ export default function Speakers() {
     try {
       if (isBlocked) {
         let result = await axios.post(
-          `${BASE}/${UNBLOCK_USER}?userId=${userId}`
+          `${BASE}/${UNBLOCK_USER}?userId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
@@ -97,7 +108,14 @@ export default function Speakers() {
           accept(result.data.responseText);
         }
       } else if (!isBlocked) {
-        let result = await axios.post(`${BASE}/${BLOCK_USER}?userId=${userId}`);
+        let result = await axios.post(
+          `${BASE}/${BLOCK_USER}?userId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
           accept();

@@ -8,8 +8,11 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import "./style.css";
+import Cookies from "universal-cookie";
 
 export default function SendMessage() {
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   const [speakers, setSpeakers] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedSpeakers, setSelectedSpeakers] = useState([]);
@@ -29,6 +32,9 @@ export default function SendMessage() {
           limite: 1000,
           skip: 0,
         },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((data) => {
         setUsers(data.data.responseObject);
@@ -43,6 +49,9 @@ export default function SendMessage() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -98,7 +107,11 @@ export default function SendMessage() {
 
     // Make a POST request to your backend endpoint
     axios
-      .post(`${BASE}/${COMMUNITY}`, formData)
+      .post(`${BASE}/${COMMUNITY}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         // Handle response
         if (response.status === 200) {

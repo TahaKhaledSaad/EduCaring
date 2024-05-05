@@ -9,8 +9,11 @@ import { Toast } from "primereact/toast";
 import { BASE, LANDING_SPONSERS, LANDING_SPONSER_DELETE } from "../API/Api";
 import LandingPageSponserActions from "../DashboardComponents/LandingPageSponserActions";
 import "./style.css";
+import Cookies from "universal-cookie";
 
 export default function LandingSponsers() {
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   // States
   const [sponsers, setSponsers] = useState([]);
   const [runUseEffect, setRunUseEffect] = useState(0);
@@ -32,6 +35,9 @@ export default function LandingSponsers() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -75,6 +81,9 @@ export default function LandingSponsers() {
       let result = await axios.delete(`${BASE}/${LANDING_SPONSER_DELETE}`, {
         params: {
           sponserId: id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
       if (result.status === 200) {

@@ -27,9 +27,13 @@ import { Chip } from "primereact/chip";
 import { Tag } from "primereact/tag";
 import Cookie from "cookie-universal";
 import { ScrollPanel } from "primereact/scrollpanel";
+import Cookies from "universal-cookie";
+
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
 
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [runUseEffect, setRunUseEffect] = useState(0);
@@ -63,6 +67,9 @@ export default function Admins() {
           params: {
             limite: 1000,
             skip: 0,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((data) => {
@@ -115,7 +122,16 @@ export default function Admins() {
 
     // Make a POST request to your backend endpoint
     axios
-      .post(`${BASE}/${ADD_SUPER_ADMIN}`, formData)
+      .post(
+        `${BASE}/${ADD_SUPER_ADMIN}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        formData
+      )
       .then((response) => {
         // Handle response
         if (response.status === 200) {
@@ -214,7 +230,13 @@ export default function Admins() {
     try {
       if (isBlocked) {
         let result = await axios.post(
-          `${BASE}/${UNBLOCK_USER}?userId=${userId}`
+          `${BASE}/${UNBLOCK_USER}?userId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+          formData
         );
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
@@ -223,7 +245,15 @@ export default function Admins() {
           accept(result.data.responseText);
         }
       } else if (!isBlocked) {
-        let result = await axios.post(`${BASE}/${BLOCK_USER}?userId=${userId}`);
+        let result = await axios.post(
+          `${BASE}/${BLOCK_USER}?userId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+          formData
+        );
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
           accept();

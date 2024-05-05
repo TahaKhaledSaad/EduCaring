@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { InputTextarea } from "primereact/inputtextarea";
 import { BASE, LANDING_TEXT_UPDATE } from "../API/Api";
 import "./style.css";
+import Cookies from "universal-cookie";
 
 export default function LandingPageTextActions({
   visible,
@@ -20,14 +21,20 @@ export default function LandingPageTextActions({
 }) {
   const toast = useRef(null);
   const { t, i18n } = useTranslation();
-
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   // submit to edit api
   const handleSubmit = async () => {
     try {
       setLoading(true);
       const response = await axios.post(
         `${BASE}/${LANDING_TEXT_UPDATE}`,
-        createModalData
+        createModalData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (response.status === 200) {

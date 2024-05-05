@@ -8,8 +8,11 @@ import { useTranslation } from "react-i18next";
 import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
 import "./style.css";
+import Cookies from "universal-cookie";
 
 export default function Users() {
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   // States
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,6 +34,9 @@ export default function Users() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -94,7 +100,11 @@ export default function Users() {
     try {
       if (isBlocked) {
         let result = await axios.post(
-          `${BASE}/${UNBLOCK_USER}?userId=${userId}`
+          `${BASE}/${UNBLOCK_USER}?userId=${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
@@ -102,7 +112,11 @@ export default function Users() {
           accept(result.data.responseText);
         }
       } else if (!isBlocked) {
-        let result = await axios.post(`${BASE}/${BLOCK_USER}?userId=${userId}`);
+        let result = await axios.post(`${BASE}/${BLOCK_USER}?userId=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (result.status === 200) {
           // If deletion is successful, trigger a re-fetch of events
           accept();

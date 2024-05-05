@@ -7,6 +7,7 @@ import { Column } from "primereact/column";
 import { useTranslation } from "react-i18next";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
+import Cookies from "universal-cookie";
 
 export default function Events() {
   // States
@@ -20,6 +21,10 @@ export default function Events() {
   const toast = useRef(null);
   const targetRef = useRef(null);
 
+  // Get the token from the cookies
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
+
   // Get all events
   useEffect(() => {
     setLoading(true);
@@ -28,6 +33,9 @@ export default function Events() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -88,6 +96,9 @@ export default function Events() {
       let result = await axios.delete(`${BASE}/Event/DeleteEvent`, {
         params: {
           id: evenId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
       if (result.status === 200) {

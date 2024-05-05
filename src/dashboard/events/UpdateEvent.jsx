@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./createEvent.css";
 import {
   ADD_EVENT,
@@ -23,11 +23,14 @@ import { Toast } from "primereact/toast";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import EventReport from "../../DashboardComponents/EventReport";
 import { GET_SPEAKERS } from "../../Api";
+import Cookies from "universal-cookie";
 
 const UpdateEvent = ({ isEnglish }) => {
   //
   // *********************************
   // *********************************
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   const toast = useRef(null);
   const toastt = useRef(null);
   const targetRef = useRef(null);
@@ -63,7 +66,11 @@ const UpdateEvent = ({ isEnglish }) => {
   useEffect(() => {
     setGetLoading(true);
     axios
-      .get(`${BASE}/Event/${eventId}`)
+      .get(`${BASE}/Event/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((data) => {
         setEventData(data.data.responseObject);
         setGetLoading(false);
@@ -83,6 +90,9 @@ const UpdateEvent = ({ isEnglish }) => {
           limite: 1000,
           skip: 0,
         },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((data) => {
         setSpeakers(data.data.responseObject);
@@ -97,7 +107,12 @@ const UpdateEvent = ({ isEnglish }) => {
   const fetchEventDaySpeakers = async (eventDayId) => {
     try {
       const response = await axios.get(
-        `${BASE}/${GET_ALL_SPEAKERS_BY_EVENTDAY}?eventDaytId=${eventDayId}`
+        `${BASE}/${GET_ALL_SPEAKERS_BY_EVENTDAY}?eventDaytId=${eventDayId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setEventDaySpeakerData(response.data.responseObject.speakers);
       setEventDayUserData(response.data.responseObject.users);
@@ -109,7 +124,7 @@ const UpdateEvent = ({ isEnglish }) => {
     try {
       const response = await axios.get(
         `${BASE}/${EVENT_DAY_SPEAKERS_DATA}?eventDayId=${eventDayId}`,
-        { headers: { UserId: userId } }
+        { headers: { UserId: userId, Authorization: `Bearer ${token}` } }
       );
       setEventDaySpeakerDataDetails(response.data.responseObject);
     } catch (error) {
@@ -250,7 +265,7 @@ const UpdateEvent = ({ isEnglish }) => {
       [index]: true, // Set modal visibility for the specific speaker index
     }));
   };
-  const handleOpenConfirmDialogModal = (index, type, speaker) => {
+  const handleOpenConfirmDialogModal = (index, type) => {
     setModalConfirmDialogVisible(true);
     setActiveConfirmDialogIndex(index);
     setNotificationType(type);
@@ -571,6 +586,19 @@ const UpdateEvent = ({ isEnglish }) => {
 
   // *********************************
   // *********************************
+  const handleDeleteImage = (id) => {
+    axios
+      .delete(`${BASE}/Event/${EVENT_RESORSES}/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  };
+  // *********************************
+  // *********************************
 
   // TODO Answers Changes and Remove
 
@@ -871,6 +899,9 @@ const UpdateEvent = ({ isEnglish }) => {
                       height={"120px"}
                       alt=""
                       className="rounded"
+                      onClick={() => {
+                        console.log(eventData);
+                      }}
                     />
                   )}
                 </div>
@@ -895,13 +926,40 @@ const UpdateEvent = ({ isEnglish }) => {
                   eventData.eventImages.map((image, index) => (
                     <div key={index}>
                       {image.displayImageURL && (
-                        <img
-                          src={`${image.displayImageURL}`}
-                          height={"100px"}
-                          style={{ margin: "auto" }}
-                          alt=""
-                          className="rounded"
-                        />
+                        <div
+                          className="text-center"
+                          style={{ position: "relative" }}
+                        >
+                          <img
+                            src={`${image.displayImageURL}`}
+                            height={"100px"}
+                            style={{ margin: "auto" }}
+                            alt=""
+                            className="rounded"
+                          />
+                          <p
+                            style={{
+                              position: "absolute",
+                              cursor: "pointer",
+                              bottom: "-30px",
+                              right: "50%",
+                              transform: "translateX(50%)",
+                              width: "35px",
+                              height: "35px",
+                              borderRadius: "50%",
+                              backgroundColor: "rgba(255,255,255,0.8)",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            onClick={() => {
+                              console.log(image.id);
+                              handleDeleteImage(image.id);
+                            }}
+                          >
+                            <i className="fas fa-trash-alt fa-lg text-danger"></i>
+                          </p>
+                        </div>
                       )}
                     </div>
                   ))}

@@ -15,10 +15,15 @@ import { useTranslation } from "react-i18next";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 const CreateEvent = () => {
   const nav = useNavigate();
   const toast = useRef(null);
+
+  const cookies = new Cookies();
+
+  const token = cookies.get("edu-caring");
   //
 
   const [speakers, setSpeakers] = useState([]);
@@ -29,6 +34,9 @@ const CreateEvent = () => {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -146,6 +154,7 @@ const CreateEvent = () => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -178,6 +187,7 @@ const CreateEvent = () => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -225,6 +235,7 @@ const CreateEvent = () => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -478,6 +489,7 @@ const CreateEvent = () => {
         .post(`${BASE}/${ADD_EVENT}`, eventData, {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {

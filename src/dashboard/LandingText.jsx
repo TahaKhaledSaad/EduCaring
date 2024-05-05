@@ -9,8 +9,11 @@ import { Toast } from "primereact/toast";
 import { BASE, LANDING_TEXT } from "../API/Api";
 import LandingPageTextActions from "../DashboardComponents/LandingPageTextActions";
 import "./style.css";
+import Cookies from "universal-cookie";
 
 export default function LandingText() {
+  const cookies = new Cookies();
+  const token = cookies.get("edu-caring");
   const [texts, setTexts] = useState([]);
   const [runUseEffect, setRunUseEffect] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -29,6 +32,9 @@ export default function LandingText() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
