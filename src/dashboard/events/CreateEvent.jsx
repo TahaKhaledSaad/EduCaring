@@ -21,7 +21,7 @@ const CreateEvent = () => {
   const nav = useNavigate();
   const toast = useRef(null);
 
-  const cookie = new Cookie();
+  const cookies = new Cookie();
 
   const token = cookies.get("edu-caring");
   //
