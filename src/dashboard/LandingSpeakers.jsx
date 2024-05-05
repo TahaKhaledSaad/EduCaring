@@ -9,8 +9,11 @@ import { Toast } from "primereact/toast";
 import { BASE, LANDING_SPEAKERS, LANDING_SPEAKER_DELETE } from "../API/Api";
 import LandingPageSpeakerActions from "../DashboardComponents/LandingPageSpeakerActions";
 import "./style.css";
+import Cookie from "cookie-universal";
 
 export default function LandingSpeakers() {
+  const cookies = new Cookie();
+  const token = cookies.get("edu-caring");
   const [speakers, setSpeakers] = useState([]);
   const [runUseEffect, setRunUseEffect] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -33,6 +36,9 @@ export default function LandingSpeakers() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -76,6 +82,9 @@ export default function LandingSpeakers() {
       let result = await axios.delete(`${BASE}/${LANDING_SPEAKER_DELETE}`, {
         params: {
           landingSpeakerId: id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
       if (result.status === 200) {

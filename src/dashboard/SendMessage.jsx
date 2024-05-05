@@ -8,10 +8,10 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import "./style.css";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function SendMessage() {
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   const [speakers, setSpeakers] = useState([]);
   const [users, setUsers] = useState([]);

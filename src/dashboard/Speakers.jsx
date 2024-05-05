@@ -8,10 +8,10 @@ import { useTranslation } from "react-i18next";
 import "./style.css";
 import { Toast } from "primereact/toast";
 import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function Speakers() {
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   // States
   const [modalVisible, setModalVisible] = useState(false);

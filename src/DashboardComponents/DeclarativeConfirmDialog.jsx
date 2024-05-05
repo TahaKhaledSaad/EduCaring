@@ -14,7 +14,7 @@ import {
 import { MultiSelect } from "primereact/multiselect";
 import { Toast } from "primereact/toast";
 import { useTranslation } from "react-i18next";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function DeclarativeConfirmDialog({
   confirmDialogVisible = null,
@@ -31,7 +31,7 @@ export default function DeclarativeConfirmDialog({
   const [showToast, setShowToast] = useState(false);
   const { t } = useTranslation();
 
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
 
   const surveyType = notificationType === "survey";

@@ -6,8 +6,11 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import "./style.css";
+import Cookie from "cookie-universal";
 
 export default function ContactUs() {
+  const cookies = new Cookie();
+  const token = cookies.get("edu-caring");
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [messageRecivier, setMessageRecivier] = useState("");
@@ -21,6 +24,9 @@ export default function ContactUs() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {

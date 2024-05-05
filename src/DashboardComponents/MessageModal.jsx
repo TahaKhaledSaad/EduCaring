@@ -20,7 +20,7 @@ import { FileUpload } from "primereact/fileupload";
 import { MultiSelect } from "primereact/multiselect";
 import { useTranslation } from "react-i18next";
 import { Image } from "primereact/image";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function MessageModal({
   messageRecivier,
@@ -34,7 +34,7 @@ export default function MessageModal({
   const [messageValue, setMessageValue] = useState("");
   const toast = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   const fileUploadRef = useRef(null);
   const [selectedSpeakers, setSelectedSpeakers] = useState([]);

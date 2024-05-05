@@ -27,13 +27,10 @@ import { Chip } from "primereact/chip";
 import { Tag } from "primereact/tag";
 import Cookie from "cookie-universal";
 import { ScrollPanel } from "primereact/scrollpanel";
-import Cookies from "universal-cookie";
 
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
-  const cookies = new Cookies();
-  const token = cookies.get("edu-caring");
 
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [runUseEffect, setRunUseEffect] = useState(0);

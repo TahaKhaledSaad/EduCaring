@@ -7,7 +7,7 @@ import { Column } from "primereact/column";
 import { useTranslation } from "react-i18next";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function Events() {
   // States
@@ -22,7 +22,7 @@ export default function Events() {
   const targetRef = useRef(null);
 
   // Get the token from the cookies
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
 
   // Get all events

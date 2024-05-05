@@ -7,6 +7,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { BASE, LANDING_SPONSER_CREATE, LANDING_SPONSER_EDIT } from "../API/Api";
 import "./style.css";
+import Cookie from "cookie-universal";
 
 export default function LandingPageSponserActions({
   visible,
@@ -22,6 +23,8 @@ export default function LandingPageSponserActions({
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState("");
   const { t, i18n } = useTranslation();
+  const cookies = new Cookie();
+  const token = cookies.get("edu-caring");
 
   useEffect(() => {
     if (createModalData.imageURL) {
@@ -71,6 +74,7 @@ export default function LandingPageSponserActions({
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -81,6 +85,7 @@ export default function LandingPageSponserActions({
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );

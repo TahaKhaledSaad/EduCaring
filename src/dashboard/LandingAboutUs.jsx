@@ -7,10 +7,10 @@ import { Toast } from "primereact/toast";
 import { BASE, LANDING_ABOUT_US } from "../API/Api";
 import LandingPageAboutUsActions from "../DashboardComponents/LandingPageAboutUsActions";
 import "./style.css";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function LandingAboutUs() {
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   const [texts, setTexts] = useState([]);
   const [runUseEffect, setRunUseEffect] = useState(0);

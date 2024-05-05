@@ -9,10 +9,10 @@ import { Toast } from "primereact/toast";
 import { BASE, LANDING_SPONSERS, LANDING_SPONSER_DELETE } from "../API/Api";
 import LandingPageSponserActions from "../DashboardComponents/LandingPageSponserActions";
 import "./style.css";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function LandingSponsers() {
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   // States
   const [sponsers, setSponsers] = useState([]);

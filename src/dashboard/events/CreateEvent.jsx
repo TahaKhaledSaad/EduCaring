@@ -15,13 +15,13 @@ import { useTranslation } from "react-i18next";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 const CreateEvent = () => {
   const nav = useNavigate();
   const toast = useRef(null);
 
-  const cookies = new Cookies();
+  const cookie = new Cookie();
 
   const token = cookies.get("edu-caring");
   //

@@ -23,13 +23,13 @@ import { Toast } from "primereact/toast";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import EventReport from "../../DashboardComponents/EventReport";
 import { GET_SPEAKERS } from "../../Api";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 const UpdateEvent = ({ isEnglish }) => {
   //
   // *********************************
   // *********************************
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   const toast = useRef(null);
   const toastt = useRef(null);
@@ -332,6 +332,7 @@ const UpdateEvent = ({ isEnglish }) => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -367,6 +368,7 @@ const UpdateEvent = ({ isEnglish }) => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -411,6 +413,7 @@ const UpdateEvent = ({ isEnglish }) => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -677,6 +680,7 @@ const UpdateEvent = ({ isEnglish }) => {
       let result = await axios.put(`${BASE}/${ADD_EVENT}`, eventData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

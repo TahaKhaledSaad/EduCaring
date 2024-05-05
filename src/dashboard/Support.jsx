@@ -8,8 +8,11 @@ import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
 import MessageModal from "../DashboardComponents/MessageModal";
 import "./style.css";
+import Cookie from "cookie-universal";
 
 export default function Support() {
+  const cookies = new Cookie();
+  const token = cookies.get("edu-caring");
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [messageRecivier, setMessageRecivier] = useState("");
@@ -27,6 +30,9 @@ export default function Support() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
@@ -48,6 +54,9 @@ export default function Support() {
         params: {
           limite: 1000,
           skip: 0,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {

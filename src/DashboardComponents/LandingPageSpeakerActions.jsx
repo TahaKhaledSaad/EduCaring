@@ -7,6 +7,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { BASE, LANDING_SPEAKER_CREATE, LANDING_SPEAKER_EDIT } from "../API/Api";
 import "./style.css";
+import Cookie from "cookie-universal";
 
 export default function LandingPageSpeakerActions({
   visible,
@@ -22,7 +23,8 @@ export default function LandingPageSpeakerActions({
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState("");
   const { t, i18n } = useTranslation();
-
+  const cookies = new Cookie();
+  const token = cookies.get("edu-caring");
   useEffect(() => {
     if (createModalData.imageURL) {
       setPreviewURL(createModalData.imageURL);
@@ -86,6 +88,7 @@ export default function LandingPageSpeakerActions({
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -96,6 +99,7 @@ export default function LandingPageSpeakerActions({
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );

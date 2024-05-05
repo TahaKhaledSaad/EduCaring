@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { InputTextarea } from "primereact/inputtextarea";
 import { BASE, LANDING_TEXT_UPDATE } from "../API/Api";
 import "./style.css";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function LandingPageTextActions({
   visible,
@@ -21,7 +21,7 @@ export default function LandingPageTextActions({
 }) {
   const toast = useRef(null);
   const { t, i18n } = useTranslation();
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   // submit to edit api
   const handleSubmit = async () => {

@@ -6,7 +6,7 @@ import { Dialog } from "primereact/dialog";
 import { BASE, BEST_SPEAKERS } from "../API/Api";
 import "./style.css";
 import { Badge } from "primereact/badge";
-import Cookies from "universal-cookie";
+import Cookie from "cookie-universal";
 
 export default function SpeakersRatings({
   isBestSpeakersModalOpen = false,
@@ -14,7 +14,7 @@ export default function SpeakersRatings({
   eventDayId,
 }) {
   const [bestSpeakers, setBestSpeakers] = useState([]);
-  const cookies = new Cookies();
+  const cookies = new Cookie();
   const token = cookies.get("edu-caring");
   useEffect(() => {
     const fetchBestSpeakers = async () => {
