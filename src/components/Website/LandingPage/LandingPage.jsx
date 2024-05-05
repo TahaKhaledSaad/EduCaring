@@ -30,6 +30,13 @@ import { useTranslation } from "react-i18next";
 
 export default function LandingPage() {
   const { i18n } = useTranslation();
+
+  useEffect(() => {
+    if(i18n.language === "en-GB"){
+      i18n.changeLanguage("en");
+    }
+  }, []);
+
   const cookie = new Cookie();
   const token = cookie.get("edu-caring");
 
@@ -113,7 +120,7 @@ export default function LandingPage() {
       .finally(() => setLoading(false)); // Set loading to false when the data is fetched
   }, [i18n.language, decodedToken.uid]);
 
-  console.log(landingData);
+  console.log(i18n.language);
 
   useEffect(() => {
     axios
