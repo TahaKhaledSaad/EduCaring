@@ -22,6 +22,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import ConfirmCheck from "../../DashboardComponents/ConfirmCheck";
 import EventReport from "../../DashboardComponents/EventReport";
+import { GET_SPEAKERS } from "../../Api";
 
 const UpdateEvent = ({ isEnglish }) => {
   //
