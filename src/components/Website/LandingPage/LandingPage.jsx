@@ -32,7 +32,7 @@ export default function LandingPage() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    if(i18n.language === "en-GB"){
+    if(i18n.language === "en-US"){
       i18n.changeLanguage("en");
     }
   }, []);
