@@ -43,7 +43,7 @@ export default function Logout(isEnglish) {
             width: "360px",
             transform: popupVisible
               ? "translate(-50%, -50%)"
-              : "translate(250%, -50%)",
+              : "translate(900%, -50%)",
             transition: "0.5s",
             left: "50%",
             zIndex: "1000",

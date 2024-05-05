@@ -9,13 +9,14 @@ export default function QrCode({ QR, isEnglish }) {
   return (
     <>
       <div
-        className="p-1 text-center text-white"
+        className="px-2 py-1 text-center text-white"
         style={{
           fontSize: "14px",
           border: "1px solid #BDBDBD",
           borderRadius: "20px",
           cursor: "pointer",
           backgroundColor: "#565656",
+          width: "fit-content",
         }}
         onClick={togglePopup}
       >

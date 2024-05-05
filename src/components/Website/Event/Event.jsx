@@ -18,7 +18,7 @@ import SpeakerTicket from "../Popups/SpeakerTicket";
 import SpeakerQuestions from "../Popups/SpeakerQuestions";
 import { Toast } from "primereact/toast";
 import Location from "../Popups/Location";
-
+import soldoutImg from "../../../assets/sold-out.png";
 // Now you can use filesNumber, imgsNumber, and linksNumber in your component
 
 function EventDetails() {
@@ -391,7 +391,9 @@ function EventDetails() {
                   color: selectedDayIndex === index ? "white" : "black",
                   cursor: "pointer",
                 }}
-                onClick={() => setSelectedDayIndex(index)}
+                onClick={() => {
+                  setSelectedDayIndex(index);
+                }}
               >
                 {i18n.language === "en" ? "Day" : "يوم"} {index + 1}
               </div>
@@ -456,7 +458,7 @@ function EventDetails() {
                       <>
                         {decodedToken.roles.includes("User") && (
                           <Resources
-                            eventDays={eventDetails.eventDays}
+                            eventDays={eventDetails?.eventDays}
                             eventDayId={
                               eventDetails.eventDays[selectedDayIndex].id
                             }
@@ -485,7 +487,7 @@ function EventDetails() {
 
                     {eventDetails.eventDays[selectedDayIndex]?.isPaid ? (
                       <Gallary
-                        eventImages={eventDetails.eventImages}
+                        eventImages={eventDetails?.eventImages}
                         isEnglish={i18n.language}
                       ></Gallary>
                     ) : (
@@ -516,57 +518,79 @@ function EventDetails() {
 
                     {!eventDetails.eventDays[selectedDayIndex]?.isPaid &&
                     !addResourcesSpeaker ? (
-                      <Link
-                        to={`/home/payment/${eventId}`}
-                        className="p-1 border text-white text-center"
-                        style={{
-                          background: "#3296D4",
-                          borderRadius: "20px",
-                          width: "170px",
-                          fontSize: "14px",
-                        }}
-                      >
-                        <span className="mx-1">
-                          {i18n.language === "en"
-                            ? "Buy ticket"
-                            : "شراء التذكرة"}{" "}
-                          {eventDetails.eventDays[selectedDayIndex]?.price}{" "}
-                          {i18n.language === "en" ? "SAR" : "ريال"}
-                        </span>
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                      eventDetails.eventDays[selectedDayIndex]?.noOfTickets >
+                      0 ? (
+                        <Link
+                          to={`/home/payment/${eventId}`}
+                          className="p-1 border text-white text-center"
+                          style={{
+                            background: "#3296D4",
+                            borderRadius: "20px",
+                            width: "170px",
+                            fontSize: "14px",
+                          }}
                         >
-                          <path
-                            d="M15 5.28V12.72C15 13.86 14.895 14.67 14.625 15.2475C14.625 15.255 14.6175 15.27 14.61 15.2775C14.445 15.4875 14.2275 15.5925 13.9725 15.5925C13.575 15.5925 13.095 15.33 12.5775 14.775C11.9625 14.115 11.0175 14.1675 10.4775 14.8875L9.72002 15.8925C9.42002 16.2975 9.0225 16.5 8.625 16.5C8.2275 16.5 7.82998 16.2975 7.52998 15.8925L6.76502 14.88C6.23251 14.1675 5.29499 14.115 4.67999 14.7675L4.67249 14.775C3.82499 15.6825 3.07501 15.8175 2.64001 15.2775C2.63251 15.27 2.625 15.255 2.625 15.2475C2.355 14.67 2.25 13.86 2.25 12.72V5.28C2.25 4.14 2.355 3.33 2.625 2.7525C2.625 2.745 2.62501 2.7375 2.64001 2.73C3.06751 2.1825 3.82499 2.3175 4.67249 3.225L4.67999 3.2325C5.29499 3.885 6.23251 3.8325 6.76502 3.12L7.52998 2.1075C7.82998 1.7025 8.2275 1.5 8.625 1.5C9.0225 1.5 9.42002 1.7025 9.72002 2.1075L10.4775 3.1125C11.0175 3.8325 11.9625 3.885 12.5775 3.225C13.095 2.67 13.575 2.4075 13.9725 2.4075C14.2275 2.4075 14.445 2.52 14.61 2.73C14.625 2.7375 14.625 2.745 14.625 2.7525C14.895 3.33 15 4.14 15 5.28Z"
-                            stroke="white"
-                            strokeWidth="1.125"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                          <span className="mx-1">
+                            {i18n.language === "en"
+                              ? "Buy ticket"
+                              : "شراء التذكرة"}{" "}
+                            {eventDetails.eventDays[selectedDayIndex]?.price}{" "}
+                            {i18n.language === "en" ? "SAR" : "ريال"}
+                          </span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 18 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M15 5.28V12.72C15 13.86 14.895 14.67 14.625 15.2475C14.625 15.255 14.6175 15.27 14.61 15.2775C14.445 15.4875 14.2275 15.5925 13.9725 15.5925C13.575 15.5925 13.095 15.33 12.5775 14.775C11.9625 14.115 11.0175 14.1675 10.4775 14.8875L9.72002 15.8925C9.42002 16.2975 9.0225 16.5 8.625 16.5C8.2275 16.5 7.82998 16.2975 7.52998 15.8925L6.76502 14.88C6.23251 14.1675 5.29499 14.115 4.67999 14.7675L4.67249 14.775C3.82499 15.6825 3.07501 15.8175 2.64001 15.2775C2.63251 15.27 2.625 15.255 2.625 15.2475C2.355 14.67 2.25 13.86 2.25 12.72V5.28C2.25 4.14 2.355 3.33 2.625 2.7525C2.625 2.745 2.62501 2.7375 2.64001 2.73C3.06751 2.1825 3.82499 2.3175 4.67249 3.225L4.67999 3.2325C5.29499 3.885 6.23251 3.8325 6.76502 3.12L7.52998 2.1075C7.82998 1.7025 8.2275 1.5 8.625 1.5C9.0225 1.5 9.42002 1.7025 9.72002 2.1075L10.4775 3.1125C11.0175 3.8325 11.9625 3.885 12.5775 3.225C13.095 2.67 13.575 2.4075 13.9725 2.4075C14.2275 2.4075 14.445 2.52 14.61 2.73C14.625 2.7375 14.625 2.745 14.625 2.7525C14.895 3.33 15 4.14 15 5.28Z"
+                              stroke="white"
+                              strokeWidth="1.125"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M6 7.6875H12"
+                              stroke="white"
+                              strokeWidth="1.125"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M6 10.3125H10.5"
+                              stroke="white"
+                              strokeWidth="1.125"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </Link>
+                      ) : (
+                        <div
+                          className="d-flex border gap-1 px-2 py-1 m-2"
+                          style={{
+                            backgroundColor: "#F2F2F2",
+                            borderRadius: "20px",
+                            width: "fit-content",
+                            fontSize: "14px",
+                          }}
+                        >
+                          <img
+                            src={soldoutImg}
+                            alt="sold out img"
+                            width={"22px"}
                           />
-                          <path
-                            d="M6 7.6875H12"
-                            stroke="white"
-                            strokeWidth="1.125"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M6 10.3125H10.5"
-                            stroke="white"
-                            strokeWidth="1.125"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </Link>
+                          <span>Sold out</span>
+                        </div>
+                      )
                     ) : (
                       ""
                     )}
                   </div>
+
+                  {/* sold out icon */}
 
                   <div
                     className="general my-3"

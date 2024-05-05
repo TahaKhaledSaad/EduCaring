@@ -54,7 +54,6 @@ export default function Location({ eventId, eventDayId, eventDayDate }) {
   const lat = latitude?.toString();
   const long = longitude?.toString();
 
-  console.log(eventId, eventDayId, lat, long, eventDayDate);
   // post location to server for attendance
 
   useEffect(() => {

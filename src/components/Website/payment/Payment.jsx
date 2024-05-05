@@ -305,7 +305,7 @@ export default function Payment() {
             <div className="p-3 d-flex gap-3">
               {eventDetails &&
                 eventDetails.eventDays.map((day, index) => {
-                  if (day.isPaid === true) {
+                  if (day.isPaid === true || day.noOfTickets === 0) {
                     return null; // Skip this iteration
                   }
 

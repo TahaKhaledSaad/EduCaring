@@ -34,8 +34,6 @@ export default function Resources({
 
   // [13] Function to get resources of the user
   useEffect(() => {
-    console.log(flag);
-    console.log(addResourcesSpeaker);
     if (!addResourcesSpeaker) {
       axios
         .get(`${BASE}/Event/GetEventResoresesForUser`, {
@@ -49,7 +47,6 @@ export default function Resources({
           },
         })
         .then((response) => {
-          console.log(response);
           setResources(response.data.responseObject);
         });
     }

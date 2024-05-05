@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default function Gallary({ eventImages, isEnglish }) {
   const [showPopup, setShowPopup] = useState(true);
   // Add Modal to image
-  console.log(isEnglish);
+  
   const [selectedImage, setSelectedImage] = useState(null);
   const [popupVisible, setPopupVisible] = useState(true);
 
