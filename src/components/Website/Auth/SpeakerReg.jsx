@@ -376,7 +376,7 @@ export default function SpeakerReg() {
                         {i18n.language === "en" ? "Male" : "ذكر"}
                       </option>
                       <option value="2">
-                      {i18n.language === "en" ? "Female" : "أنثى"}
+                        {i18n.language === "en" ? "Female" : "أنثى"}
                       </option>
                     </select>
                   </div>
@@ -398,18 +398,27 @@ export default function SpeakerReg() {
                 </div>
 
                 {/* input */}
-                <div className={style.input}>
-                  <i className="fa-solid fa-heart-pulse"></i>
-                  <input
-                    type="text"
-                    placeholder={
-                      i18n.language === "en"
-                        ? "Health Authority Number"
-                        : "رقم الهيئة الصحية"
-                    }
-                    name="HealthAuthorityNumber"
-                    onChange={handleChange}
-                  />
+                <div>
+                  <div className={style.input}>
+                    <i className="fa-solid fa-heart-pulse"></i>
+                    <input
+                      type="text"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Health Authority Number"
+                          : "رقم الهيئة الصحية"
+                      }
+                      name="HealthAuthorityNumber"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {showError && userData.HealthAuthorityNumber.length < 3 && (
+                    <span className="m-0 my-0 text-danger">
+                      {i18n.language === "en"
+                        ? "Health Authority Number Should be More 3 characters"
+                        : "رقم الهيئة الصحية يجب ان يكون اكثر من 3 احرف"}
+                    </span>
+                  )}
                 </div>
 
                 {/* input */}
@@ -470,7 +479,7 @@ export default function SpeakerReg() {
                       }
                       onChange={handleChange}
                       name="Password"
-                      style={{paddingRight:"30px"}}
+                      style={{ paddingRight: "30px" }}
                     />
                     <i
                       className={`fa-regular ${
@@ -501,7 +510,7 @@ export default function SpeakerReg() {
                       }
                       onChange={handleChange}
                       name="ConfirmPassword"
-                      style={{paddingRight:"30px"}}
+                      style={{ paddingRight: "30px" }}
                     />
                     <i
                       className={`fa-regular ${
@@ -579,7 +588,7 @@ export default function SpeakerReg() {
                 className="w-100 rounded p-2 mb-2 mt-4"
                 placeholder={i18n.language === "en" ? "Bio" : "نبذه"}
                 onChange={handleChange}
-                style={{resize:"none"}}
+                style={{ resize: "none" }}
               ></textarea>
               {showError2 && userData.Bio.length < 10 && (
                 <span className="m-0 my-0 mb-3 text-danger">
