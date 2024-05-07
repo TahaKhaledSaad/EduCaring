@@ -582,7 +582,11 @@ function EventDetails() {
                             alt="sold out img"
                             width={"22px"}
                           />
-                          <span>Sold out</span>
+                          <span>
+                            {i18n.language === "en"
+                              ? "Sold out"
+                              : "نفذت الكمية"}
+                          </span>
                         </div>
                       )
                     ) : (

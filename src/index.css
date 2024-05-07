@@ -967,7 +967,7 @@ tr {
 .datef::before {
   content: "Date of birth";
   position: absolute;
-  width: 90%;
+  width: 70%;
   height: 100%;
   padding-left: 10px;
   background-color: #fff;
@@ -982,7 +982,7 @@ tr {
   content: "تاريخ الميلاد";
   position: absolute;
   left: 0;
-  width: 90%;
+  width: 70%;
   height: 100%;
   padding-left: 10px;
   background-color: #fff;

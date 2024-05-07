@@ -70,7 +70,7 @@
 .home-comp .coming-events .events {
   display: flex;
   row-gap: 20px;
-  column-gap: 10px;
+  column-gap: 20px;
   flex-wrap: wrap;
   justify-content: start;
   align-items: center;
@@ -96,6 +96,7 @@
   height: 230px;
   background-color: #e1c6c6;
   border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
   align-items: end;

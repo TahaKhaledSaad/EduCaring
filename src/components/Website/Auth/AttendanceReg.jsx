@@ -398,6 +398,7 @@ export default function AttendanceReg() {
                       : "رقم الهيئة الصحية"
                   }
                   name="HealthAuthorityNumber"
+                  required
                   onChange={handleChange}
                 />
               </div>
@@ -494,7 +495,7 @@ export default function AttendanceReg() {
                     }
                     onChange={handleChange}
                     name="Password"
-                    style={{paddingRight:"30px"}}
+                    style={{ paddingRight: "30px" }}
                   />
                   <i
                     className={`fa-regular ${
@@ -525,7 +526,7 @@ export default function AttendanceReg() {
                     }
                     onChange={handleChange}
                     name="ConfirmPassword"
-                    style={{paddingRight:"30px"}}
+                    style={{ paddingRight: "30px" }}
                   />
                   <i
                     className={`fa-regular ${
@@ -562,6 +563,7 @@ export default function AttendanceReg() {
                   userData.DateOfBirth.length > 8 &&
                   userData.SpecializationCategoryId !== 0 &&
                   userData.Country.length > 3 &&
+                  userData.HealthAuthorityNumber.length > 3 &&
                   userData.City.length > 3 &&
                   userData.Password.length >= 8 &&
                   userData.Password === userData.ConfirmPassword
