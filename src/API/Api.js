@@ -11,6 +11,7 @@ export const LOGIN = "Auth/Login";
 export const ADD_EVENT = "Event";
 export const GET_EVENT = "Event/GetAll";
 export const GET_EVENT_DAY_ATTENDANCE = "Event/EventDayAttentanceReport";
+export const Delete_Event_Image = "Event/DeleteEventImage";
 
 // Users && Speakers
 export const GET_USERS = "Dashboard/GetAllUsers";

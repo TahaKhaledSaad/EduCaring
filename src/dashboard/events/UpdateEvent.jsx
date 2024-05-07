@@ -9,6 +9,7 @@ import {
   EVENT_RESORSES,
   GET_ALL_SPEAKERS_BY_EVENTDAY,
   UPLOAD,
+  Delete_Event_Image
 } from "../../API/Api";
 import { useParams } from "react-router-dom";
 import { Accordion } from "react-bootstrap";
@@ -591,7 +592,7 @@ const UpdateEvent = ({ isEnglish }) => {
   // *********************************
   const handleDeleteImage = (id) => {
     axios
-      .delete(`${BASE}/Event/${EVENT_RESORSES}/delete/${id}`, {
+      .delete(`${BASE}/${Delete_Event_Image}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
