@@ -362,58 +362,54 @@ export default function AttendanceReg() {
                     ))}
                   </select>
                 </div>
-              </div>
 
-              {/* input */}
-              <div>
-                <div
-                  className={`${style.input} d-flex align-items-center gap-2`}
-                >
-                  <svg
-                    className="m-0 p-0"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8.96973 22H14.9697C19.9697 22 21.9697 20 21.9697 15V9C21.9697 4 19.9697 2 14.9697 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z"
-                      stroke="#C8C8C8"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M1.96973 12.7L7.96973 12.68C8.71973 12.68 9.55973 13.25 9.83973 13.95L10.9797 16.83C11.2397 17.48 11.6497 17.48 11.9097 16.83L14.1997 11.02C14.4197 10.46 14.8297 10.44 15.1097 10.97L16.1497 12.94C16.4597 13.53 17.2597 14.01 17.9197 14.01H21.9797"
-                      stroke="#C8C8C8"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <input
-                    className="m-0 p-0"
-                    type="text"
-                    placeholder={
-                      i18n.language === "en"
-                        ? "Health Authority Number"
-                        : "رقم الهيئة الصحية"
-                    }
-                    name="HealthAuthorityNumber"
-                    required
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {showError && userData.HealthAuthorityNumber.length < 3 && (
+                {showError && userData.GenderId === 1 && (
                   <span className="m-0 my-0 text-danger">
                     {i18n.language === "en"
-                      ? "Please Enter Health Authority Number"
-                      : "من فضلك ادخل رقم الهيئة الصحية"}
+                      ? "Please Select The gender"
+                      : "من فضلك اختر النوع"}
                   </span>
                 )}
               </div>
+
+              {/* input */}
+              <div className={`${style.input} d-flex align-items-center gap-2`}>
+                <svg
+                  className="m-0 p-0"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.96973 22H14.9697C19.9697 22 21.9697 20 21.9697 15V9C21.9697 4 19.9697 2 14.9697 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z"
+                    stroke="#C8C8C8"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M1.96973 12.7L7.96973 12.68C8.71973 12.68 9.55973 13.25 9.83973 13.95L10.9797 16.83C11.2397 17.48 11.6497 17.48 11.9097 16.83L14.1997 11.02C14.4197 10.46 14.8297 10.44 15.1097 10.97L16.1497 12.94C16.4597 13.53 17.2597 14.01 17.9197 14.01H21.9797"
+                    stroke="#C8C8C8"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <input
+                  className="m-0 p-0"
+                  type="text"
+                  placeholder={
+                    i18n.language === "en"
+                      ? "Health Authority Number"
+                      : "رقم الهيئة الصحية"
+                  }
+                  name="HealthAuthorityNumber"
+                  onChange={handleChange}
+                />
+              </div>
+
               {/* input */}
               <div>
                 <div className={`${style.input} d-flex align-items-center p-0`}>
@@ -435,6 +431,14 @@ export default function AttendanceReg() {
                     ))}
                   </select>
                 </div>
+
+                {showError && userData.SpecializationCategoryId === 1 && (
+                  <span className="m-0 my-0 text-danger">
+                    {i18n.language === "en"
+                      ? "Please Select The Specialization Category"
+                      : "من فضلك اختر التخصص"}
+                  </span>
+                )}
               </div>
 
               {/* input */}
@@ -450,6 +454,13 @@ export default function AttendanceReg() {
                     onChange={handleChange}
                   />
                 </div>
+                {showError && userData.SpecializationCategoryId < 3 && (
+                  <span className="m-0 my-0 text-danger">
+                    {i18n.language === "en"
+                      ? "Please Enter The Specialization"
+                      : "من فضلك ادخل التخصص"}
+                  </span>
+                )}
               </div>
 
               {/* input */}

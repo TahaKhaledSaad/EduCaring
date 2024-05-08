@@ -380,21 +380,37 @@ export default function SpeakerReg() {
                       </option>
                     </select>
                   </div>
+                  {showError && userData.GenderId === 1 && (
+                    <span className="m-0 my-0 text-danger">
+                      {i18n.language === "en"
+                        ? "Please Select The gender"
+                        : "من فضلك اختر النوع"}
+                    </span>
+                  )}
                 </div>
 
                 {/* input */}
-                <div className={style.input}>
-                  <i className="fa-solid fa-id-card"></i>
-                  <input
-                    type="text"
-                    placeholder={
-                      i18n.language === "en"
-                        ? "Enter passport number"
-                        : "ادخل رقم جواز السقر"
-                    }
-                    name="PassportNumber"
-                    onChange={handleChange}
-                  />
+                <div>
+                  <div className={style.input}>
+                    <i className="fa-solid fa-id-card"></i>
+                    <input
+                      type="text"
+                      placeholder={
+                        i18n.language === "en"
+                          ? "Enter passport number"
+                          : "ادخل رقم جواز السقر"
+                      }
+                      name="PassportNumber"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {showError && userData.PassportNumber.length < 3 && (
+                    <span className="m-0 my-0 text-danger">
+                      {i18n.language === "en"
+                        ? "Passport Number Should 8 characters"
+                        : "رقم جواز السفر يجب ان يكون 8 احرف"}
+                    </span>
+                  )}
                 </div>
 
                 {/* input */}
