@@ -319,7 +319,7 @@ export default function SpeakerReg() {
                     className={style.input}
                     name="PhoneNumber"
                   />
-                  {showError && userData.PhoneNumber.length < 10 && (
+                  {showError && (userData.PhoneNumber!=null&& userData.PhoneNumber.length) < 10 && (
                     <span className="m-0 my-0 text-danger">
                       {i18n.language === "en"
                         ? "Invalid Phone Number"
@@ -428,7 +428,7 @@ export default function SpeakerReg() {
                       onChange={handleChange}
                     />
                   </div>
-                  {showError && userData.HealthAuthorityNumber.length < 3 && (
+                  {showError && userData.HealthAuthorityNumber.length < 2 && (
                     <span className="m-0 my-0 text-danger">
                       {i18n.language === "en"
                         ? "Health Authority Number Should be More 3 characters"
