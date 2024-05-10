@@ -9,6 +9,7 @@ import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
 import "./style.css";
 import Cookie from "cookie-universal";
+import RowPopup from "../DashboardComponents/RowPopup";
 
 export default function Users() {
   const cookies = new Cookie();
@@ -25,6 +26,8 @@ export default function Users() {
   const [confirmMessage, setConfirmMessage] = useState(""); // State to manage confirmation dialog message
   const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
   const toast = useRef(null);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   // Get all events
   useEffect(() => {
@@ -137,6 +140,11 @@ export default function Users() {
     }
   };
 
+  // Function to handle row click
+  const handleRowClick = (rowData) => {
+    setSelectedRowData(rowData);
+    setPopupVisible(!popupVisible);
+  };
   return (
     <div className="h-100">
       <h2 className="main-title fw-bold text-muted">
@@ -168,6 +176,7 @@ export default function Users() {
           rows={10}
           filterDisplay="row"
           emptyMessage={t("NoUsersFound")}
+          onRowClick={(event) => handleRowClick(event.data)}
         >
           <Column
             body={(rowData, index) => index.rowIndex + 1}
@@ -249,6 +258,14 @@ export default function Users() {
             }}
           />
         </DataTable>
+        {popupVisible && (
+          <RowPopup
+            rowData={selectedRowData}
+            visible={popupVisible}
+            setVisible={setPopupVisible}
+            onClose={() => setPopupVisible(false)}
+          />
+        )}
         <MessageModal
           setVisible={setModalVisible}
           visible={modalVisible}
