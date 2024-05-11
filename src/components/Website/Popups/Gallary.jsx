@@ -111,7 +111,7 @@ export default function Gallary({ eventImages, isEnglish }) {
           className="custom-popup bg-white position-fixed top-50 start-50 rounded-3 overflow-y-auto "
           style={{
             transform: showPopup
-              ? "translate(300%,-50%)"
+              ? "translate(900%,-50%)"
               : "translate(-50%, -50%)",
             transition: "0.5s",
             zIndex: "1000000",

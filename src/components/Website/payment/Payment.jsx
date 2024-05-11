@@ -58,6 +58,7 @@ export default function Payment() {
     }
   }, [eventId, i18n.language]);
 
+  // console.log(eventDetails);
   // [2] Fetch tickets
 
   const [selectedDayIndices, setSelectedDayIndices] = useState([]);

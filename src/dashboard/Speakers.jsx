@@ -215,19 +215,26 @@ export default function Speakers() {
               return (
                 <div className="d-flex justify-content-center align-items-center">
                   <i
-                    onClick={() => handleMessageModal(rowData)}
+                    onClick={(e) =>{
+                      e.stopPropagation()
+                      handleMessageModal(rowData)
+
+                    }}
                     className="fas center fa-paper-plane update"
                   ></i>
                   <i
                     onClick={(e) =>
-                      showConfirmDialog(
-                        rowData.isBlocked
-                          ? t("ConfirmationMessages.unBlockUser")
-                          : t("ConfirmationMessages.blockUser"),
-                        () => blockUser(rowData.id, rowData.isBlocked),
-                        e.target, // Pass the button reference, so that we can focus it later
-                        rowData.isBlocked
-                      )
+                      {
+                        e.stopPropagation()
+                        showConfirmDialog(
+                          rowData.isBlocked
+                            ? t("ConfirmationMessages.unBlockUser")
+                            : t("ConfirmationMessages.blockUser"),
+                          () => blockUser(rowData.id, rowData.isBlocked),
+                          e.target, // Pass the button reference, so that we can focus it later
+                          rowData.isBlocked
+                        )
+                      }
                     }
                     className={`fas center fa-${
                       !rowData.isBlocked
