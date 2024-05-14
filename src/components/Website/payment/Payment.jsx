@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -31,6 +31,7 @@ export default function Payment() {
   const [apply, setApply] = useState(false);
   const [open, setOpen] = useState(false);
   const [discount, setDiscount] = useState(0);
+  const [isSuceess, setIsSuccess] = useState(true);
 
   // [1] Fetch event details
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function Payment() {
           console.log(response);
           setApply(false);
           setPromoCode("");
+          setIsSuccess(response.data.isSuccess);
           setDiscount(response.data.responseObject.discountPercentage);
         })
         .catch((error) => {
@@ -149,20 +151,23 @@ export default function Payment() {
           console.log(data);
           setPaymentMethodLink(data.data.responseObject.url);
           setOpen(false);
-          console.log(paymentMethodLink);
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
   }, [userEventDays, eventId, userId, open]);
+  console.log(paymentMethodLink);
 
+  const navigate = useNavigate();
   // open new window with paymentMethodLink when it is available
   useEffect(() => {
     // open new window with paymentMethodLink
-    if (userEventDays.length > 0 && paymentMethodLink && open) {
+    if (paymentMethodLink) {
       window.open(paymentMethodLink, "_blank");
+      navigate("/home");
     }
-  });
+  }, [paymentMethodLink]);
+  console.log(open);
 
   // [5] Format date to show in the event box
   const formatDate = (dateString) => {
@@ -232,6 +237,7 @@ export default function Payment() {
     const value = e.target.value;
     setPromoCode(value);
     setInputLength(value.length >= 5);
+    setIsSuccess(true);
   };
   // Function to handle input change in affiliate code input
   const handleAffiliateChange = (e) => {
@@ -241,6 +247,7 @@ export default function Payment() {
 
   console.log("promocode:", promoCode);
   console.log("affiliateCode:", affiliateCode);
+  console.log(isSuceess);
   return (
     <>
       {show && show ? (
@@ -333,7 +340,7 @@ export default function Payment() {
               </div>
             </div>
 
-            <div className="border p-3 my-4 rounded d-flex gap-2 align-items-center">
+            <div className="border p-3 my-4 rounded d-flex gap-2 align-items-center position-relative">
               <svg
                 width="24"
                 height="24"
@@ -383,8 +390,26 @@ export default function Payment() {
               >
                 {i18n.language === "en" ? "Apply" : "تم"}{" "}
               </button>
+              {isSuceess === false ? (
+                <p
+                  className="position-absolute"
+                  style={{
+                    bottom: "-45px",
+                    left: i18n.language === "en" ? "40px" : "auto",
+                    right: i18n.language === "en" ? "auto" : "40px",
+                    color: "red",
+                  }}
+                >
+                  {i18n.language === "en"
+                    ? "Invalid Promo Code"
+                    : "رمز العرض غير صالح"}
+                </p>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="border p-3 my-4 rounded d-flex gap-2 align-items-center">
+
+            <div className="border p-3 my-5 rounded d-flex gap-2 align-items-center">
               <input
                 type="text"
                 className="border-0 outline-0 flex-grow-1 px-2"
@@ -547,12 +572,24 @@ export default function Payment() {
                 onClick={() => {
                   setOpen(true);
                 }}
-                to={paymentMethodLink ? "/home" : ""}
+                // to={paymentMethodLink ? "/home" : ""}
               >
                 {i18n.language === "en" ? "Continue" : "استمرار"}
               </Link>
             </div>
           </div>
+          {!paymentMethodLink && open ? (
+            <div
+              className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-75 d-flex align-items-center justify-content-center"
+              style={{ zIndex: 99999 }}
+            >
+              <p className="text-white fs-1">
+                {i18n.language === "en" ? "Please wait" : "يرجى الانتظار"}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       ) : (
         ""
