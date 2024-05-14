@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -6,13 +6,11 @@ import { BASE } from "../../../Api";
 import { useTranslation } from "react-i18next";
 import Cookie from "cookie-universal";
 import { jwtDecode } from "jwt-decode";
-import { useCreditCardValidator } from "react-creditcard-validator";
 import "./Payment.css";
 import applePay from "../../../assets/Apple_Pay_logo.png";
 import mada from "../../../assets/Mada_Logo.png";
 import paypal from "../../../assets/PayPal_Logo.png";
 import { PulseLoader } from "react-spinners";
-import { set } from "firebase/database";
 
 export default function Payment() {
   // [0] stats
@@ -22,15 +20,17 @@ export default function Payment() {
   const [eventDetails, setEventDetails] = useState(null);
   const [userEventDays, setUserEventDays] = useState([]);
   const [userId, setUserId] = useState("");
-  const [tickets, setTickets] = useState([]);
   const [show, setShow] = useState(true);
-  const [show2, setShow2] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
   const [paymentMethodLink, setPaymentMethodLink] = useState("");
-  const [selectedDayTicket, setSelectedDayTicket] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
-  const [promoCode, setPromoCode] = useState("");
   const [inputLength, setInputLength] = useState(false);
+  const [selectedDayIndices, setSelectedDayIndices] = useState([]);
+  const [promoCode, setPromoCode] = useState("");
+  const [affiliateCode, setAffiliateCode] = useState("");
+  const [apply, setApply] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [discount, setDiscount] = useState(0);
 
   // [1] Fetch event details
   useEffect(() => {
@@ -58,10 +58,30 @@ export default function Payment() {
     }
   }, [eventId, i18n.language]);
 
-  // console.log(eventDetails);
-  // [2] Fetch tickets
-
-  const [selectedDayIndices, setSelectedDayIndices] = useState([]);
+  // check promo code and get discount
+  useEffect(() => {
+    if (apply) {
+      console.log("promo code:", promoCode);
+      axios
+        .get(`${BASE}/PromoCode/CheckPromoCode`, {
+          headers: {
+            Accept: "text/plain",
+          },
+          params: {
+            promoCode: promoCode,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          setApply(false);
+          setPromoCode("");
+          setDiscount(response.data.responseObject.discountPercentage);
+        })
+        .catch((error) => {
+          console.error("Error checking promo code:", error);
+        });
+    }
+  }, [apply]);
 
   // Function to toggle day selection
   const toggleDaySelection = (index) => {
@@ -89,27 +109,20 @@ export default function Payment() {
       ]);
     }
   };
-  console.log(userEventDays);
 
-  // fetch tickets from eventDetials
-  useEffect(() => {
-    if (eventDetails) {
-      const newTickets = eventDetails.eventDays.map((day) => day.qrCode);
-      setTickets(newTickets);
-    }
-  }, [eventDetails]);
-  // console.log(tickets);
-
-  // [6] compute subtotal
+  // compute subtotal for selected days
   const subtotal = selectedDayIndices.reduce((total, selectedIndex) => {
     const price = eventDetails?.eventDays[selectedIndex]?.price || 0;
     return total + price;
   }, 0);
 
-  // [3] Fetch payment method link
+  // compute total after discount
+  const total = subtotal - (subtotal * discount) / 100;
+  console.log("total :", total);
+
+  // Fetch payment method link when userEventDays is updated and click on continue btn
   useEffect(() => {
-    if (userEventDays.length > 0) {
-      // Check if userEventDays has data
+    if (userEventDays.length > 0 && open) {
       axios
         .post(
           `${BASE}/Event/UserBuyEvents2`,
@@ -117,10 +130,11 @@ export default function Payment() {
             id: 0,
             userId: userId,
             totalPrice: subtotal,
-            priceAfterDiscount: 400,
-            discount: 0,
+            priceAfterDiscount: total,
+            discount: (subtotal * discount) / 100,
             discountCode: promoCode,
-            isPaid: true,
+            affiliateCode: affiliateCode,
+            isPaid: false,
             userEventDays: userEventDays,
             PaymentMethod: "PayPal",
           },
@@ -132,25 +146,25 @@ export default function Payment() {
           }
         )
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           setPaymentMethodLink(data.data.responseObject.url);
+          setOpen(false);
+          console.log(paymentMethodLink);
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
     }
-  }, [userEventDays, eventId, userId]);
+  }, [userEventDays, eventId, userId, open]);
 
-  // console.log(paymentMethodLink);
-
-  // [4] continue button click handler
-  const handleContinueClick = () => {
+  // open new window with paymentMethodLink when it is available
+  useEffect(() => {
     // open new window with paymentMethodLink
-    if (userEventDays.length > 0 && paymentMethodLink) {
+    if (userEventDays.length > 0 && paymentMethodLink && open) {
       window.open(paymentMethodLink, "_blank");
     }
-  };
+  });
 
-  // [5] Format date
+  // [5] Format date to show in the event box
   const formatDate = (dateString) => {
     if (!dateString) return ""; // Check if dateString is undefined or null
 
@@ -188,7 +202,7 @@ export default function Payment() {
     setSelectedPaymentMethod(method);
   };
 
-  // [6] Render loading spinner while loading is true
+  // Render loading spinner while loading is true
   if (loading) {
     // Render loading spinner while loading is true
     return (
@@ -213,12 +227,20 @@ export default function Payment() {
     );
   }
 
-  // Function to handle input change
-  const handleInputChange = (e) => {
+  // Function to handle input change in promo code input
+  const handlePromoInput = (e) => {
     const value = e.target.value;
     setPromoCode(value);
     setInputLength(value.length >= 5);
   };
+  // Function to handle input change in affiliate code input
+  const handleAffiliateChange = (e) => {
+    const value = e.target.value;
+    setAffiliateCode(value);
+  };
+
+  console.log("promocode:", promoCode);
+  console.log("affiliateCode:", affiliateCode);
   return (
     <>
       {show && show ? (
@@ -349,15 +371,30 @@ export default function Payment() {
                   i18n.language === "en" ? "Promocode" : "رقم العرض الترويجي"
                 }
                 value={promoCode}
-                onChange={handleInputChange}
+                onChange={handlePromoInput}
               />
               <button
                 className={`btn btn-secondary ${
                   inputLength ? "bg-success" : ""
                 }`}
+                onClick={() => {
+                  setApply(true);
+                }}
               >
                 {i18n.language === "en" ? "Apply" : "تم"}{" "}
               </button>
+            </div>
+            <div className="border p-3 my-4 rounded d-flex gap-2 align-items-center">
+              <input
+                type="text"
+                className="border-0 outline-0 flex-grow-1 px-2"
+                style={{ color: "#C8C8C8", outline: 0 }}
+                placeholder={
+                  i18n.language === "en" ? "Affiliate Code" : " رمز الشريك"
+                }
+                value={affiliateCode}
+                onChange={handleAffiliateChange}
+              />
             </div>
             <div className="p-3 d-flex gap-3">
               {eventDetails &&
@@ -490,454 +527,32 @@ export default function Payment() {
                   className="d-flex justify-content-between my-2"
                   style={{ color: "#747688" }}
                 >
+                  {/* (subtotal * discount) / 100; */}
                   <span>{i18n.language === "en" ? "Discount" : "الخصم"}</span>
-                  <span>00 {i18n.language === "en" ? "SAR" : "ريال"}</span>
+                  <span>
+                    {(subtotal * discount) / 100}{" "}
+                    {i18n.language === "en" ? "SAR" : "ريال"}
+                  </span>
                 </div>
               </div>
               <div className="total fw-bold d-flex justify-content-between pt-3">
                 <span>
                   {i18n.language === "en" ? "Total" : "المجموع الكلي"}{" "}
                 </span>
-                <span>{subtotal}</span>
+                <span>{total}</span>
               </div>
               <Link
                 className="d-block text-center w-100 mt-5 p-3  text-white"
                 style={{ backgroundColor: "#3296D4", borderRadius: "12px" }}
-                onClick={userEventDays.length > 0 ? handleContinueClick : ""}
+                onClick={() => {
+                  setOpen(true);
+                }}
                 to={paymentMethodLink ? "/home" : ""}
               >
                 {i18n.language === "en" ? "Continue" : "استمرار"}
               </Link>
             </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {show2 && tickets && tickets.length > 0 ? (
-        <div className="ticket row p-4 w-100 justify-content-around ">
-          {tickets ? (
-            <>
-              <div className="d-flex flex-column align-items-center justify-content-center py-3 col-md-6 col-lg-5">
-                <svg
-                  width="254"
-                  height="227"
-                  viewBox="0 0 254 227"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clipPath="url(#clip0_927_9270)">
-                    <mask
-                      id="mask0_927_9270"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="254"
-                      height="227"
-                    >
-                      <path d="M253.07 0H0V227H253.07V0Z" fill="white" />
-                    </mask>
-                    <g mask="url(#mask0_927_9270)">
-                      <g opacity="0.5">
-                        <path
-                          d="M35.4297 112.911L154.385 44.5641L35.4297 112.911Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M35.4297 112.911L154.385 44.5641"
-                          stroke="#3296D4"
-                          strokeWidth="29.2537"
-                          strokeLinecap="round"
-                        />
-                      </g>
-                      <g opacity="0.5">
-                        <path
-                          d="M63.7241 157.739L182.68 89.3914L63.7241 157.739Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M63.7241 157.739L182.68 89.3914"
-                          stroke="#3296D4"
-                          strokeWidth="29.2537"
-                          strokeLinecap="round"
-                        />
-                      </g>
-                      <g opacity="0.5">
-                        <path
-                          d="M213.152 72.2165L222.423 66.8196L213.152 72.2165Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M213.152 72.2165L222.423 66.8196"
-                          stroke="#3296D4"
-                          strokeWidth="29.2537"
-                          strokeLinecap="round"
-                        />
-                      </g>
-                      <g opacity="0.5">
-                        <path
-                          d="M105.691 194.618L196.033 141.85L105.691 194.618Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M105.691 194.618L196.033 141.85"
-                          stroke="#3296D4"
-                          strokeWidth="29.2537"
-                          strokeLinecap="round"
-                        />
-                      </g>
-                      <path
-                        d="M218.231 146.7C219.678 146.847 220.733 148.141 220.586 149.589C220.439 151.036 219.145 152.092 217.697 151.945C216.25 151.798 215.195 150.503 215.342 149.056C215.489 147.608 216.783 146.553 218.231 146.7Z"
-                        stroke="#3296D4"
-                        strokeWidth="1.36186"
-                      />
-                      <path
-                        d="M64.6329 200.89C67.0128 201.131 68.7488 203.26 68.5069 205.64C68.265 208.02 66.1363 209.756 63.7563 209.514C61.3764 209.272 59.6404 207.143 59.8823 204.764C60.1242 202.384 62.2529 200.648 64.6329 200.89Z"
-                        stroke="#3296D4"
-                        strokeWidth="2.23948"
-                      />
-                      <path
-                        d="M124.8 23.0169C127.18 23.2588 128.916 25.3875 128.674 27.7675C128.432 30.1475 126.304 31.8834 123.924 31.6415C121.544 31.3997 119.808 29.2709 120.05 26.891C120.292 24.511 122.42 22.7751 124.8 23.0169Z"
-                        stroke="#3296D4"
-                        strokeWidth="2.23948"
-                      />
-                      <path
-                        d="M24.7048 79.4512C25.7977 79.4512 26.6851 80.3385 26.6851 81.4314C26.6851 82.5243 25.7977 83.4116 24.7048 83.4116C23.6119 83.4116 22.7246 82.5243 22.7246 81.4314C22.7246 80.3385 23.6119 79.4512 24.7048 79.4512Z"
-                        stroke="#3296D4"
-                        strokeWidth="1.63697"
-                      />
-                      <path
-                        d="M178.507 208.585C179.6 208.585 180.487 209.472 180.487 210.565C180.487 211.658 179.6 212.545 178.507 212.545C177.414 212.545 176.527 211.658 176.527 210.565C176.527 209.472 177.414 208.585 178.507 208.585Z"
-                        stroke="#3296D4"
-                        strokeWidth="1.63697"
-                      />
-                      <path
-                        d="M201.405 22.4678L203.055 14.6929"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M198.472 17.7993L206.247 19.4499"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M33.0596 152.213L34.3933 144.378"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M29.9397 147.667L37.7752 149"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M198.319 186.585L199.14 178.679"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M194.91 182.252L202.816 183.072"
-                        stroke="#3296D4"
-                        strokeWidth="0.953781"
-                      />
-                      <path
-                        d="M126.57 56.3632C158.11 56.3632 183.718 81.971 183.718 113.511C183.718 145.05 158.11 170.658 126.57 170.658C95.0304 170.658 69.4226 145.05 69.4226 113.511C69.4226 81.971 95.0304 56.3632 126.57 56.3632Z"
-                        fill="#3296D4"
-                      />
-                      <path
-                        d="M126.537 61.7676C155.093 61.7676 178.279 84.9534 178.279 113.51C178.279 142.067 155.093 165.253 126.537 165.253C97.9798 165.253 74.7939 142.067 74.7939 113.51C74.7939 84.9534 97.9798 61.7676 126.537 61.7676Z"
-                        fill="#3296D4"
-                      />
-                      <path
-                        d="M103.169 115.408L117.158 129.079L149.904 96.3327"
-                        stroke="white"
-                        strokeWidth="5.72269"
-                      />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_927_9270">
-                      <rect width="253.07" height="227" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-                <h3 className="mt-4 fw-bold">
-                  {" "}
-                  {i18n.language === "en" ? "Congratulations" : "مبروك"}
-                </h3>
-                <p>
-                  {i18n.language === "en"
-                    ? "you have a ticket now"
-                    : "لديك التذكرة الآن"}
-                </p>
-              </div>
-
-              <div className="col-md-6 col-lg-4">
-                <div className="p-3 d-flex gap-3 justify-content-center">
-                  {tickets &&
-                    tickets.map((t, index) => (
-                      <div key={index}>
-                        <div
-                          className={`p-2 rounded fw-bold day-item ${
-                            selectedDayTicket === index ? "selected" : ""
-                          }`}
-                          style={{
-                            fontSize: "20px",
-                            backgroundColor: "#F2F2F2",
-                            color: "black",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => setSelectedDayTicket(index)}
-                        >
-                          {i18n.language === "en"
-                            ? ` Day ${index + 1}`
-                            : `اليوم ${index + 1}`}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-                {tickets &&
-                  tickets.map((t, index) => (
-                    <div
-                      key={index}
-                      className={`rounded overflow-hidden p-0 ${
-                        selectedDayTicket !== index ? "hidden" : ""
-                      }`}
-                      style={{
-                        boxShadow: "0 0 5px rgba(0,0,0,0.4)",
-                        backgroundColor: "#F2F2F2",
-                      }}
-                    >
-                      <img
-                        src={eventDetails.displayPrimeImageURL}
-                        style={{ objectFit: "cover" }}
-                        alt="ticketImg"
-                        className="w-100"
-                        height={"220px"}
-                      />
-                      <div className="border-bottom d-flex gap-3 align-items-center px-3 py-1">
-                        <div className="d-flex flex-column align-items-center justify-content-center">
-                          <span
-                            className="fw-bold m-0"
-                            style={{
-                              color: "#3296D4",
-                              fontSize: "12px",
-                              display: "block",
-                            }}
-                          >
-                            {new Date(t.eventStartDay).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                              }
-                            )}
-                          </span>
-                          <p className="fw-bold p-0 m-0 fs-2">
-                            {new Date(t.eventStartDay).toLocaleDateString(
-                              "en-US",
-                              {
-                                day: "numeric",
-                              }
-                            )}
-                          </p>
-                        </div>
-                        <p className="fs-4 fw-bold">{t.eventDayName}</p>
-                      </div>
-
-                      <div className="QR p-3 text-center">
-                        <img
-                          src={t.qrCode}
-                          alt="qrCode"
-                          width={"265px"}
-                          height={"244px"}
-                        />
-                        <p
-                          className="m-0"
-                          style={{ fontSize: "12px", color: "#323232" }}
-                        >
-                          {i18n.language === "en"
-                            ? "verified by @EduCaring"
-                            : `@EduCaring تم التحقق منها بواسطة`}
-                        </p>
-                        <button
-                          className="text-uppercase border-0 w-100 p-2 rounded my-3 text-white"
-                          style={{ backgroundColor: "#565656" }}
-                          onClick={() => {
-                            const content = `
-                        <html>
-                        <head>
-                        <title>Ticket</title>
-                      <style>
-                      @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap");
-                      body {
-                        font-family: "Cairo", sans-serif;
-                      }
-                      .ticket-content{
-                        width:350px;
-                        box-shadow:0 0 5px rgba(0,0,0,0.2);
-                        margin:20px auto;
-                        padding:5px;
-                        background-color:#F2F2F2;
-                      }
-                      .eventImg{
-                        height:220px;
-                        width:100%;
-                      }
-                      .ticket-content .content{
-                        display:flex;
-                        gap:20px;
-                        padding:10px;
-                        align-items:center;
-                      }
-                      .month{
-                        color: #3296D4;
-                        font-weight:bold;
-                        margin:0;
-                        font-size:12px;
-                      }
-                      .day{
-                        font-weight:bold;
-                        margin:0;
-                        font-size:20px;
-                      }
-                      .name{
-                        font-size:22px;
-                        font-weight:bold;
-                      }
-                      .QR {
-                        text-align:center;
-                        padding:10px;
-                      }
-                      </style>
-                      </head>
-                        <body>
-                        <div class="ticket-content">
-                        <img
-                        src=${eventDetails.displayPrimeImageURL}
-                        alt="ticketImg"
-                        class="eventImg"
-                       
-                      />
-                      <div class="content">
-                        <div>
-                          <span
-                            class="month"
-                            
-                          >
-                            ${new Date(t.eventStartDay).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                              }
-                            )}
-                          </span>
-                          <p class="day">
-                            ${new Date(t.eventStartDay).toLocaleDateString(
-                              "en-US",
-                              {
-                                day: "numeric",
-                              }
-                            )}
-                          </p>
-                        </div>
-                        <p class="name">${t.eventDayName}</p>
-                      </div>
-    
-                      <div class="QR">
-                        <img
-                          src=${t.qrCode}
-                          alt="qrCode"
-                          width="265px"
-                          height="244px"
-                        />
-                        <p
-                          className="m-0"
-                          style={{ fontSize: "12px", color: "#323232" }}
-                        >
-                          verified by @EduCaring
-                        </p>
-                        
-                        </div>
-                        </body>
-                        </html> `;
-                            const printWindow = window.open("", "_blank");
-                            printWindow.document.open();
-                            printWindow.document.write(content);
-                            printWindow.document.close();
-                            printWindow.print();
-                          }}
-                        >
-                          {i18n.language === "en"
-                            ? `print pdf `
-                            : " pdf طباعة "}
-
-                          <svg
-                            width="30"
-                            height="30"
-                            viewBox="0 0 30 30"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              x="0.5"
-                              y="0.5"
-                              width="29"
-                              height="29"
-                              rx="14.5"
-                              fill="white"
-                              fillOpacity="0.2"
-                            />
-                            <path
-                              d="M12.4272 12.2916H17.5731V11.2083C17.5731 10.125 17.1668 9.58331 15.9481 9.58331H14.0522C12.8335 9.58331 12.4272 10.125 12.4272 11.2083V12.2916Z"
-                              stroke="white"
-                              strokeWidth="0.8125"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M17.1668 16.625V18.7917C17.1668 19.875 16.6252 20.4167 15.5418 20.4167H14.4585C13.3752 20.4167 12.8335 19.875 12.8335 18.7917V16.625H17.1668Z"
-                              stroke="white"
-                              strokeWidth="0.8125"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M19.875 13.9167V16.625C19.875 17.7084 19.3333 18.25 18.25 18.25H17.1667V16.625H12.8333V18.25H11.75C10.6667 18.25 10.125 17.7084 10.125 16.625V13.9167C10.125 12.8334 10.6667 12.2917 11.75 12.2917H18.25C19.3333 12.2917 19.875 12.8334 19.875 13.9167Z"
-                              stroke="white"
-                              strokeWidth="0.8125"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M17.7082 16.625H17.0528H12.2915"
-                              stroke="white"
-                              strokeWidth="0.8125"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M12.2915 14.4583H13.9165"
-                              stroke="white"
-                              strokeWidth="0.8125"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </>
-          ) : (
-            ""
-          )}
         </div>
       ) : (
         ""
