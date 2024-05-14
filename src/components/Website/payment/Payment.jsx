@@ -75,7 +75,6 @@ export default function Payment() {
         .then((response) => {
           console.log(response);
           setApply(false);
-          setPromoCode("");
           setIsSuccess(response.data.isSuccess);
           setDiscount(response.data.responseObject.discountPercentage);
         })
@@ -151,6 +150,7 @@ export default function Payment() {
           console.log(data);
           setPaymentMethodLink(data.data.responseObject.url);
           setOpen(false);
+          setPromoCode("");
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false)); // Set loading to false when the data is fetched
@@ -398,6 +398,7 @@ export default function Payment() {
                     left: i18n.language === "en" ? "40px" : "auto",
                     right: i18n.language === "en" ? "auto" : "40px",
                     color: "red",
+                    fontSize:"14px"
                   }}
                 >
                   {i18n.language === "en"
