@@ -86,6 +86,10 @@ function SideBar() {
         <i className="fas fa-flag"></i>
         <span>{t("ContactUs")}</span>
       </NavLink>
+      <NavLink to="/dashboard/copouns" className="link">
+        <i className="fas fa-percent"></i>
+        <span>{t("PromoCodes")}</span>
+      </NavLink>
     </div>
   );
 }

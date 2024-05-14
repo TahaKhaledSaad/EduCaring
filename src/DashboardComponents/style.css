@@ -1822,3 +1822,11 @@ body {
     border-radius: 6px !important;
   }
 }
+
+span.p-inputtext-lg {
+  padding: 0 !important;
+}
+
+span.p-inputtext-lg input {
+  padding: 8px 5px;
+}

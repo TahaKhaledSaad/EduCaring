@@ -64,3 +64,10 @@ export const LANDING_SPONSER_EDIT = "LandingPage/UpdateSponser";
 export const LANDING_SPONSER_DELETE = "LandingPage/DeleteSponser";
 export const LANDING_TEXT_UPDATE = "LandingPage/AddLandingText";
 export const LANDING_ABOUT_US_UPDATE = "MainData/AddAboutUs";
+
+// Promo Codes
+export const GET_All_PROMO_CODES = "PromoCode/GetAllPromoCode";
+export const ADD_PROMO_CODE = "PromoCode/AddPromoCode";
+export const DELETE_PROMO_CODE = "PromoCode/DeletePromoCode";
+export const CHECK_PROMO_CODE = "PromoCode/CheckPromoCode";
+export const UPDATE_PROMO_CODE = "PromoCode/UpdatePromoCode";
