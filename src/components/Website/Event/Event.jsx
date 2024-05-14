@@ -402,7 +402,7 @@ function EventDetails() {
 
           <div className="content-container">
             {selectedDayIndex !== null && (
-              <div className="event-info m-3 d-flex gap-3 flex-column flex-lg-row align-items-center">
+              <div className="event-info m-3 d-flex gap-3 flex-column flex-lg-row align-items-center align-items-lg-start">
                 {/* Details */}
                 <div className="details w-75">
                   <div className="d-flex gap-2 flex-column flex-md-row">
@@ -760,7 +760,7 @@ function EventDetails() {
                                   </div>
                                 )}
                                 <p className="text-dark text-center">
-                                  {s.speaker.name}
+                                  {s.speaker.name.split(" ")[0]}...
                                 </p>
                               </Link>
                             );
