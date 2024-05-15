@@ -7,15 +7,11 @@ import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import {
-  ADD_PROMO_CODE,
-  BASE,
-  UPDATE_PROMO_CODE,
-} from "../API/Api";
+import { ADD_AFFILIATE_CODE, BASE, UPDATE_AFFILIATE_CODE } from "../API/Api";
 import "./style.css";
 import Cookie from "cookie-universal";
 
-export default function PromoCodesAction({
+export default function AffiliateCodeAction({
   visible,
   setCreateModalData,
   setRunUseEffect,
@@ -30,17 +26,6 @@ export default function PromoCodesAction({
   const cookies = new Cookie();
   const token = cookies.get("edu-caring");
 
-  function convertDateToISO(dateString) {
-    const date = new Date(dateString);
-    const isoString = date.toISOString().slice(0, -1); // Removes the 'Z' at the end
-    const milliseconds = date
-      .getMilliseconds()
-      .toString()
-      .padStart(3, "0")
-      .slice(0, 2); // Get and format milliseconds to two decimal places
-    return `${isoString.slice(0, -4)}.${milliseconds}`;
-  }
-
   // submit to  create and edit api
   const handleSubmit = async () => {
     console.log("createModalData", createModalData);
@@ -49,7 +34,6 @@ export default function PromoCodesAction({
 
     let sendData = {
       ...createModalData,
-      expirationDate: convertDateToISO(createModalData.expirationDate),
     };
 
     console.log(sendData);
@@ -58,9 +42,8 @@ export default function PromoCodesAction({
       setLoading(true);
       if (
         !createModalData.code ||
-        !createModalData.discountPercentage ||
-        !createModalData.expirationDate ||
-        !createModalData.limitNumber
+        !createModalData.nameAr ||
+        !createModalData.nameEn
       ) {
         toast.current.show({
           severity: "error",
@@ -72,21 +55,18 @@ export default function PromoCodesAction({
 
       let response;
 
-      const formData = new FormData();
-      formData.append("code", createModalData.code);
-      formData.append("discountPercentage", createModalData.discountPercentage);
-      formData.append(
-        "expirationDate",
-        convertDateToISO(createModalData.expirationDate)
-      );
-      formData.append("limitNumber", createModalData.limitNumber);
-      formData.append("id", createModalData.id);
-      formData.append("isDeleted", createModalData.isDeleted);
-      formData.append("note", createModalData.note);
+      // append data as json to sendData
+      sendData = {
+        id: createModalData.id,
+        code: createModalData.code,
+        nameAr: createModalData.nameAr,
+        nameEn: createModalData.nameEn,
+        isDeleted: createModalData.isDeleted,
+      };
 
       if (type === "create") {
         response = await axios
-          .post(`${BASE}/${ADD_PROMO_CODE}`, sendData, {
+          .post(`${BASE}/${ADD_AFFILIATE_CODE}`, sendData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`,
@@ -107,9 +87,9 @@ export default function PromoCodesAction({
           .catch((err) => console.log(err));
       } else if (type === "edit") {
         response = await axios
-          .put(`${BASE}/${UPDATE_PROMO_CODE}`, sendData, {
+          .put(`${BASE}/${UPDATE_AFFILIATE_CODE}`, sendData, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           })
@@ -163,7 +143,7 @@ export default function PromoCodesAction({
       {!loading && (
         <Dialog
           header={
-            type === "create" ? t("CreateNewPromoCode") : t("EditSpeaker")
+            type === "create" ? t("CreateNewAffiliateCode") : t("EditSpeaker")
           }
           visible={visible}
           style={{
@@ -198,57 +178,38 @@ export default function PromoCodesAction({
             </div>
             <div className="box">
               <div className="box d-flex align-items-center justify-content-between mt-2  ">
-                <p style={{ margin: 0 }}>{t("DiscountPercentage")}</p>
-                <InputNumber
-                  className="p-inputtext-lg border p-2 mx-1"
-                  style={{ width: "255px" }}
-                  placeholder={t("DiscountPercentage")}
-                  prefix="%"
-                  value={createModalData.discountPercentage}
-                  onChange={(e) =>
-                    setCreateModalData((prev) => ({
-                      ...prev,
-                      discountPercentage: e.value,
-                    }))
-                  }
-                />
+                <p style={{ margin: 0 }}>{t("nameAr")}</p>
+                <InputText
+                type="text"
+                style={{ width: "255px" }}
+                className="p-inputtext-lg border p-2 mx-1"
+                placeholder={t("nameAr")}
+                value={createModalData.nameAr}
+                onChange={(e) =>
+                  setCreateModalData((prev) => ({
+                    ...prev,
+                    nameAr: e.target.value,
+                  }))
+                }
+              />
               </div>
             </div>
             <div className="box">
-              <div className="box d-flex align-items-center justify-content-between mt-2  ">
-                <p style={{ margin: 0 }}>{t("ExpirationDate")}</p>
-                <Calendar
-                  className="p-inputtext-lg border p-2 mx-1"
-                  style={{ width: "255px" }}
-                  placeholder={t("ExpirationDate")}
-                  dateFormat="dd/mm/yy"
-                  value={createModalData.expirationDate}
-                  onChange={(e) =>
-                    setCreateModalData((prev) => ({
-                      ...prev,
-                      expirationDate: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="box d-flex align-items-center justify-content-between mt-2 mb-2 ">
-                <p style={{ margin: 0 }}>{t("LimitNumber")}</p>
-                <InputNumber
-                  type="text"
-                  className="p-inputtext-lg  border p-2 mx-1"
-                  style={{ width: "255px" }}
-                  placeholder={t("LimitNumber")}
-                  mode="decimal"
-                  showButtons
-                  min={0}
-                  value={createModalData.limitNumber}
-                  onChange={(e) =>
-                    setCreateModalData((prev) => ({
-                      ...prev,
-                      limitNumber: e.value,
-                    }))
-                  }
-                />
+              <div className="box d-flex align-items-center justify-content-between my-2  ">
+                <p style={{ margin: 0 }}>{t("nameEn")}</p>
+                <InputText
+                type="text"
+                style={{ width: "255px" }}
+                className="p-inputtext-lg border p-2 mx-1"
+                placeholder={t("nameEn")}
+                value={createModalData.nameEn}
+                onChange={(e) =>
+                  setCreateModalData((prev) => ({
+                    ...prev,
+                    nameEn: e.target.value,
+                  }))
+                }
+              />
               </div>
             </div>
           </div>

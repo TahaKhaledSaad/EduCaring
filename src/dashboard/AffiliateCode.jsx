@@ -6,15 +6,15 @@ import { Column } from "primereact/column";
 import { useTranslation } from "react-i18next";
 import ConfirmCheck from "../DashboardComponents/ConfirmCheck";
 import { Toast } from "primereact/toast";
-import { BASE, DELETE_PROMO_CODE, GET_All_PROMO_CODES } from "../API/Api";
+import { BASE, DELETE_AFFILIATE_CODE, GET_All_AFFILIATE_CODES } from "../API/Api"; // replace with Affiliate Code API
 import "./style.css";
 import Cookie from "cookie-universal";
-import PromoCodesAction from "../DashboardComponents/PromoCodesAction";
+import AffiliateCodeAction from "../DashboardComponents/AffiliateCodeAction";
 
-export default function Copouns() {
+export default function AffiliateCode() {
   const cookies = new Cookie();
   const token = cookies.get("edu-caring");
-  const [promoCodes, setPromoCodes] = useState([]);
+  const [affiliateCodes, setAffiliateCodes] = useState([]);
   const [runUseEffect, setRunUseEffect] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -32,13 +32,13 @@ export default function Copouns() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${BASE}/${GET_All_PROMO_CODES}`, {
+      .get(`${BASE}/${GET_All_AFFILIATE_CODES}`, { // replace with Affiliate Code API
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((data) => {
-        setPromoCodes(data.data.responseObject);
+        setAffiliateCodes(data.data.responseObject);
         setLoading(false);
         console.log(data);
       })
@@ -53,7 +53,7 @@ export default function Copouns() {
     // accept();
   };
 
-  console.log(promoCodes);
+  console.log(affiliateCodes);
 
   const confirmReject = () => {
     setConfirmVisible(false); // Hide the confirmation dialog
@@ -79,7 +79,7 @@ export default function Copouns() {
     try {
       // Use the provided API endpoint for deletion
       let result = await axios
-        .delete(`${BASE}/${DELETE_PROMO_CODE}`, {
+        .delete(`${BASE}/${DELETE_AFFILIATE_CODE}`, { // replace with Affiliate Code API
           params: {
             id: id,
           },
@@ -99,7 +99,7 @@ export default function Copouns() {
         toast.current.show({
           severity: "success",
           summary: "Success",
-          detail: "Promo Code deleted successfully.",
+          detail: " Affiliate Code deleted successfully.",
           life: 3000,
         });
       }
@@ -112,10 +112,8 @@ export default function Copouns() {
     const initialFormData = {
       id: 0,
       code: null,
-      discountPercentage: null,
-      expirationDate: null,
-      limitNumber: null,
-      note: null,
+      nameAr: null,
+      nameEn: null,
       isDeleted: false,
     };
     // Open the modal with create mode
@@ -130,7 +128,7 @@ export default function Copouns() {
   return (
     <div className="h-100">
       <div className="d-flex justify-content-between event-page">
-        <h2 className="main-title fw-bold text-muted">{t("PromoCodes")} </h2>
+        <h2 className="main-title fw-bold text-muted">{t("AffiliateCodes")} </h2>
         <div
           onClick={handleOpenCreateModal}
           className="btn link add-event "
@@ -152,13 +150,13 @@ export default function Copouns() {
           }}
         >
           <i className="fas fa-plus-square "></i>
-          <span style={{ paddingRight: "7px" }}>{t("AddPromoCode")}</span>
+          <span style={{ paddingRight: "7px" }}>{t("AddAffiliateCodes")}</span>
         </div>
       </div>
       <div style={{ overflowX: "auto" }}>
         <DataTable
           dataKey="id"
-          value={promoCodes}
+          value={affiliateCodes}
           loading={loading}
           tableStyle={{ minWidth: "50rem" }}
           paginator
@@ -178,26 +176,22 @@ export default function Copouns() {
             style={{ textAlign: "center" }}
           ></Column>
           <Column
-            field="discountPercentage"
-            header={t("DiscountPercentage")}
+            field="nameAr"
+            header={t("nameAr")}
             style={{ textAlign: "center" }}
           ></Column>
           <Column
-            field="expirationDate"
-            header={t("ExpirationDate")}
+            field="nameEn"
+            header={t("nameEn")}
             style={{ textAlign: "center" }}
           ></Column>
-          <Column
-            field="limitNumber"
-            header={t("LimitNumber")}
-            style={{ textAlign: "center" }}
-          ></Column>
+         
 
           <Column
             header={t("Actions")}
             dataType="boolean"
             style={{ width: "10rem" }}
-            body={(rowData, i) => {
+            body={(rowData) => {
               return (
                 <>
                   <i
@@ -210,7 +204,7 @@ export default function Copouns() {
                     // onClick={() => deleteEvent(rowData.id)}
                     onClick={(e) =>
                       showConfirmDialog(
-                        t("DeletePromoConfirm"),
+                        t("DeleteCodeConfirm"),
                         () => deleteSpeaker(rowData.id),
                         e.target // Pass the button reference, so that we can focus it later
                       )
@@ -234,7 +228,7 @@ export default function Copouns() {
 
         <Toast ref={toast} />
 
-        <PromoCodesAction
+        <AffiliateCodeAction
           visible={createModalVisible}
           onHide={() => setCreateModalVisible(false)}
           setRunUseEffect={setRunUseEffect}

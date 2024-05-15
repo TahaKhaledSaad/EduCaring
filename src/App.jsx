@@ -57,6 +57,7 @@ import RequireBack from "./components/Website/Auth/RequireBack.jsx";
 import Session from "./components/Website/session/Session.jsx";
 import Recommendations from "./components/Website/recommendations/Recommendations.jsx";
 import Copouns from "./dashboard/PromoCodes.jsx";
+import AffiliateCode from "./dashboard/AffiliateCode.jsx";
 
 function App() {
   const { i18n } = useTranslation();
@@ -118,6 +119,7 @@ function App() {
             />
             <Route path="messages" element={<SendMessage />} />
             <Route path="contactus" element={<ContactUs />} />
+            <Route path="affiliate" element={<AffiliateCode />} />
             <Route path="copouns" element={<Copouns />} />
             <Route path="support" element={<Support />} />
             <Route
