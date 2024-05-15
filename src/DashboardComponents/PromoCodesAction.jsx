@@ -95,7 +95,7 @@ export default function PromoCodesAction({
           .catch((err) => console.log(err));
       } else if (type === "edit") {
         response = await axios
-          .delete(`${BASE}/${UPDATE_PROMO_CODE}`, sendData, {
+          .put(`${BASE}/${UPDATE_PROMO_CODE}`, sendData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`,
