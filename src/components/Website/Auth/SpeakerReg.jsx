@@ -6,7 +6,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../../../Api";
 import DeleteModel from "./../Popups/DeleteModel";
@@ -30,6 +30,8 @@ export default function SpeakerReg() {
   const [showError, setShowError] = useState(false);
   const [showError2, setShowError2] = useState(false);
   const [showVerify, setShowVerify] = useState(false);
+
+  const nav = useNavigate();
 
   // const [users, setUsers] = useState([{}]);
 
@@ -126,7 +128,8 @@ export default function SpeakerReg() {
         })
         .then((res) => {
           if (res.data.isSuccess) {
-            setShowVerify(true);
+            // setShowVerify(true);
+            nav("/login");
             setErrorMessage("");
           } else {
             if (res.data.responseText === "Email is already registered!") {
@@ -319,13 +322,15 @@ export default function SpeakerReg() {
                     className={style.input}
                     name="PhoneNumber"
                   />
-                  {showError && (userData.PhoneNumber!=null&& userData.PhoneNumber.length) < 10 && (
-                    <span className="m-0 my-0 text-danger">
-                      {i18n.language === "en"
-                        ? "Invalid Phone Number"
-                        : "رقم الهاتف غير صحيح"}
-                    </span>
-                  )}
+                  {showError &&
+                    (userData.PhoneNumber != null &&
+                      userData.PhoneNumber.length) < 10 && (
+                      <span className="m-0 my-0 text-danger">
+                        {i18n.language === "en"
+                          ? "Invalid Phone Number"
+                          : "رقم الهاتف غير صحيح"}
+                      </span>
+                    )}
                 </div>
 
                 {/* input */}

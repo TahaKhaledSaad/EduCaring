@@ -7,12 +7,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import {
-  ADD_PROMO_CODE,
-  BASE,
-  LANDING_SPEAKER_EDIT,
-  UPDATE_PROMO_CODE,
-} from "../API/Api";
+import { ADD_PROMO_CODE, BASE, UPDATE_PROMO_CODE } from "../API/Api";
 import "./style.css";
 import Cookie from "cookie-universal";
 
@@ -30,6 +25,7 @@ export default function PromoCodesAction({
   const { t, i18n } = useTranslation();
   const cookies = new Cookie();
   const token = cookies.get("edu-caring");
+  const [hideCalendar, setHideCalendar] = useState(false);
 
   function convertDateToISO(dateString) {
     const date = new Date(dateString);
@@ -159,6 +155,11 @@ export default function PromoCodesAction({
     </div>
   );
 
+  function convertISOToDDMMYY(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-GB"); // 'en-GB' formats the date as dd/mm/yy
+  }
+
   return (
     <div className=" flex justify-content-center ">
       {!loading && (
@@ -221,7 +222,11 @@ export default function PromoCodesAction({
                 <Calendar
                   className="p-inputtext-lg border p-2 mx-1"
                   style={{ width: "255px" }}
-                  placeholder={t("ExpirationDate")}
+                  placeholder={
+                    createModalData.expirationDate
+                      ? convertISOToDDMMYY(createModalData.expirationDate)
+                      : t("ExpirationDate")
+                  }
                   dateFormat="dd/mm/yy"
                   value={createModalData.expirationDate}
                   onChange={(e) =>

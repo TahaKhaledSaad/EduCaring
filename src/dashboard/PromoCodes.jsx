@@ -210,7 +210,7 @@ export default function Copouns() {
                     // onClick={() => deleteEvent(rowData.id)}
                     onClick={(e) =>
                       showConfirmDialog(
-                        t("DeleteSpeakerConfirm"),
+                        t("DeletePromoCodeConfirm"),
                         () => deleteSpeaker(rowData.id),
                         e.target // Pass the button reference, so that we can focus it later
                       )

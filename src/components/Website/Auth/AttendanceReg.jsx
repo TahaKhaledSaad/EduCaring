@@ -4,7 +4,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE } from "../../../Api";
 import Verfication from "../verfiy-number/Verfication";
@@ -21,6 +21,7 @@ export default function AttendanceReg() {
 
   const [showError, setShowError] = useState(false);
   const [showVerify, setShowVerify] = useState(false);
+  const nav = useNavigate();
 
   // User Data
   const [userData, setUserData] = useState({
@@ -103,7 +104,8 @@ export default function AttendanceReg() {
 
           if (res.data.isSuccess) {
             setErrorMessage("");
-            setShowVerify(true);
+            // setShowVerify(true);
+            nav("/login");
           } else {
             if (res.data.responseText === "Email is already registered!") {
               setErrorMessage(res.data.responseText);
@@ -297,13 +299,15 @@ export default function AttendanceReg() {
                   className={style.input}
                   name="PhoneNumber"
                 />
-                {showError &&(userData.PhoneNumber!=null &&  userData.PhoneNumber.length < 10) && (
-                  <span className="m-0 my-0 text-danger">
-                    {i18n.language === "en"
-                      ? "Invalid Phone Number"
-                      : "رقم الهاتف غير صحيح"}
-                  </span>
-                )}
+                {showError &&
+                  userData.PhoneNumber != null &&
+                  userData.PhoneNumber.length < 10 && (
+                    <span className="m-0 my-0 text-danger">
+                      {i18n.language === "en"
+                        ? "Invalid Phone Number"
+                        : "رقم الهاتف غير صحيح"}
+                    </span>
+                  )}
               </div>
 
               {/* input */}
