@@ -33,10 +33,6 @@ export default function Copouns() {
     setLoading(true);
     axios
       .get(`${BASE}/${GET_All_PROMO_CODES}`, {
-        params: {
-          limite: 1000,
-          skip: 0,
-        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,6 +40,7 @@ export default function Copouns() {
       .then((data) => {
         setPromoCodes(data.data.responseObject);
         setLoading(false);
+        console.log(data);
       })
       .catch((err) => console.log(err));
   }, [runUseEffect]);

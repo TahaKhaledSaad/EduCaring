@@ -71,6 +71,8 @@ export default function PromoCodesAction({
         return;
       }
 
+      let response;
+
       const formData = new FormData();
       formData.append("code", createModalData.code);
       formData.append("discountPercentage", createModalData.discountPercentage);
@@ -91,7 +93,11 @@ export default function PromoCodesAction({
               Authorization: `Bearer ${token}`,
             },
           })
-          .then((data) => console.log(data))
+          .then((data) => {
+            console.log(data);
+            setRunUseEffect((prev) => prev + 1);
+            setCreateModalVisible(false);
+          })
           .catch((err) => console.log(err));
       } else if (type === "edit") {
         response = await axios
@@ -104,6 +110,8 @@ export default function PromoCodesAction({
           .then((data) => console.log(data))
           .catch((err) => console.log(err));
       }
+
+      console.log(response.status);
 
       if (response.status === 200) {
         toast.current.show({
