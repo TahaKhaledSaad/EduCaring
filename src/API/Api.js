@@ -71,3 +71,12 @@ export const ADD_PROMO_CODE = "PromoCode/AddPromoCode";
 export const DELETE_PROMO_CODE = "PromoCode/DeletePromoCode";
 export const CHECK_PROMO_CODE = "PromoCode/CheckPromoCode";
 export const UPDATE_PROMO_CODE = "PromoCode/UpdatePromoCode";
+
+// Affiliate Codes
+
+export const GET_All_AFFILIATE_CODES = "Affiliate/GetAllAffiliate";
+export const ADD_AFFILIATE_CODE = "Affiliate/AddAffiliate";
+export const DELETE_AFFILIATE_CODE = "Affiliate/DeleteAffiliate";
+export const CHECK_AFFILIATE_CODE = "Affiliate/CheckAffiliate";
+export const UPDATE_AFFILIATE_CODE = "Affiliate/UpdateAffiliate";
+

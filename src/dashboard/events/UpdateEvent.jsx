@@ -63,7 +63,7 @@ const UpdateEvent = ({ isEnglish }) => {
   const [confirmVisible, setConfirmVisible] = useState(false); // State to manage confirmation dialog visibility
   const [confirmMessage, setConfirmMessage] = useState(""); // State to manage confirmation dialog message
   const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
-
+  const [flag, setFlag] = useState(false);
   useEffect(() => {
     setGetLoading(true);
     axios
@@ -75,12 +75,13 @@ const UpdateEvent = ({ isEnglish }) => {
       .then((data) => {
         setEventData(data.data.responseObject);
         setGetLoading(false);
+        setFlag(true);
       })
       .catch((error) => {
         console.log(error);
         setGetLoading(false);
       });
-  }, [eventId]);
+  }, [eventId , flag]);
 
   const [speakers, setSpeakers] = useState([]);
   useEffect(() => {
@@ -599,6 +600,7 @@ const UpdateEvent = ({ isEnglish }) => {
       })
       .then((data) => {
         console.log(data);
+        setFlag(false);
       });
   };
   // *********************************

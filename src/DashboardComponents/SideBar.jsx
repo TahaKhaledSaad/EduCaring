@@ -90,6 +90,10 @@ function SideBar() {
         <i className="fas fa-percent"></i>
         <span>{t("PromoCodes")}</span>
       </NavLink>
+      <NavLink to="/dashboard/affiliate" className="link">
+      <i className="fa-solid fa-bolt-lightning"></i>
+        <span>{t("AffiliateCodes")}</span>
+      </NavLink>
     </div>
   );
 }
