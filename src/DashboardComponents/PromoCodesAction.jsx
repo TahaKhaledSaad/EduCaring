@@ -97,6 +97,13 @@ export default function PromoCodesAction({
             console.log(data);
             setRunUseEffect((prev) => prev + 1);
             setCreateModalVisible(false);
+            toast.current.show({
+              severity: "success",
+              summary: "Success",
+              detail: "Promo Code saved successfully.",
+            });
+            setRunUseEffect((prev) => prev + 1);
+            setCreateModalVisible(false);
           })
           .catch((err) => console.log(err));
       } else if (type === "edit") {
@@ -107,22 +114,20 @@ export default function PromoCodesAction({
               Authorization: `Bearer ${token}`,
             },
           })
-          .then((data) => console.log(data))
+          .then((data) => {
+            console.log(data);
+            setRunUseEffect((prev) => prev + 1);
+            setCreateModalVisible(false);
+            toast.current.show({
+              severity: "success",
+              summary: "Success",
+              detail: "Promo Code updated successfully.",
+            });
+          })
           .catch((err) => console.log(err));
       }
-
-      console.log(response.status);
-
-      if (response.status === 200) {
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Promo Code saved successfully.",
-        });
-        setRunUseEffect((prev) => prev + 1);
-        setCreateModalVisible(false);
-      }
     } catch (error) {
+      console.log(error);
       toast.current.show({
         severity: "error",
         summary: "Error",

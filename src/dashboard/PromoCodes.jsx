@@ -87,7 +87,11 @@ export default function Copouns() {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((data) => console.log(data))
+        .then((data) => {
+          console.log(data);
+          setRunUseEffect((prev) => prev + 1);
+          setCreateModalVisible(false);
+        })
         .catch((err) => console.log(err));
       if (result.status === 200) {
         // If deletion is successful, trigger a re-fetch of events
