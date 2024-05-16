@@ -163,8 +163,17 @@ export default function Payment() {
   useEffect(() => {
     // open new window with paymentMethodLink
     if (paymentMethodLink) {
-      window.open(paymentMethodLink, "_blank");
-      navigate("/home");
+      //window.open(paymentMethodLink, "_blank");
+      
+        const newWindow = window.open(paymentMethodLink, '_blank');
+        if (newWindow) {
+            newWindow.focus();
+          navigate("/home");
+
+        } else {
+            window.location.href = paymentMethodLink;
+        }
+    
     }
   }, [paymentMethodLink]);
   console.log(open);
