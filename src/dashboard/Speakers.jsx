@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { BASE, BLOCK_USER, GET_SPEAKERS, UNBLOCK_USER } from "../API/Api";
+import { BASE, BLOCK_USER, GET_SPEAKERS, UNBLOCK_USER ,DELETE_USER} from "../API/Api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MessageModal from "../DashboardComponents/MessageModal";
@@ -41,6 +41,22 @@ export default function Speakers() {
     confirmCallback(); // Execute the callback function
     setConfirmVisible(false); // Hide the confirmation dialog
   };
+  const acceptDelete = (text) => {
+    text === "User deleted successfully"
+      ? toast.current.show({
+          severity: "success",
+          summary: t("Confirmed"),
+          detail: t("SpeakerDeletedSucc"),
+          life: 3000,
+        })
+      : toast.current.show({
+          severity: "danger",
+          summary: t("Confirmed"),
+          detail: t("Error"),
+          life: 3000,
+        });
+  };
+
   const accept = (text) => {
     text === "User UnBlocked Successfuly"
       ? toast.current.show({
@@ -125,6 +141,26 @@ export default function Speakers() {
           accept();
           setRunUseEffect((prev) => prev + 1);
         }
+      }
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: t("Error"),
+        detail: error.response.data.message,
+        life: 3000,
+      });
+    }
+  };
+
+  const deleteSpeaker = async (userId) => {
+    try {
+      let result = await axios.delete(`${BASE}/${DELETE_USER}?id=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (result.status === 200) {
+        // If deletion is successful, trigger a re-fetch of events
+        setRunUseEffect((prev) => prev + 1);
+        acceptDelete(result.data.responseText);
       }
     } catch (error) {
       toast.current.show({
@@ -243,6 +279,20 @@ export default function Speakers() {
                     } update d-flex justify-content-center align-items-center`}
                     style={{
                       color: rowData.isBlocked ? "#22c55e" : "#dc3545",
+                    }}
+                  >
+                    
+                  </i>
+                  <i
+                    className="fas fa-trash delete d-flex justify-content-center align-items-center update"
+                    onClick={(e) =>
+                      {
+                      e.stopPropagation()
+                      showConfirmDialog(
+                        t("ConfirmationMessages.deleteSpeaker"),
+                        () => deleteSpeaker(rowData.id),
+                        e.target
+                      )
                     }}
                   ></i>
                 </div>

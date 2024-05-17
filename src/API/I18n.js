@@ -158,6 +158,10 @@ i18n
             blockUser: "Are you sure you want to block this user?",
             unBlockUser: "Are you sure you want to unblock this user?",
             delete: "Are you sure you want to delete this Admin?",
+            deleteSpeaker: "Are you sure you want to delete this Speaker?",
+            deleteUser: "Are you sure you want to delete this User?",
+
+
           },
           rejectRemoving: "Rejected",
           rejectRemovingMessage: "You have rejected the removing",
@@ -223,6 +227,7 @@ i18n
           descriptionAr: "Description Arabic",
           descriptionEn: "Description English",
           SpeakerDeletedSucc: "Speaker has been deleted successfully",
+          UserDeletedSucc: "User has been deleted successfully",
           Notifications: "Notifications",
           MarkAllAsRead: "Mark all as read",
           EventOrganizer: "Event Organizer",
@@ -322,6 +327,7 @@ i18n
           descriptionAr: "وصف بالعربي",
           descriptionEn: "وصف بالانجليزي",
           SpeakerDeletedSucc: "المتحدث تم حذفه بنجاح",
+          UserDeletedSucc: "الحساب تم حذفه بنجاح",
           DeleteSponserConfirm: "هل انت متأكد من حذف هذا الممول؟",
           DeleteSpeakerConfirm: "هل انت متأكد من حذف هذا المتحدث؟",
           DeletePromoCodeConfirm: "هل انت متأكد من حذف هذا الكود",
@@ -390,6 +396,10 @@ i18n
             blockUser: "هل أنت متأكد أنك تريد أزالة هذا المستخدم؟",
             unBlockUser: "هل أنت متأكد أنك تريد تفعيل هذا المستخدم؟",
             delete: "هل أنت متأكد أنك تريد أزالة هذا المدير",
+            deleteSpeaker: "هل أنت متأكد أنك تريد أزالة هذا المتحدث",
+            deleteUser: "هل أنت متأكد أنك تريد أزالة هذا الحساب",
+
+
           },
           Confirmation: "التأكيد",
           Confirmed: "تم التأكيد",

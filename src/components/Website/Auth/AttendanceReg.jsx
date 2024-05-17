@@ -458,7 +458,7 @@ export default function AttendanceReg() {
                     onChange={handleChange}
                   />
                 </div>
-                {showError && userData.Specialization.length < 1 && (
+                {showError && userData.Specialization.length < 0 && (
                   <span className="m-0 my-0 text-danger">
                     {i18n.language === "en"
                       ? "Please Enter The Specialization"

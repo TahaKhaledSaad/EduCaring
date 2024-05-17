@@ -194,10 +194,10 @@ export default function AffiliateCode() {
             body={(rowData) => {
               return (
                 <>
-                  <i
+                  {/* <i
                     className="fas fa-pen-alt update"
                     onClick={() => handleOpenEditModal(rowData)}
-                  ></i>
+                  ></i> */}
 
                   <i
                     className="fas fa-trash-alt delete"

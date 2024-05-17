@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { BASE, BLOCK_USER, GET_USERS, UNBLOCK_USER } from "../API/Api";
+import { BASE, BLOCK_USER, GET_USERS, UNBLOCK_USER, DELETE_USER } from "../API/Api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MessageModal from "../DashboardComponents/MessageModal";
@@ -24,7 +24,7 @@ export default function Users() {
   const targetRef = useRef(null);
   const [confirmVisible, setConfirmVisible] = useState(false); // State to manage confirmation dialog visibility
   const [confirmMessage, setConfirmMessage] = useState(""); // State to manage confirmation dialog message
-  const [confirmCallback, setConfirmCallback] = useState(() => () => {}); // State to manage confirmation dialog callback function
+  const [confirmCallback, setConfirmCallback] = useState(() => () => { }); // State to manage confirmation dialog callback function
   const toast = useRef(null);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -70,19 +70,52 @@ export default function Users() {
   const accept = (text) => {
     text === "User UnBlocked Successfuly"
       ? toast.current.show({
-          severity: "success",
-          summary: t("Confirmed"),
-          detail: t("UserUnBlocked"),
-          life: 3000,
-        })
+        severity: "success",
+        summary: t("Confirmed"),
+        detail: t("UserUnBlocked"),
+        life: 3000,
+      })
       : toast.current.show({
-          severity: "warn",
-          summary: t("Confirmed"),
-          detail: t("UserBlocked"),
-          life: 3000,
-        });
+        severity: "warn",
+        summary: t("Confirmed"),
+        detail: t("UserBlocked"),
+        life: 3000,
+      });
   };
-
+  const acceptDelete = (text) => {
+    text === "User deleted successfully"
+      ? toast.current.show({
+        severity: "success",
+        summary: t("Confirmed"),
+        detail: t("UserDeletedSucc"),
+        life: 3000,
+      })
+      : toast.current.show({
+        severity: "danger",
+        summary: t("Confirmed"),
+        detail: t("Error"),
+        life: 3000,
+      });
+  };
+  const deleteUser = async (userId) => {
+    try {
+      let result = await axios.delete(`${BASE}/${DELETE_USER}?id=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (result.status === 200) {
+        // If deletion is successful, trigger a re-fetch of events
+        setRunUseEffect((prev) => prev + 1);
+        acceptDelete(result.data.responseText);
+      }
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: t("Error"),
+        detail: error.response.data.message,
+        life: 3000,
+      });
+    }
+  };
   // Function to handle rejecting the confirmation dialog
   const confirmReject = () => {
     setConfirmVisible(false); // Hide the confirmation dialog
@@ -228,7 +261,7 @@ export default function Users() {
             style={{ width: "10rem" }}
             body={(rowData) => {
               return (
-                <>
+                <div className="d-flex justify-content-center align-items-center">
                   <i
                     onClick={() => handleMessageModal(rowData)}
                     className="fas center fa-paper-plane update"
@@ -244,16 +277,27 @@ export default function Users() {
                         rowData.isBlocked
                       )
                     }
-                    className={`fas center fa-${
-                      !rowData.isBlocked
+                    className={`fas center fa-${!rowData.isBlocked
                         ? "fas fa-lock-open update"
                         : "fas fa-lock update"
-                    } update`}
+                      } update`}
                     style={{
                       color: rowData.isBlocked ? "#22c55e" : "#dc3545",
                     }}
                   ></i>
-                </>
+
+                  <i
+                    className="fas fa-trash delete d-flex justify-content-center align-items-center update"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      showConfirmDialog(
+                        t("ConfirmationMessages.deleteUser"),
+                        () => deleteUser(rowData.id),
+                        e.target
+                      )
+                    }}
+                  ></i>
+                </div>
               );
             }}
           />

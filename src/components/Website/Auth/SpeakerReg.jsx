@@ -409,7 +409,7 @@ export default function SpeakerReg() {
                       onChange={handleChange}
                     />
                   </div>
-                  {showError && userData.PassportNumber.length < 3 && (
+                  {showError && userData.PassportNumber.length < 0 && (
                     <span className="m-0 my-0 text-danger">
                       {i18n.language === "en"
                         ? "Passport Number Should 8 characters"
@@ -433,7 +433,7 @@ export default function SpeakerReg() {
                       onChange={handleChange}
                     />
                   </div>
-                  {showError && userData.HealthAuthorityNumber.length < 2 && (
+                  {showError && userData.HealthAuthorityNumber.length < 0 && (
                     <span className="m-0 my-0 text-danger">
                       {i18n.language === "en"
                         ? "Health Authority Number Should be More 3 characters"
@@ -558,8 +558,8 @@ export default function SpeakerReg() {
                     userData.NameAr.length >= 2 &&
                     userData.NameEn.length >= 2 &&
                     userData.Email.includes("@") &&
-                    userData.PassportNumber.length > 3 &&
-                    userData.HealthAuthorityNumber.length > 3 &&
+                  //  userData.PassportNumber.length > 3 &&
+                  //  userData.HealthAuthorityNumber.length > 3 &&
                     userData.Country.length > 3 &&
                     userData.City.length > 3 &&
                     userData.Password.length >= 8 &&
@@ -634,7 +634,7 @@ export default function SpeakerReg() {
                       className="p-2"
                     />
                   </div>
-                  {showError2 && userData.SaudiAuthorityNumber.length < 10 && (
+                  {showError2 && userData.SaudiAuthorityNumber.length < 0 && (
                     <span className="m-0 my-0 text-danger">
                       {i18n.language === "en"
                         ? "Saudi Authority Number Should be More 10 characters"
@@ -725,7 +725,7 @@ export default function SpeakerReg() {
                 onClick={() => {
                   if (
                     userData.Bio.length >= 10 &&
-                    userData.SaudiAuthorityNumber.length >= 10 &&
+                    //userData.SaudiAuthorityNumber.length >= 10 &&
                     userData.ExpYears > 1 &&
                     userData.CurrentWorkPlace.length > 2
                   ) {
