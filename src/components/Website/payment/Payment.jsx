@@ -457,9 +457,10 @@ export default function Payment() {
                         }}
                         onClick={() => toggleDaySelection(index)}
                       >
-                        {i18n.language === "en"
+                        {/* {i18n.language === "en"
                           ? `Day ${index + 1}`
-                          : `اليوم ${index + 1}`}
+                          : `اليوم ${index + 1}`} */}
+                          {day.name}
                       </div>
                       <p
                         className="text-center"
