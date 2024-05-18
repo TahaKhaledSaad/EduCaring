@@ -395,7 +395,9 @@ function EventDetails() {
                   setSelectedDayIndex(index);
                 }}
               >
-                {i18n.language === "en" ? "Day" : "يوم"} {index + 1}
+                {/* {i18n.language === "en" ? "Day" : "يوم"} {index + 1} */}
+                {d.name}
+
               </div>
             ))}
           </div>
