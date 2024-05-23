@@ -186,6 +186,11 @@ export default function AffiliateCode() {
             style={{ textAlign: "center" }}
           ></Column>
          
+         <Column
+            field="usingCount"
+            header={t("UsingCount")}
+            style={{ textAlign: "center" }}
+          ></Column>
 
           <Column
             header={t("Actions")}
